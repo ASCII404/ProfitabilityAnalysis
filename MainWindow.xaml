@@ -21,12 +21,13 @@
                 <Button Height="50" Margin="40,40,40,0" Click="PreviewDatabaseButton_Click">Preview Database</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="AnalysisButton_Click">Analysis</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="InputDataButton_Click">Input Data</Button>
+                <Button Height="50" Margin="40,40,40,0" Click="EditDataButton_Click">Edit database</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="ScenarioAnalysisButton_Click">Scenario Analysis</Button>
             </StackPanel>
         </DockPanel>
 
         <!-- Main content area with hidden TabControl headers -->
-        <TabControl Grid.Column="1" Name="MainTabControl" BorderThickness="0">
+        <TabControl Grid.Column="1" Name="MainTabControl" BorderThickness="0" Height="1064" VerticalAlignment="Bottom">
             <TabControl.Template>
                 <ControlTemplate TargetType="TabControl">
                     <Grid>
@@ -81,9 +82,8 @@
             <TabItem Header="Preview Database" Name="PreviewDatabaseTab">
                 <Grid Background="Green">
                     <StackPanel>
-                        <Button Content="Add User" Click="AddUserButton_Click" Width="100" Height="30" Margin="10"/>
-                        <Button Content="Preview Users" Click="PreviewUsersButton_Click" Width="100" Height="30" Margin="10"/>
-                        <ListBox Name="UsersListBox" Width="400" Height="200" Margin="10"/>
+                        <Button>Preview</Button>
+                        <DataGrid Name="FinancialDataGrid" AutoGenerateColumns="True" />
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -95,8 +95,76 @@
             </TabItem>
 
             <TabItem Header="InputData" Name="InputDataTab">
+                <Grid>
+                    <DockPanel>
+                        <StackPanel Margin="10" DockPanel.Dock="Top">
+                            <TextBlock Text="Date" />
+                            <DatePicker Name="DateInput" />
+
+                            <TextBlock Text="Revenue" />
+                            <TextBox Name="RevenueInput" />
+
+                            <TextBlock Text="Cost of Goods Sold" />
+                            <TextBox Name="CostOfGoodsSoldInput" />
+
+                            <TextBlock Text="Operating Expenses" />
+                            <TextBox Name="OperatingExpensesInput" />
+
+                            <TextBlock Text="Net Income" />
+                            <TextBox Name="NetIncomeInput" />
+
+                            <TextBlock Text="Total Assets" />
+                            <TextBox Name="TotalAssetsInput" />
+
+                            <TextBlock Text="Shareholders' Equity" />
+                            <TextBox Name="TotalEquityInput" />
+
+                            <TextBlock Text="EBITDA" />
+                            <TextBox Name="EBITDAInput" />
+
+                            <TextBlock Text="Current Assets" />
+                            <TextBox Name="CurrentAssetsInput" />
+
+                            <TextBlock Text="Current Liabilities" />
+                            <TextBox Name="CurrentLiabilitiesInput" />
+
+                            <TextBlock Text="Total Liabilities" />
+                            <TextBox Name="TotalLiabilitiesInput" />
+
+                            <TextBlock Text="Interest Expense" />
+                            <TextBox Name="InterestExpenseInput" />
+
+                            <TextBlock Text="Variable Costs" />
+                            <TextBox Name="VariableCostsInput" />
+
+                            <TextBlock Text="Fixed Costs" />
+                            <TextBox Name="FixedCostsInput" />
+
+                            <TextBlock Text="Sales Revenue Per Unit" />
+                            <TextBox Name="SalesRevenuePerUnitInput" />
+
+                            <TextBlock Text="Variable Cost Per Unit" />
+                            <TextBox Name="VariableCostPerUnitInput" />
+
+                            <Button Content="Add Financial Data" Click="InputDataButton_Click" />
+                        </StackPanel>
+                    </DockPanel>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="EditDataTab" Name="EditDataTab">
                 <Grid Background="White">
-                    <TextBlock Text="Enter Data Content Here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Margin="10">
+                        <!-- Input field for FinancialDataID -->
+                        <TextBlock Text="Enter FinancialDataID to delete:" />
+                        <TextBox Name="FinancialDataIDInput" Width="200" Margin="0,10,0,10" />
+
+                        <!-- Delete button -->
+                        <Button Content="Delete Financial Data" Click="EditDataButton_Click" Width="200" />
+
+                        <!-- Other UI elements can go here -->
+                    </StackPanel>
                 </Grid>
             </TabItem>
 
@@ -106,10 +174,7 @@
                     <TextBlock Text="Preview Scenario Content Here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
-            
-            
 
-            <!-- Additional Tabs can be added here -->
         </TabControl>
     </Grid>
 </Window>
