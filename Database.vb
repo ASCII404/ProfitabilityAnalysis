@@ -142,17 +142,17 @@ Public Class Database
         End Using
     End Sub
 
-    Public Sub DeleteFinancialData(financialDataId As Integer)
+    Public Async Function DeleteFinancialDataAsync(financialDataId As Integer) As Task
         Using connection As New SQLiteConnection(connectionString)
-            connection.Open()
+            Await connection.OpenAsync()
 
             Dim cmd As New SQLiteCommand("
                 DELETE FROM FinancialData WHERE FinancialDataID = @FinancialDataID", connection)
 
             cmd.Parameters.AddWithValue("@FinancialDataID", financialDataId)
-            cmd.ExecuteNonQuery()
+            Await cmd.ExecuteNonQueryAsync()
         End Using
-    End Sub
+    End Function
 
     Public Function GetOrCreateDateID(dateValue As Date) As Integer
         Using connection As New SQLiteConnection(connectionString)
@@ -189,25 +189,25 @@ Public Class Database
         End Using
     End Function
 
-    Public Function GetFinancialData() As List(Of FinancialData)
+    Public Async Function GetFinancialDataAsync() As Task(Of List(Of FinancialData))
         Dim financialDataList As New List(Of FinancialData)
 
         Using connection As New SQLiteConnection(connectionString)
-            connection.Open()
+            Await connection.OpenAsync()
 
             Dim cmd As New SQLiteCommand("
                 SELECT FinancialDataID, DateID, Revenue, CostOfGoodsSold, OperatingExpenses, NetIncome, TotalAssets, TotalEquity, EBITDA, CurrentAssets, CurrentLiabilities, TotalLiabilities, InterestExpense, VariableCosts, FixedCosts, SalesRevenuePerUnit, VariableCostPerUnit 
                 FROM FinancialData", connection)
 
-            Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                While reader.Read()
+            Using reader As SQLiteDataReader = Await cmd.ExecuteReaderAsync()
+                While Await reader.ReadAsync()
                     Dim dateId As Integer = Convert.ToInt32(reader("DateID"))
 
                     ' Fetch date details from DateDimension
                     Dim dateCmd As New SQLiteCommand("
                         SELECT Date FROM DateDimension WHERE DateID = @DateID", connection)
                     dateCmd.Parameters.AddWithValue("@DateID", dateId)
-                    Dim dateValue As Date = Convert.ToDateTime(dateCmd.ExecuteScalar())
+                    Dim dateValue As Date = Convert.ToDateTime(Await dateCmd.ExecuteScalarAsync())
 
                     Dim data As New FinancialData With {
                         .FinancialDataID = Convert.ToInt32(reader("FinancialDataID")),

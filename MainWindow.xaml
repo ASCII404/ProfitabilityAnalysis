@@ -6,175 +6,297 @@
         xmlns:local="clr-namespace:ProfitabilityAnalysis"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="Profitabil-inatorul" Height="1080" Width="1920">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="139*" MinWidth="200"/>
-            <ColumnDefinition Width="821*"/>
-        </Grid.ColumnDefinitions>
-
+        Title="Profitabil-inatorul" Height="720" Width="1280">
+    <DockPanel>
         <!-- Sidebar for navigation buttons -->
-        <DockPanel Grid.Column="0" Background="Gray">
+        <DockPanel DockPanel.Dock="Left" Background="Gray" Width="200" MinWidth="200">
             <Button Height="50" Margin="40,20,40,30" DockPanel.Dock="Bottom">HELP</Button>
             <StackPanel>
                 <Button Height="50" Margin="40,40,40,0" Click="DashboardButton_Click">Dashboard</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="PreviewDatabaseButton_Click">Preview Database</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="AnalysisButton_Click">Analysis</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="InputDataButton_Click">Input Data</Button>
-                <Button Height="50" Margin="40,40,40,0" Click="EditDataButton_Click">Edit database</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="ScenarioAnalysisButton_Click">Scenario Analysis</Button>
             </StackPanel>
         </DockPanel>
 
         <!-- Main content area with hidden TabControl headers -->
-        <TabControl Grid.Column="1" Name="MainTabControl" BorderThickness="0" Height="1064" VerticalAlignment="Bottom">
-            <TabControl.Template>
-                <ControlTemplate TargetType="TabControl">
-                    <Grid>
-                        <ContentPresenter ContentSource="SelectedContent"/>
+        <DockPanel>
+            <TabControl Name="MainTabControl" BorderThickness="0" DockPanel.Dock="Top">
+                <TabControl.Template>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <ContentPresenter ContentSource="SelectedContent"/>
+                        </Grid>
+                    </ControlTemplate>
+                </TabControl.Template>
+                <!-- Dashboard Tab -->
+                <TabItem Header="Dashboard" Name="DashboardTab">
+                    <Grid Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Placeholder for Chart 1 -->
+                        <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Name="chart1" Visibility="Collapsed" />
+                        <Grid Grid.Row="0" Grid.Column="0" Name="placeholder1">
+                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
+                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        </Grid>
+
+                        <!-- Placeholder for Chart 2 -->
+                        <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Name="chart2" Visibility="Collapsed" />
+                        <Grid Grid.Row="0" Grid.Column="1" Name="placeholder2">
+                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
+                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        </Grid>
+
+                        <!-- Placeholder for Chart 3 -->
+                        <lvc:CartesianChart Grid.Row="1" Grid.Column="0" Name="chart3" Visibility="Collapsed" />
+                        <Grid Grid.Row="1" Grid.Column="0" Name="placeholder3">
+                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
+                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        </Grid>
+
+                        <!-- Placeholder for Chart 4 -->
+                        <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="chart4" Visibility="Collapsed" />
+                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4">
+                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
+                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        </Grid>
                     </Grid>
-                </ControlTemplate>
-            </TabControl.Template>
-            <!-- Dashboard Tab -->
-            <TabItem Header="Dashboard" Name="DashboardTab">
-                <Grid Background="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                </TabItem>
 
-                    <!-- Placeholder for Chart 1 -->
-                    <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Name="chart1" Visibility="Collapsed"/>
-                    <Grid Grid.Row="0" Grid.Column="0" Name="placeholder1">
-                        <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="37,46,37,46"/>
-                        <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray"/>
-                        <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="871,46,-797,46"/>
-                        <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="37,582,37,-490"/>
-                        <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="871,582,-797,-490"/>
+
+                <!-- Preview Database Tab -->
+                <!-- Add an edit database button, specify the ID you want to edit, etc-->
+                <!-- Or maybe do not edit the database at all? just delete the row and enter it again but correctly? dumbass?-->
+                <!-- TO DO: Date Range(Start, End), Value Ranges(Min,Max), Record Count(Total number), Most Recent Entry, Oldest date Entry(also called first entry? why would I add this? am I going insane?), Maybe a standard deviation for each column?-->
+                <TabItem Header="Preview Database" Name="PreviewDatabaseTab">
+                    <Grid Background="Green">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <!-- Takes up all available space -->
+                        </Grid.RowDefinitions>
+
+                        <DockPanel>
+                            <!-- Customized DataGrid -->
+                            <DataGrid Name="FinancialDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column"
+                      CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                      RowHeaderWidth="0" GridLinesVisibility="None" DockPanel.Dock="Top">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding FinancialDataID}" Width="50" />
+                                    <DataGridTextColumn Header="Date" Binding="{Binding DateValue, StringFormat=d}" Width="100" />
+                                    <DataGridTextColumn Header="Revenue" Binding="{Binding Revenue, StringFormat=C}" Width="100" />
+                                    <DataGridTextColumn Header="Cost of Goods Sold" Binding="{Binding CostOfGoodsSold, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Operating Expenses" Binding="{Binding OperatingExpenses, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Net Income" Binding="{Binding NetIncome, StringFormat=C}" Width="100" />
+                                    <DataGridTextColumn Header="Total Assets" Binding="{Binding TotalAssets, StringFormat=C}" Width="100" />
+                                    <DataGridTextColumn Header="Total Equity" Binding="{Binding TotalEquity, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="EBITDA" Binding="{Binding EBITDA, StringFormat=C}" Width="100" />
+                                    <DataGridTextColumn Header="Current Assets" Binding="{Binding CurrentAssets, StringFormat=C}" Width="100" />
+                                    <DataGridTextColumn Header="Current Liabilities" Binding="{Binding CurrentLiabilities, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Total Liabilities" Binding="{Binding TotalLiabilities, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Interest Expense" Binding="{Binding InterestExpense, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Variable Costs" Binding="{Binding VariableCosts, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Fixed Costs" Binding="{Binding FixedCosts, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Sales Revenue Per Unit" Binding="{Binding SalesRevenuePerUnit, StringFormat=C}" Width="150" />
+                                    <DataGridTextColumn Header="Variable Cost Per Unit" Binding="{Binding VariableCostPerUnit, StringFormat=C}" Width="150" />
+                                    
+                                    <!-- Add more columns as needed -->
+                                </DataGrid.Columns>
+
+                                <DataGrid.Resources>
+                                    <!-- Style for the DataGrid -->
+                                    <Style TargetType="DataGrid">
+                                        <Setter Property="AlternatingRowBackground" Value="LightGray" />
+                                        <Setter Property="RowBackground" Value="White" />
+                                        <Setter Property="GridLinesVisibility" Value="Horizontal" />
+                                        <Setter Property="HorizontalGridLinesBrush" Value="Gray" />
+                                    </Style>
+
+                                    <!-- Style for the DataGrid rows -->
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="FontSize" Value="14" />
+                                        <Setter Property="Height" Value="30" />
+                                    </Style>
+
+                                    <!-- Style for the DataGrid columns header -->
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="LightSteelBlue" />
+                                        <Setter Property="FontSize" Value="14" />
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                        <Setter Property="Height" Value="30" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        <Setter Property="Padding" Value="5" />
+                                    </Style>
+                                </DataGrid.Resources>
+                            </DataGrid>
+
+                            <StackPanel DockPanel.Dock="Bottom" Margin="10">
+                                <TextBlock Width="600">Specify which transaction IDs you do not want anymore</TextBlock>
+                                <TextBox Name="FinancialDataIDInput" Width="600"></TextBox>
+                                <Button Content="Delete Financial Data" Click="DeleteDataButton_Click" Width="600"></Button>
+                            </StackPanel>
+                        </DockPanel>
                     </Grid>
+                </TabItem>
 
-                    <!-- Placeholder for Chart 2 -->
-                    <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Name="chart2" Visibility="Collapsed"/>
-                    <Grid Grid.Row="0" Grid.Column="1" Name="placeholder2">
-                        <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray"/>
+                <!-- Preview AnalysisTab -->
+                <TabItem Header="AnalysisTab" Name="AnalysisTab">
+                    <Grid Background="White">
+                        <TextBlock Text="Preview Analysis Content Here" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Grid>
+                </TabItem>
 
-                    <!-- Placeholder for Chart 3 -->
-                    <lvc:CartesianChart Grid.Row="1" Grid.Column="0" Name="chart3" Visibility="Collapsed"/>
-                    <Grid Grid.Row="1" Grid.Column="0" Name="placeholder3">
-                        <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray"/>
+                <!-- Preview InputDataTab -->
+                <TabItem Header="InputData" Name="InputDataTab">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <Grid>
+                            <DockPanel>
+                                <Grid Margin="10" DockPanel.Dock="Top">
+                                    <!-- Define rows and columns -->
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <!-- Add more RowDefinitions if needed -->
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <!-- This row will take up the remaining space -->
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Date"/>
+                                        <DatePicker Width="120" Name="DateInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Revenue"/>
+                                        <TextBox Width="120" Name="RevenueInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Cost of Goods Sold"/>
+                                        <TextBox Width="120" Name="CostOfGoodsSoldInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Operating Expenses"/>
+                                        <TextBox Width="120" Name="OperatingExpensesInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Net Income"/>
+                                        <TextBox Width="120" Name="NetIncomeInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Total Assets"/>
+                                        <TextBox Width="120" Name="TotalAssetsInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Total Equity"/>
+                                        <TextBox Width="120" Name="TotalEquityInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="EBITDA"/>
+                                        <TextBox Width="120" Name="EBITDAInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Current Assets"/>
+                                        <TextBox Width="120" Name="CurrentAssetsInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Current Liabilities"/>
+                                        <TextBox Width="120" Name="CurrentLiabilitiesInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Total Liabilities"/>
+                                        <TextBox Width="120" Name="TotalLiabilitiesInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Interest Expense"/>
+                                        <TextBox Width="120" Name="InterestExpenseInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Variable Costs"/>
+                                        <TextBox Width="120" Name="VariableCostsInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Fixed Costs"/>
+                                        <TextBox Width="120" Name="FixedCostsInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Grid.Row="3" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Sales Revenue/unit"/>
+                                        <TextBox Width="120" Name="SalesRevenuePerUnitInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3" Grid.Row="3" HorizontalAlignment="Left">
+                                        <TextBlock Width="120" Text="Variable Cost Per Unit"/>
+                                        <TextBox Width="120" Name="VariableCostPerUnitInput"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left">
+                                        <Button Width="120" Margin="0,20,0,0" Content="Add Financial Data" Click="InputDataButton_Click"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="8" Grid.ColumnSpan="4">
+                                        <TextBlock Text="Imported Data" HorizontalAlignment="Center" Margin="0,20,0,10" />
+                                        <DataGrid Name="ImportedDataGrid" AutoGenerateColumns="True" Height="200" Margin="5" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,0" Orientation="Horizontal" Height="30">
+                                    <Button Content="Import Data" Click="ImportExcelButton_Click" Margin="5,0"/>
+                                    <Button Content="Put data into Database" Click="AddImportedDataButton_Click" Margin="5,0"/>
+                                </StackPanel>
+
+                            </DockPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+
+
+                <!-- DELETE THIS -->
+                <TabItem Header="EditDataTab" Name="EditDataTab">
+                    <Grid Background="White">
+
                     </Grid>
+                </TabItem>
 
-                    <!-- Placeholder for Chart 4 -->
-                    <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="chart4" Visibility="Collapsed"/>
-                    <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4">
-                        <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray"/>
+                <TabItem Header="ScenarioAnalysisTab" Name="ScenarioAnalysisTab">
+                    <Grid Background="White">
+                        <TextBlock Text="Preview Scenario Content Here" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Grid>
+                </TabItem>
 
-                </Grid>
-            </TabItem>
-
-            <!-- Preview Database Tab -->
-            <TabItem Header="Preview Database" Name="PreviewDatabaseTab">
-                <Grid Background="Green">
-                    <StackPanel>
-                        <Button>Preview</Button>
-                        <DataGrid Name="FinancialDataGrid" AutoGenerateColumns="True" />
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="AnalysisTab" Name="AnalysisTab">
-                <Grid Background="White">
-                    <TextBlock Text="Preview Analysis Content Here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="InputData" Name="InputDataTab">
-                <Grid>
-                    <DockPanel>
-                        <StackPanel Margin="10" DockPanel.Dock="Top">
-                            <TextBlock Text="Date" />
-                            <DatePicker Name="DateInput" />
-
-                            <TextBlock Text="Revenue" />
-                            <TextBox Name="RevenueInput" />
-
-                            <TextBlock Text="Cost of Goods Sold" />
-                            <TextBox Name="CostOfGoodsSoldInput" />
-
-                            <TextBlock Text="Operating Expenses" />
-                            <TextBox Name="OperatingExpensesInput" />
-
-                            <TextBlock Text="Net Income" />
-                            <TextBox Name="NetIncomeInput" />
-
-                            <TextBlock Text="Total Assets" />
-                            <TextBox Name="TotalAssetsInput" />
-
-                            <TextBlock Text="Shareholders' Equity" />
-                            <TextBox Name="TotalEquityInput" />
-
-                            <TextBlock Text="EBITDA" />
-                            <TextBox Name="EBITDAInput" />
-
-                            <TextBlock Text="Current Assets" />
-                            <TextBox Name="CurrentAssetsInput" />
-
-                            <TextBlock Text="Current Liabilities" />
-                            <TextBox Name="CurrentLiabilitiesInput" />
-
-                            <TextBlock Text="Total Liabilities" />
-                            <TextBox Name="TotalLiabilitiesInput" />
-
-                            <TextBlock Text="Interest Expense" />
-                            <TextBox Name="InterestExpenseInput" />
-
-                            <TextBlock Text="Variable Costs" />
-                            <TextBox Name="VariableCostsInput" />
-
-                            <TextBlock Text="Fixed Costs" />
-                            <TextBox Name="FixedCostsInput" />
-
-                            <TextBlock Text="Sales Revenue Per Unit" />
-                            <TextBox Name="SalesRevenuePerUnitInput" />
-
-                            <TextBlock Text="Variable Cost Per Unit" />
-                            <TextBox Name="VariableCostPerUnitInput" />
-
-                            <Button Content="Add Financial Data" Click="InputDataButton_Click" />
-                        </StackPanel>
-                    </DockPanel>
-
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="EditDataTab" Name="EditDataTab">
-                <Grid Background="White">
-                    <StackPanel Margin="10">
-                        <!-- Input field for FinancialDataID -->
-                        <TextBlock Text="Enter FinancialDataID to delete:" />
-                        <TextBox Name="FinancialDataIDInput" Width="200" Margin="0,10,0,10" />
-
-                        <!-- Delete button -->
-                        <Button Content="Delete Financial Data" Click="EditDataButton_Click" Width="200" />
-
-                        <!-- Other UI elements can go here -->
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="ScenarioAnalysisTab" Name="ScenarioAnalysisTab">
-                    
-                <Grid Background="White">
-                    <TextBlock Text="Preview Scenario Content Here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Grid>
-            </TabItem>
-
-        </TabControl>
-    </Grid>
+            </TabControl>
+        </DockPanel>
+    </DockPanel>
 </Window>
