@@ -6,7 +6,18 @@
         xmlns:local="clr-namespace:ProfitabilityAnalysis"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="Profitabil-inatorul" Height="720" Width="1280">
+        Title="Profitabil-inatorul" Height="720" Width="1280"
+        MinWidth="1280" MinHeight="720">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CustomStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <DockPanel>
         <!-- Sidebar for navigation buttons -->
         <DockPanel DockPanel.Dock="Left" Background="Gray" Width="200" MinWidth="200">
@@ -150,9 +161,104 @@
                 <!-- Preview AnalysisTab -->
                 <TabItem Header="AnalysisTab" Name="AnalysisTab">
                     <Grid Background="White">
-                        <TextBlock Text="Preview Analysis Content Here" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <DockPanel>
+                            <!-- Top Section -->
+                            <Grid DockPanel.Dock="Top" Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="230" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <DatePicker Name="StartDatePicker" BorderThickness="0" Text="Select start date" />
+                                    <DatePicker Name="EndDatePicker" Width="120" BorderThickness="0" Text="Select end date" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <CheckBox Grid.Row="0" Grid.Column="0" Content="ROA"/>
+                                        <CheckBox Grid.Row="0" Grid.Column="1" Content="ROE"/>
+                                        <CheckBox Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
+
+                                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
+                                        <CheckBox Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
+                                        <CheckBox Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
+
+                                        <CheckBox Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
+                                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
+                                        <CheckBox Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
+
+                                        <CheckBox Grid.Row="3" Grid.Column="1" Content="Break-Even Point"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+
+                           <!-- TO DO: Implement the API in the BOTTOM part and add livecharts for both sides-->
+                            
+                            <!-- Middle Separator -->
+                            <Separator DockPanel.Dock="Top" Margin="30,70"/>
+
+                            <!-- Bottom Section -->
+                            <Grid DockPanel.Dock="Bottom" Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="230" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <DatePicker Name="StartDatePickerBottom" BorderThickness="0" Text="Select start date" />
+                                    <DatePicker Name="EndDatePickerBottom" Width="120" BorderThickness="0" Text="Select end date" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Grid>
+                                        <!-- Define the Grid Rows and Columns -->
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Add CheckBoxes to the Grid -->
+                                        <CheckBox Grid.Row="0" Grid.Column="0" Content="ROA"/>
+                                        <CheckBox Grid.Row="0" Grid.Column="1" Content="ROE"/>
+                                        <CheckBox Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
+
+                                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
+                                        <CheckBox Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
+                                        <CheckBox Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
+
+                                        <CheckBox Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
+                                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
+                                        <CheckBox Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
+
+                                        <CheckBox Grid.Row="3" Grid.Column="1" Content="Break-Even Point"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </DockPanel>
                     </Grid>
                 </TabItem>
+
+
 
                 <!-- Preview InputDataTab -->
                 <TabItem Header="InputData" Name="InputDataTab">
@@ -283,19 +389,12 @@
                     </ScrollViewer>
                 </TabItem>
 
-
-                <!-- DELETE THIS -->
-                <TabItem Header="EditDataTab" Name="EditDataTab">
-                    <Grid Background="White">
-
-                    </Grid>
-                </TabItem>
-
                 <TabItem Header="ScenarioAnalysisTab" Name="ScenarioAnalysisTab">
                     <Grid Background="White">
                         <TextBlock Text="Preview Scenario Content Here" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Grid>
                 </TabItem>
+                <ToolBar x:Name="toolBar" Height="100" Width="100"/>
 
             </TabControl>
         </DockPanel>
