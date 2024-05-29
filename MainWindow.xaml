@@ -264,6 +264,7 @@
 
                                     <StackPanel Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left">
                                         <Button Width="120" Margin="0,20,0,0" Content="Add Financial Data" Click="InputDataButton_Click"/>
+                                        <Button Width="120" Margin="0,20,0,0" Content="Clear all fields" Click="ClearInputButton_Click"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="8" Grid.ColumnSpan="4">
