@@ -292,4 +292,7 @@ Class MainWindow
         Next
     End Sub
 
+    Private Sub MainTabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles MainTabControl.SelectionChanged
+
+    End Sub
 End Class

@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Custom DatePicker Style to Remove Border and Make Read-Only -->
+    <Style x:Key="CustomDatePickerStyle" TargetType="DatePicker">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DatePicker">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <DatePickerTextBox x:Name="PART_TextBox" 
+                                           Grid.Column="0"
+                                           IsReadOnly="True" 
+                                           Background="Transparent" 
+                                           BorderThickness="0" 
+                                           Padding="0">
+                            <DatePickerTextBox.Style>
+                                <Style TargetType="DatePickerTextBox">
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="DatePickerTextBox">
+                                                <Border x:Name="Border"
+                                                        Background="Transparent" 
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="0">
+                                                    <ScrollViewer x:Name="PART_ContentHost" 
+                                                                  HorizontalScrollBarVisibility="Hidden" 
+                                                                  VerticalScrollBarVisibility="Hidden" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DatePickerTextBox.Style>
+                        </DatePickerTextBox>
+                        <ToggleButton x:Name="PART_Button"
+                                Grid.Column="1"
+                                Content="▼"
+                                Focusable="False"
+                                IsTabStop="False"
+                                Margin="0"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderThickness="0" />
+                        <Popup x:Name="PART_Popup" Placement="Bottom" StaysOpen="False"
+                               IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                            <Popup.Child>
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <Calendar IsTodayHighlighted="True"
+                                              SelectedDate="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+                                </Border>
+                            </Popup.Child>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_TextBox" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger SourceName="PART_Popup" Property="Popup.IsOpen" Value="True">
+                            <Setter TargetName="PART_Button" Property="IsChecked" Value="True" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
