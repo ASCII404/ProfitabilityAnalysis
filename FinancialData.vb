@@ -41,5 +41,45 @@
         Me.VariableCostPerUnit = variableCostPerUnit
     End Sub
 
-    'TO DO: Implement methods to calculate the respective metrics
+    Public Function GrossProfitMargin() As Decimal
+        Return (Revenue - CostOfGoodsSold) / Revenue
+    End Function
+
+    Public Function OperatingProfitMargin() As Decimal
+        Return (Revenue - CostOfGoodsSold - OperatingExpenses) / Revenue
+    End Function
+
+    Public Function NetProfitMargin() As Decimal
+        Return NetIncome / Revenue
+    End Function
+
+    Public Function ReturnOnAssets() As Decimal
+        Return NetIncome / TotalAssets
+    End Function
+
+    Public Function ReturnOnEquity() As Decimal
+        Return NetIncome / TotalEquity
+    End Function
+
+    Public Function CurrentRatio() As Decimal
+        Return CurrentAssets / CurrentLiabilities
+    End Function
+
+    Public Function DebtToEquityRatio() As Decimal
+        Return TotalLiabilities / TotalEquity
+    End Function
+    Public Function InterestCoverageRatio() As Decimal
+        Return EBITDA / InterestExpense
+    End Function
+    Public Function ContributionMargin() As Decimal
+        Return (SalesRevenuePerUnit - VariableCostPerUnit) / SalesRevenuePerUnit
+    End Function
+
+    Public Function BreakEvenPoint() As Decimal
+        If (SalesRevenuePerUnit - VariableCostPerUnit) > 0 Then
+            Return FixedCosts / (SalesRevenuePerUnit - VariableCostPerUnit)
+        Else
+            Return 0
+        End If
+    End Function
 End Class

@@ -12,7 +12,6 @@ Class MainWindow
         InitializeComponent()
         dbHelper = New Database("dbtest.db")
     End Sub
-
     ' Event handlers to switch tabs
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
@@ -292,9 +291,5 @@ Class MainWindow
             End Try
         Next
     End Sub
-
-
-
-
 
 End Class
