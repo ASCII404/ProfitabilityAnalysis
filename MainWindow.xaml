@@ -165,7 +165,7 @@
                             <!-- Top Section -->
                             <Grid DockPanel.Dock="Top" Margin="10">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="230" />
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
@@ -186,6 +186,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <CheckBox Grid.Row="0" Grid.Column="0" Content="ROA"/>
@@ -200,22 +201,37 @@
                                         <CheckBox Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
                                         <CheckBox Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
 
-                                        <CheckBox Grid.Row="3" Grid.Column="1" Content="Break-Even Point"/>
+                                        <CheckBox Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
+
+                                        <StackPanel Grid.Row="0" Grid.Column="3" Margin="50,0,0,0">
+                                            <TextBlock>CHART 1</TextBlock>
+                                            <!--<lvc:CandleSeries></lvc:CandleSeries>-->
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="4" Margin="200,0,0,0">
+                                            <TextBlock>CHART 2</TextBlock>
+                                            <!--<lvc:PieChart></lvc:PieChart>-->
+                                        </StackPanel>
                                     </Grid>
                                 </StackPanel>
                             </Grid>
 
-                           <!-- TO DO: Implement the API in the BOTTOM part and add livecharts for both sides-->
-                            
                             <!-- Middle Separator -->
                             <Separator DockPanel.Dock="Top" Margin="30,70"/>
 
                             <!-- Bottom Section -->
                             <Grid DockPanel.Dock="Bottom" Margin="10">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="230" />
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                                     <DatePicker Name="StartDatePickerBottom" BorderThickness="0" Text="Select start date" />
@@ -235,6 +251,8 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Add CheckBoxes to the Grid -->
@@ -250,13 +268,52 @@
                                         <CheckBox Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
                                         <CheckBox Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
 
-                                        <CheckBox Grid.Row="3" Grid.Column="1" Content="Break-Even Point"/>
+                                        <CheckBox Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
+
+                                        <StackPanel Grid.Row="0" Grid.Column="3" Margin="20,0,0,0">
+                                            <TextBlock>Chart 1</TextBlock>
+                                            <!--<lvc:LineSeries></lvc:LineSeries>-->
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="0" Grid.Column="4" Margin="40,0,0,0">
+                                            <TextBlock>Chart 2</TextBlock>
+                                            <!--<lvc:PieChart></lvc:PieChart>-->
+                                        </StackPanel>
                                     </Grid>
                                 </StackPanel>
+
+                                <!-- Add a Grid for Button and ComboBox -->
+                                <Grid Grid.Row="4" Grid.Column="0" Margin="10,0,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Button -->
+                                    <Button Grid.Row="0" Grid.Column="0" Content="Retrieve data" Margin="0,0,0,10" Click="GetAPIdata_Click"/>
+
+                                    <!-- ComboBox -->
+                                    <ComboBox Grid.Row="1" Grid.Column="0" Width="200" Height="30" SelectedIndex="0">
+                                        <ComboBoxItem Content="Option 1" />
+                                        <ComboBoxItem Content="Option 2" />
+                                        <ComboBoxItem Content="Option 3" />
+                                        <ComboBoxItem Content="Option 4" />
+                                    </ComboBox>
+
+                                    <TextBox Name="API_Test" Grid.Row="3" Grid.Column="0" Width="200" Height="300" Margin="0,10,0,0">
+                                        
+                                    </TextBox>
+                                </Grid>
                             </Grid>
                         </DockPanel>
                     </Grid>
                 </TabItem>
+
+
 
 
 
