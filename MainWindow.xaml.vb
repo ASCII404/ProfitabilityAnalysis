@@ -299,10 +299,6 @@ Class MainWindow
 
     End Sub
 
-    Private Async Function LoadAPI_DataAsync() As Task
-        'TO DO: Implement API data loading to calculate functions
-    End Function
-
     Private Async Sub TestAPI()
         Dim apiKey As String = "KN8N1PLOV3JJ8TCB"
         Dim incomeStatementUrl As String = $"https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=IBM&apikey={apiKey}"
