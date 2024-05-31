@@ -6,14 +6,28 @@ Imports OfficeOpenXml
 Imports System.Net
 Imports Newtonsoft.Json.Linq
 Imports System.Net.Http
+'Delete this when done with the project
+Imports System.Runtime.InteropServices
 Class MainWindow
+
+    'Delete this when done with the project
+    <DllImport("kernel32.dll")>
+    Public Shared Function AllocConsole() As Boolean
+    End Function
+
     Private dbHelper As Database
     Private apiKey As String
+    Private FinancialData As FinancialData
+    Private financialDataList As List(Of FinancialData)
     Public Sub New()
+        'Delete this when done with the project
+        AllocConsole()
+
         apiKey = "your Alpha Vantage API Key"
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial
         InitializeComponent()
         dbHelper = New Database("dbtest.db")
+        FinancialData = New FinancialData()
     End Sub
     ' Event handlers to switch tabs
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
@@ -52,8 +66,10 @@ Class MainWindow
     End Sub
 
 
-    Private Sub AnalysisButton_Click(sender As Object, e As RoutedEventArgs)
+    Private Async Sub AnalysisButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = AnalysisTab
+        Await LoadFinancialDataAsync()
+        Console.WriteLine(FinancialData.TotalAssets)
     End Sub
 
     Private Sub InputDataButton_Click(sender As Object, e As RoutedEventArgs)
@@ -299,80 +315,37 @@ Class MainWindow
 
     End Sub
 
-    Private Async Sub TestAPI()
-        Dim apiKey As String = "KN8N1PLOV3JJ8TCB"
-        Dim incomeStatementUrl As String = $"https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=IBM&apikey={apiKey}"
-        Dim balanceSheetUrl As String = $"https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=IBM&apikey={apiKey}"
+    Private Async Sub GetAPIdata_Click(sender As Object, e As RoutedEventArgs)
+        Dim comboBoxItem1 As ComboBoxItem = CType(SymbolOptions.SelectedItem, ComboBoxItem)
+        Dim selectedSymbol As String = comboBoxItem1.Content.ToString()
+        Dim selectedFiscalYearIndex As Integer = PeriodOptions.SelectedIndex
 
-        Using client As New HttpClient()
-            Dim incomeStatementJson As String = Await client.GetStringAsync(incomeStatementUrl)
-            Dim balanceSheetJson As String = Await client.GetStringAsync(balanceSheetUrl)
+        Console.WriteLine("This is the selected symbol: " & selectedSymbol)
+        Console.WriteLine("This is the selected fiscal year index: " & selectedFiscalYearIndex)
 
-            Dim incomeStatementData As JObject = JObject.Parse(incomeStatementJson)
-            Dim balanceSheetData As JObject = JObject.Parse(balanceSheetJson)
-
-            Dim result As String = "Financial Metrics for IBM:" & Environment.NewLine
-
-            ' Extract the latest annual reports
-            Dim latestIncomeReport As JObject = incomeStatementData("annualReports")(0)
-            Dim previousIncomeReport As JObject = incomeStatementData("annualReports")(1)
-            Dim latestBalanceReport As JObject = balanceSheetData("annualReports")(0)
-            Dim previousBalanceReport As JObject = balanceSheetData("annualReports")(1)
-
-            ' Include the dates of the reports
-            Dim latestIncomeReportDate As String = latestIncomeReport("fiscalDateEnding").ToString()
-            Dim previousIncomeReportDate As String = previousIncomeReport("fiscalDateEnding").ToString()
-            Dim latestBalanceReportDate As String = latestBalanceReport("fiscalDateEnding").ToString()
-            Dim previousBalanceReportDate As String = previousBalanceReport("fiscalDateEnding").ToString()
-
-            result &= $"Latest Income Report Date: {latestIncomeReportDate}{Environment.NewLine}"
-            result &= $"Previous Income Report Date: {previousIncomeReportDate}{Environment.NewLine}"
-            result &= $"Latest Balance Sheet Report Date: {latestBalanceReportDate}{Environment.NewLine}"
-            result &= $"Previous Balance Sheet Report Date: {previousBalanceReportDate}{Environment.NewLine}{Environment.NewLine}"
-
-            ' Extract necessary data from the latest reports
-            Dim totalRevenue As Double = Double.Parse(latestIncomeReport("totalRevenue").ToString())
-            Dim grossProfit As Double = Double.Parse(latestIncomeReport("grossProfit").ToString())
-            Dim operatingIncome As Double = Double.Parse(latestIncomeReport("operatingIncome").ToString())
-            Dim netIncome As Double = Double.Parse(latestIncomeReport("netIncome").ToString())
-            Dim totalAssets As Double = Double.Parse(latestBalanceReport("totalAssets").ToString())
-            Dim totalLiabilities As Double = Double.Parse(latestBalanceReport("totalLiabilities").ToString())
-            Dim totalShareholderEquity As Double = Double.Parse(latestBalanceReport("totalShareholderEquity").ToString())
-            Dim currentAssets As Double = Double.Parse(latestBalanceReport("totalCurrentAssets").ToString())
-            Dim currentLiabilities As Double = Double.Parse(latestBalanceReport("totalCurrentLiabilities").ToString())
-            Dim interestExpense As Double = Double.Parse(latestIncomeReport("interestExpense").ToString())
-
-            ' Calculate and display metrics
-            Dim roa As Double = netIncome / totalAssets
-            result &= $"ROA: {roa:P2}{Environment.NewLine}"
-
-            Dim roe As Double = netIncome / totalShareholderEquity
-            result &= $"ROE: {roe:P2}{Environment.NewLine}"
-
-            Dim operatingMargin As Double = operatingIncome / totalRevenue
-            result &= $"Operating Margin Profit: {operatingMargin:P2}{Environment.NewLine}"
-
-            Dim grossProfitMargin As Double = grossProfit / totalRevenue
-            result &= $"Gross Profit Margin: {grossProfitMargin:P2}{Environment.NewLine}"
-
-            Dim netProfitMargin As Double = netIncome / totalRevenue
-            result &= $"Net Profit Margin: {netProfitMargin:P2}{Environment.NewLine}"
-
-            Dim currentRatio As Double = currentAssets / currentLiabilities
-            result &= $"Current Ratio: {currentRatio:F2}{Environment.NewLine}"
-
-            Dim debtToEquity As Double = totalLiabilities / totalShareholderEquity
-            result &= $"Debt-to-Equity: {debtToEquity:F2}{Environment.NewLine}"
-
-            Dim interestCoverage As Double = operatingIncome / interestExpense
-            result &= $"Interest Coverage: {interestCoverage:F2}{Environment.NewLine}"
-
-            ' Display the result in the TextBox
-            API_Test.Text = result
-        End Using
+        Dim financialData As New FinancialData()
+        Await financialData.LoadFinancialData(selectedSymbol, selectedFiscalYearIndex)
+        financialData.PrintFinancialData()
+        ' Additional code to display ratios or handle results...
     End Sub
 
-    Private Sub GetAPIdata_Click(sender As Object, e As RoutedEventArgs)
-        TestAPI()
+    'TO DO: CHECK WHY IT IS NOT WORKING (Values obtained are 0)
+    Private Async Sub CalculateRatiosButton_Click(sender As Object, e As RoutedEventArgs)
+        If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
+            Console.WriteLine(financialDataList.Count)
+            Console.WriteLine("Data empty, why?")
+            Await LoadFinancialDataAsync()
+        End If
+        Try
+            If CK_ROA.IsChecked = True Then
+                Dim roa As Decimal = FinancialData.ReturnOnAssets()
+                Console.WriteLine($"Return on Assets: {roa}")
+            End If
+        Catch ex As Exception
+            Console.WriteLine(FinancialData.TotalAssets)
+            Console.WriteLine($"An error occurred while calculating ratios: {ex.Message}")
+        End Try
+
     End Sub
+
 End Class
