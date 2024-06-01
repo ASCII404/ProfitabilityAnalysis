@@ -70,59 +70,89 @@ Public Class FinancialData
 
     ' DELETET THIS WHEN DONE WITH TESTING
     Public Sub PrintFinancialData()
-        Console.WriteLine("Financial Data:")
-        Console.WriteLine($"Revenue: {Revenue}")
-        Console.WriteLine($"Cost of Goods Sold: {CostOfGoodsSold}")
-        Console.WriteLine($"Operating Expenses: {OperatingExpenses}")
-        Console.WriteLine($"Net Income: {NetIncome}")
-        Console.WriteLine($"Total Assets: {TotalAssets}")
-        Console.WriteLine($"Total Equity: {TotalEquity}")
-        Console.WriteLine($"EBITDA: {EBITDA}")
-        Console.WriteLine($"Current Assets: {CurrentAssets}")
-        Console.WriteLine($"Current Liabilities: {CurrentLiabilities}")
-        Console.WriteLine($"Total Liabilities: {TotalLiabilities}")
-        Console.WriteLine($"Interest Expense: {InterestExpense}")
+        Debug.WriteLine("Financial Data:")
+        Debug.WriteLine($"Revenue: {Revenue}")
+        Debug.WriteLine($"Cost of Goods Sold: {CostOfGoodsSold}")
+        Debug.WriteLine($"Operating Expenses: {OperatingExpenses}")
+        Debug.WriteLine($"Net Income: {NetIncome}")
+        Debug.WriteLine($"Total Assets: {TotalAssets}")
+        Debug.WriteLine($"Total Equity: {TotalEquity}")
+        Debug.WriteLine($"EBITDA: {EBITDA}")
+        Debug.WriteLine($"Current Assets: {CurrentAssets}")
+        Debug.WriteLine($"Current Liabilities: {CurrentLiabilities}")
+        Debug.WriteLine($"Total Liabilities: {TotalLiabilities}")
+        Debug.WriteLine($"Interest Expense: {InterestExpense}")
     End Sub
 
-    Public Function GrossProfitMargin() As Decimal
-        Return (Revenue - CostOfGoodsSold) / Revenue
+    Public Function GrossProfitMargin(ByVal revenue As Double, ByVal costOfGoodsSold As Double) As Double
+        If revenue = 0 Then
+            Return 0
+        End If
+        Return (revenue - costOfGoodsSold) / revenue
     End Function
 
-    Public Function OperatingProfitMargin() As Decimal
-        Return (Revenue - CostOfGoodsSold - OperatingExpenses) / Revenue
+    Public Function OperatingProfitMargin(ByVal revenue As Double, ByVal costOfGoodsSold As Double, ByVal operatingExpenses As Double) As Double
+        If revenue = 0 Then
+            Return 0
+        End If
+        Return (revenue - costOfGoodsSold - operatingExpenses) / revenue
     End Function
 
-    Public Function NetProfitMargin() As Decimal
-        Return NetIncome / Revenue
+    Public Function NetProfitMargin(ByVal revenue As Double, ByVal costOfGoodsSold As Double, ByVal operatingExpenses As Double, ByVal netIncome As Double) As Double
+        If revenue = 0 Then
+            Return 0
+        End If
+        Return netIncome / revenue
     End Function
 
-    Public Function ReturnOnAssets() As Decimal
-        Return NetIncome / TotalAssets
+    Public Function ReturnOnAssets(ByVal netIncome As Double, ByVal totalAssets As Double) As Double
+        If totalAssets = 0 Then
+            Return 0
+        End If
+        Return netIncome / totalAssets
     End Function
 
-    Public Function ReturnOnEquity() As Decimal
-        Return NetIncome / TotalEquity
+    Public Function ReturnOnEquity(ByVal netIncome As Double, ByVal totalEquity As Double) As Double
+        If totalEquity = 0 Then
+            Return 0
+        End If
+        Return netIncome / totalEquity
     End Function
 
-    Public Function CurrentRatio() As Decimal
-        Return CurrentAssets / CurrentLiabilities
+    Public Function CurrentRatio(ByVal currentAssets As Double, ByVal currentLiabilities As Double) As Double
+        If currentLiabilities = 0 Then
+            Return 0
+        End If
+        Return currentAssets / currentLiabilities
     End Function
 
-    Public Function DebtToEquityRatio() As Decimal
-        Return TotalLiabilities / TotalEquity
-    End Function
-    Public Function InterestCoverageRatio() As Decimal
-        Return EBITDA / InterestExpense
-    End Function
-    Public Function ContributionMargin() As Decimal
-        Return (SalesRevenuePerUnit - VariableCostPerUnit) / SalesRevenuePerUnit
+    Public Function DebtToEquityRatio(ByVal totalLiabilities As Double, ByVal totalEquity As Double) As Double
+        If totalEquity = 0 Then
+            Return 0
+        End If
+        Return totalLiabilities / totalEquity
     End Function
 
-    Public Function BreakEvenPoint() As Decimal
-        If (SalesRevenuePerUnit - VariableCostPerUnit) > 0 Then
-            Return FixedCosts / (SalesRevenuePerUnit - VariableCostPerUnit)
+    Public Function InterestCoverageRatio(ByVal ebitda As Double, ByVal interestExpense As Double) As Double
+        If interestExpense = 0 Then
+            Return 0
+        End If
+        Return ebitda / interestExpense
+    End Function
+
+    Public Function ContributionMarginRatio(ByVal salesRevenuePerUnit As Double, ByVal variableCostPerUnit As Double) As Double
+        If salesRevenuePerUnit = 0 Then
+            Return 0
+        End If
+        Return (salesRevenuePerUnit - variableCostPerUnit) / salesRevenuePerUnit
+    End Function
+
+    Public Function BreakEvenPoint(ByVal fixedCosts As Double, ByVal salesRevenuePerUnit As Double, ByVal variableCostPerUnit As Double) As Double
+        If (salesRevenuePerUnit - variableCostPerUnit) > 0 Then
+            Return fixedCosts / (salesRevenuePerUnit - variableCostPerUnit)
         Else
             Return 0
         End If
     End Function
+
 End Class

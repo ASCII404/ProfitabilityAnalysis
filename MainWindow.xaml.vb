@@ -6,22 +6,15 @@ Imports OfficeOpenXml
 Imports System.Net
 Imports Newtonsoft.Json.Linq
 Imports System.Net.Http
-'Delete this when done with the project
-Imports System.Runtime.InteropServices
+
 Class MainWindow
 
-    'Delete this when done with the project
-    <DllImport("kernel32.dll")>
-    Public Shared Function AllocConsole() As Boolean
-    End Function
 
     Private dbHelper As Database
     Private apiKey As String
     Private FinancialData As FinancialData
     Private financialDataList As List(Of FinancialData)
     Public Sub New()
-        'Delete this when done with the project
-        AllocConsole()
 
         apiKey = "your Alpha Vantage API Key"
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial
@@ -65,11 +58,9 @@ Class MainWindow
         FinancialDataIDInput.Text = String.Empty
     End Sub
 
-
     Private Async Sub AnalysisButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = AnalysisTab
         Await LoadFinancialDataAsync()
-        Console.WriteLine(FinancialData.TotalAssets)
     End Sub
 
     Private Sub InputDataButton_Click(sender As Object, e As RoutedEventArgs)
@@ -172,6 +163,7 @@ Class MainWindow
     Private Sub ClearInputButton_Click(sender As Object, e As RoutedEventArgs)
         ClearInputFields()
     End Sub
+
     Private Sub ClearInputFields()
         DateInput.SelectedDate = Nothing
         RevenueInput.Text = String.Empty
@@ -302,13 +294,13 @@ Class MainWindow
                 ' If the user clicks OK, add the data to the database
                 If result = MessageBoxResult.OK Then
                     dbHelper.AddFinancialData(dateValue, revenue, costOfGoodsSold, operatingExpenses, netIncome, totalAssets, totalEquity, ebitda, currentAssets, currentLiabilities, totalLiabilities, interestExpense, variableCosts, fixedCosts, salesRevenuePerUnit, variableCostPerUnit)
-                    MessageBox.Show("Financial data added successfully!")
                     ClearInputFields()
                 End If
             Catch ex As Exception
                 MessageBox.Show($"Error parsing data at row {rowIndex + 1}: {ex.Message}")
             End Try
         Next
+        MessageBox.Show("Financial data added successfully!")
     End Sub
 
     Private Sub MainTabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles MainTabControl.SelectionChanged
@@ -329,23 +321,57 @@ Class MainWindow
         ' Additional code to display ratios or handle results...
     End Sub
 
-    'TO DO: CHECK WHY IT IS NOT WORKING (Values obtained are 0)
     Private Async Sub CalculateRatiosButton_Click(sender As Object, e As RoutedEventArgs)
-        If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
-            Console.WriteLine(financialDataList.Count)
-            Console.WriteLine("Data empty, why?")
-            Await LoadFinancialDataAsync()
-        End If
-        Try
-            If CK_ROA.IsChecked = True Then
-                Dim roa As Decimal = FinancialData.ReturnOnAssets()
-                Console.WriteLine($"Return on Assets: {roa}")
-            End If
-        Catch ex As Exception
-            Console.WriteLine(FinancialData.TotalAssets)
-            Console.WriteLine($"An error occurred while calculating ratios: {ex.Message}")
-        End Try
+        Dim financialDataList As List(Of FinancialData) = Await dbHelper.GetFinancialDataAsync()
+        Dim results As New Dictionary(Of String, List(Of Double))
+        Dim helperMethods As New FinancialData()
 
+        Dim selectedStartDate As Date? = StartDatePicker.SelectedDate
+        Dim selectedEndDate As Date? = EndDatePicker.SelectedDate
+
+        ' Filter the financial data list based on the selected date
+        Dim filteredDataList As List(Of FinancialData)
+        If selectedStartDate.HasValue AndAlso selectedEndDate.HasValue Then
+            filteredDataList = financialDataList.Where(Function(data) data.DateValue >= selectedStartDate.Value AndAlso data.DateValue <= selectedEndDate.Value).ToList()
+            Debug.WriteLine(filteredDataList.Count & " records found for the selected date range: " & selectedStartDate.Value.ToString("yyyy-MM-dd") & " to " & selectedEndDate.Value.ToString("yyyy-MM-dd"))
+        Else
+            filteredDataList = financialDataList
+            Debug.WriteLine("No date range selected. Processing all records.")
+        End If
+
+        Dim totalAssets As Double = 0
+        Dim totalNetIncome As Double = 0
+        Dim totalEquity As Double = 0
+
+        For Each data As FinancialData In filteredDataList
+            totalAssets += data.TotalAssets
+            totalNetIncome += data.NetIncome
+            totalEquity += data.TotalEquity
+        Next
+
+        'The FinancialData.ReturnOnAssets() is used from the constructor intialization of FinancialData. 
+        If CK_ROA.IsChecked Then
+            If totalAssets > 0 Then
+                Dim roa As Double = FinancialData.ReturnOnAssets(totalNetIncome, totalAssets)
+                Debug.WriteLine($"TotalAssets: {totalAssets}, TotalNetIncome: {totalNetIncome}, ROA: {roa}")
+            Else
+                Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
+            End If
+        End If
+
+        If CK_ROE.IsChecked Then
+            If totalEquity > 0 Then
+                Dim roe As Double = totalNetIncome / totalEquity
+                Debug.WriteLine($"TotalEquity: {totalEquity}, TotalNetIncome: {totalNetIncome}, ROE: {roe}")
+            Else
+                Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
+            End If
+        End If
+
+        For Each result In results
+            Debug.WriteLine($"{result.Key}: {result.Value}")
+        Next
     End Sub
+
 
 End Class
