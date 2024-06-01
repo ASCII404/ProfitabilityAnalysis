@@ -181,6 +181,7 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -189,19 +190,18 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <CheckBox Grid.Row="0" Grid.Column="0" Content="ROA"/>
-                                        <CheckBox Grid.Row="0" Grid.Column="1" Content="ROE"/>
-                                        <CheckBox Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
+                                        <CheckBox x:Name="CK_ROA" Grid.Row="0" Grid.Column="0" Content="ROA"/>
+                                        <CheckBox x:Name="CK_ROE" Grid.Row="0" Grid.Column="1" Content="ROE"/>
+                                        <CheckBox x:Name="CK_OperatingMargin" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
+                                        <CheckBox x:Name="CK_GrossProfitMargin" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
+                                        <CheckBox x:Name="CK_NetProfitMargin" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
+                                        <CheckBox x:Name="CK_CurrentRatios" Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
+                                        <CheckBox x:Name="CK_DebtToEquity" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
+                                        <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
+                                        <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
+                                        <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
 
-                                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
-                                        <CheckBox Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
-                                        <CheckBox Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
-
-                                        <CheckBox Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
-                                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
-                                        <CheckBox Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
-
-                                        <CheckBox Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
+                                        <Button Grid.Row="4" Grid.Column="0" Content="Calculate ratios" Click="CalculateRatiosButton_Click"/>
 
                                         <StackPanel Grid.Row="0" Grid.Column="3" Margin="50,0,0,0">
                                             <TextBlock>CHART 1</TextBlock>
@@ -256,19 +256,19 @@
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Add CheckBoxes to the Grid -->
-                                        <CheckBox Grid.Row="0" Grid.Column="0" Content="ROA"/>
-                                        <CheckBox Grid.Row="0" Grid.Column="1" Content="ROE"/>
-                                        <CheckBox Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
+                                        <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA"/>
+                                        <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE"/>
+                                        <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
 
-                                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
-                                        <CheckBox Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
-                                        <CheckBox Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
+                                        <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
+                                        <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
+                                        <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
 
-                                        <CheckBox Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
-                                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
-                                        <CheckBox Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
+                                        <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
+                                        <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
+                                        <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
 
-                                        <CheckBox Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
+                                        <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
 
                                         <StackPanel Grid.Row="0" Grid.Column="3" Margin="20,0,0,0">
                                             <TextBlock>Chart 1</TextBlock>
@@ -298,7 +298,7 @@
                                     <Button Grid.Row="0" Grid.Column="0" Content="Retrieve data" Margin="0,0,0,10" Click="GetAPIdata_Click"/>
 
                                     <!-- ComboBox -->
-                                    <ComboBox Grid.Row="1" Grid.Column="0" Width="200" Height="30" SelectedIndex="0">
+                                    <ComboBox Name="SymbolOptions"  Grid.Row="1" Grid.Column="0" Width="200" Height="30" SelectedIndex="0">
                                         <ComboBoxItem Content="AAPL" />
                                         <ComboBoxItem Content="AMZN" />
                                         <ComboBoxItem Content="MSFT" />
@@ -321,19 +321,13 @@
                                         <ComboBoxItem Content="IBM" />
                                     </ComboBox>
 
-                                    <ComboBox Grid.Row="1" Grid.Column="1" Width="100" SelectedIndex="0">
+                                    <ComboBox Name="PeriodOptions" Grid.Row="1" Grid.Column="1" Width="100" SelectedIndex="0">
                                         <ComboBoxItem Content="Last year" />
                                         <ComboBoxItem Content="Two years ago" />
                                         <ComboBoxItem Content="Three years ago" />
                                         <ComboBoxItem Content="Four years ago" />
                                         <ComboBoxItem Content="Five years ago" />
                                     </ComboBox>
-
-
-
-                                    <TextBox Name="API_Test" Grid.Row="3" Grid.Column="0" Width="200" Height="300" Margin="0,10,0,0">
-                                        
-                                    </TextBox>
                                 </Grid>
                             </Grid>
                         </DockPanel>

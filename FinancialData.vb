@@ -1,4 +1,6 @@
-﻿Public Class FinancialData
+﻿Imports Newtonsoft.Json.Linq
+
+Public Class FinancialData
     Public Property FinancialDataID As Integer
     Public Property DateValue As Date
     Public Property Revenue As Decimal
@@ -17,8 +19,10 @@
     Public Property SalesRevenuePerUnit As Decimal
     Public Property VariableCostPerUnit As Decimal
 
+    Private AV_API As API
+
     Public Sub New()
-        ' Default constructor
+        AV_API = New API()
     End Sub
 
     Public Sub New(financialDataID As Integer, dateValue As Date, revenue As Decimal, costOfGoodsSold As Decimal, operatingExpenses As Decimal, netIncome As Decimal, totalAssets As Decimal, totalEquity As Decimal, ebitda As Decimal, currentAssets As Decimal, currentLiabilities As Decimal, totalLiabilities As Decimal, interestExpense As Decimal, variableCosts As Decimal, fixedCosts As Decimal, salesRevenuePerUnit As Decimal, variableCostPerUnit As Decimal)
@@ -39,6 +43,45 @@
         Me.FixedCosts = fixedCosts
         Me.SalesRevenuePerUnit = salesRevenuePerUnit
         Me.VariableCostPerUnit = variableCostPerUnit
+    End Sub
+
+    Public Async Function LoadFinancialData(symbol As String, selectedFiscalYearIndex As Integer) As Task
+        AV_API.Symbol = symbol
+        Await AV_API.LoadIncomeStatement_API(selectedFiscalYearIndex)
+
+        ' Populate FinancialData properties from the API data
+        Dim report As JObject = AV_API.IncomeReport
+
+        If report IsNot Nothing Then
+            Revenue = If(report("totalRevenue") IsNot Nothing, CDec(report("totalRevenue")), 0D)
+            CostOfGoodsSold = If(report("costOfRevenue") IsNot Nothing, CDec(report("costOfRevenue")), 0D)
+            OperatingExpenses = If(report("operatingExpenses") IsNot Nothing, CDec(report("operatingExpenses")), 0D)
+            NetIncome = If(report("netIncome") IsNot Nothing, CDec(report("netIncome")), 0D)
+            TotalAssets = If(report("totalAssets") IsNot Nothing, CDec(report("totalAssets")), 0D)
+            TotalEquity = If(report("totalShareholderEquity") IsNot Nothing, CDec(report("totalShareholderEquity")), 0D)
+            EBITDA = If(report("ebitda") IsNot Nothing, CDec(report("ebitda")), 0D)
+            CurrentAssets = If(report("currentAssets") IsNot Nothing, CDec(report("currentAssets")), 0D)
+            CurrentLiabilities = If(report("currentLiabilities") IsNot Nothing, CDec(report("currentLiabilities")), 0D)
+            TotalLiabilities = If(report("totalLiabilities") IsNot Nothing, CDec(report("totalLiabilities")), 0D)
+            InterestExpense = If(report("interestExpense") IsNot Nothing, CDec(report("interestExpense")), 0D)
+            ' Other fields can be populated similarly
+        End If
+    End Function
+
+    ' DELETET THIS WHEN DONE WITH TESTING
+    Public Sub PrintFinancialData()
+        Console.WriteLine("Financial Data:")
+        Console.WriteLine($"Revenue: {Revenue}")
+        Console.WriteLine($"Cost of Goods Sold: {CostOfGoodsSold}")
+        Console.WriteLine($"Operating Expenses: {OperatingExpenses}")
+        Console.WriteLine($"Net Income: {NetIncome}")
+        Console.WriteLine($"Total Assets: {TotalAssets}")
+        Console.WriteLine($"Total Equity: {TotalEquity}")
+        Console.WriteLine($"EBITDA: {EBITDA}")
+        Console.WriteLine($"Current Assets: {CurrentAssets}")
+        Console.WriteLine($"Current Liabilities: {CurrentLiabilities}")
+        Console.WriteLine($"Total Liabilities: {TotalLiabilities}")
+        Console.WriteLine($"Interest Expense: {InterestExpense}")
     End Sub
 
     Public Function GrossProfitMargin() As Decimal
