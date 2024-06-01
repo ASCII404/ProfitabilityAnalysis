@@ -33,7 +33,7 @@
 
         <!-- Main content area with hidden TabControl headers -->
         <DockPanel>
-            <TabControl Name="MainTabControl" BorderThickness="0" DockPanel.Dock="Top">
+            <TabControl Name="MainTabControl" BorderThickness="0" DockPanel.Dock="Top" SelectedIndex="0">
                 <TabControl.Template>
                     <ControlTemplate TargetType="TabControl">
                         <Grid>
@@ -92,69 +92,69 @@
                     <Grid Background="Green">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
-                            <!-- Takes up all available space -->
+                            <!-- This row takes all available space -->
+                            <RowDefinition Height="Auto" />
+                            <!-- This row sizes to content -->
                         </Grid.RowDefinitions>
 
-                        <DockPanel>
-                            <!-- Customized DataGrid -->
-                            <DataGrid Name="FinancialDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column"
-                      CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
-                      RowHeaderWidth="0" GridLinesVisibility="None" DockPanel.Dock="Top">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Binding="{Binding FinancialDataID}" Width="50" />
-                                    <DataGridTextColumn Header="Date" Binding="{Binding DateValue, StringFormat=d}" Width="100" />
-                                    <DataGridTextColumn Header="Revenue" Binding="{Binding Revenue, StringFormat=C}" Width="100" />
-                                    <DataGridTextColumn Header="Cost of Goods Sold" Binding="{Binding CostOfGoodsSold, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Operating Expenses" Binding="{Binding OperatingExpenses, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Net Income" Binding="{Binding NetIncome, StringFormat=C}" Width="100" />
-                                    <DataGridTextColumn Header="Total Assets" Binding="{Binding TotalAssets, StringFormat=C}" Width="100" />
-                                    <DataGridTextColumn Header="Total Equity" Binding="{Binding TotalEquity, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="EBITDA" Binding="{Binding EBITDA, StringFormat=C}" Width="100" />
-                                    <DataGridTextColumn Header="Current Assets" Binding="{Binding CurrentAssets, StringFormat=C}" Width="100" />
-                                    <DataGridTextColumn Header="Current Liabilities" Binding="{Binding CurrentLiabilities, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Total Liabilities" Binding="{Binding TotalLiabilities, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Interest Expense" Binding="{Binding InterestExpense, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Variable Costs" Binding="{Binding VariableCosts, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Fixed Costs" Binding="{Binding FixedCosts, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Sales Revenue Per Unit" Binding="{Binding SalesRevenuePerUnit, StringFormat=C}" Width="150" />
-                                    <DataGridTextColumn Header="Variable Cost Per Unit" Binding="{Binding VariableCostPerUnit, StringFormat=C}" Width="150" />
-                                    
-                                    <!-- Add more columns as needed -->
-                                </DataGrid.Columns>
+                        <!-- Customized DataGrid -->
+                        <DataGrid Name="FinancialDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column"
+                              CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                              RowHeaderWidth="0" GridLinesVisibility="None" Grid.Row="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding FinancialDataID}" Width="50" />
+                                <DataGridTextColumn Header="Date" Binding="{Binding DateValue, StringFormat=d}" Width="100" />
+                                <DataGridTextColumn Header="Revenue" Binding="{Binding Revenue, StringFormat=C}" Width="100" />
+                                <DataGridTextColumn Header="Cost of Goods Sold" Binding="{Binding CostOfGoodsSold, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Operating Expenses" Binding="{Binding OperatingExpenses, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Net Income" Binding="{Binding NetIncome, StringFormat=C}" Width="100" />
+                                <DataGridTextColumn Header="Total Assets" Binding="{Binding TotalAssets, StringFormat=C}" Width="100" />
+                                <DataGridTextColumn Header="Total Equity" Binding="{Binding TotalEquity, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="EBITDA" Binding="{Binding EBITDA, StringFormat=C}" Width="100" />
+                                <DataGridTextColumn Header="Current Assets" Binding="{Binding CurrentAssets, StringFormat=C}" Width="100" />
+                                <DataGridTextColumn Header="Current Liabilities" Binding="{Binding CurrentLiabilities, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Total Liabilities" Binding="{Binding TotalLiabilities, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Interest Expense" Binding="{Binding InterestExpense, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Variable Costs" Binding="{Binding VariableCosts, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Fixed Costs" Binding="{Binding FixedCosts, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Sales Revenue Per Unit" Binding="{Binding SalesRevenuePerUnit, StringFormat=C}" Width="150" />
+                                <DataGridTextColumn Header="Variable Cost Per Unit" Binding="{Binding VariableCostPerUnit, StringFormat=C}" Width="150" />
 
-                                <DataGrid.Resources>
-                                    <!-- Style for the DataGrid -->
-                                    <Style TargetType="DataGrid">
-                                        <Setter Property="AlternatingRowBackground" Value="LightGray" />
-                                        <Setter Property="RowBackground" Value="White" />
-                                        <Setter Property="GridLinesVisibility" Value="Horizontal" />
-                                        <Setter Property="HorizontalGridLinesBrush" Value="Gray" />
-                                    </Style>
+                                <!-- Add more columns as needed -->
+                            </DataGrid.Columns>
 
-                                    <!-- Style for the DataGrid rows -->
-                                    <Style TargetType="DataGridRow">
-                                        <Setter Property="FontSize" Value="14" />
-                                        <Setter Property="Height" Value="30" />
-                                    </Style>
+                            <DataGrid.Resources>
+                                <!-- Style for the DataGrid -->
+                                <Style TargetType="DataGrid">
+                                    <Setter Property="AlternatingRowBackground" Value="LightGray" />
+                                    <Setter Property="RowBackground" Value="White" />
+                                    <Setter Property="GridLinesVisibility" Value="Horizontal" />
+                                    <Setter Property="HorizontalGridLinesBrush" Value="Gray" />
+                                </Style>
 
-                                    <!-- Style for the DataGrid columns header -->
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="Background" Value="LightSteelBlue" />
-                                        <Setter Property="FontSize" Value="14" />
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                        <Setter Property="Height" Value="30" />
-                                        <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                        <Setter Property="Padding" Value="5" />
-                                    </Style>
-                                </DataGrid.Resources>
-                            </DataGrid>
+                                <!-- Style for the DataGrid rows -->
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Height" Value="30" />
+                                </Style>
 
-                            <StackPanel DockPanel.Dock="Bottom" Margin="10">
-                                <TextBlock Width="600">Specify which transaction IDs you do not want anymore</TextBlock>
-                                <TextBox Name="FinancialDataIDInput" Width="600"></TextBox>
-                                <Button Content="Delete Financial Data" Click="DeleteDataButton_Click" Width="600"></Button>
-                            </StackPanel>
-                        </DockPanel>
+                                <!-- Style for the DataGrid columns header -->
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="LightSteelBlue" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="Height" Value="30" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                    <Setter Property="Padding" Value="5" />
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
+
+                        <StackPanel Grid.Row="1" Margin="10">
+                            <TextBlock Width="600">Specify which transaction IDs you do not want anymore</TextBlock>
+                            <TextBox Name="FinancialDataIDInput" Width="600"></TextBox>
+                            <Button Content="Delete Financial Data" Click="DeleteDataButton_Click" Width="600"></Button>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
 
