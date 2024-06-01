@@ -342,11 +342,35 @@ Class MainWindow
         Dim totalAssets As Double = 0
         Dim totalNetIncome As Double = 0
         Dim totalEquity As Double = 0
+        Dim totalRevenue As Double = 0
+        Dim TotalOperatingExpenses As Double = 0
+        Dim totalCostOfGoodsSold As Double = 0
+        Dim totalInterestExpense As Double = 0
+        Dim totalVariableCosts As Double = 0
+        Dim totalFixedCosts As Double = 0
+        Dim totalSalesRevenuePerUnit As Double = 0
+        Dim totalVariableCostPerUnit As Double = 0
+        Dim totalLiabilities As Double = 0
+        Dim totalCurrentLiabilities As Double = 0
+        Dim totalCurrentAssets As Double = 0
+        Dim totalEbitda As Double = 0
 
         For Each data As FinancialData In filteredDataList
             totalAssets += data.TotalAssets
             totalNetIncome += data.NetIncome
             totalEquity += data.TotalEquity
+            totalRevenue += data.Revenue
+            TotalOperatingExpenses += data.OperatingExpenses
+            totalCostOfGoodsSold += data.CostOfGoodsSold
+            totalInterestExpense += data.InterestExpense
+            totalVariableCosts += data.VariableCosts
+            totalFixedCosts += data.FixedCosts
+            totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
+            totalVariableCostPerUnit += data.VariableCostPerUnit
+            totalLiabilities += data.TotalLiabilities
+            totalCurrentLiabilities += data.CurrentLiabilities
+            totalCurrentAssets += data.CurrentAssets
+            totalEbitda += data.EBITDA
         Next
 
         'The FinancialData.ReturnOnAssets() is used from the constructor intialization of FinancialData. 
@@ -371,6 +395,84 @@ Class MainWindow
         For Each result In results
             Debug.WriteLine($"{result.Key}: {result.Value}")
         Next
+
+        If CK_OperatingMargin.IsChecked Then
+            Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses
+                                                                                )
+            Debug.WriteLine($"Operating Margin: {operatingMargin}")
+        End If
+
+        If CK_OperatingMargin.IsChecked Then
+            If totalRevenue > 0 Then
+                Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses)
+                Debug.WriteLine($"totalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, OM: {operatingMargin}")
+            Else
+                Debug.WriteLine("Total Revenue is zero or less, cannot calculate OM")
+            End If
+        End If
+
+        If CK_NetProfitMargin.IsChecked Then
+            If totalRevenue > 0 Then
+                Dim netProfitMargin As Double = helperMethods.NetProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses, totalNetIncome)
+                Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, TotalOperatingExpenses: {TotalOperatingExpenses}, TotalNetIncome: {totalNetIncome}, NPM: {netProfitMargin}")
+            Else
+                Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
+            End If
+        End If
+
+        If CK_GrossProfitMargin.IsChecked Then
+            If totalRevenue > 0 Then
+                Dim grossProfitMargin As Double = helperMethods.GrossProfitMargin(totalRevenue, totalCostOfGoodsSold)
+                Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, GPM: {grossProfitMargin}")
+            Else
+                Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
+            End If
+        End If
+
+        If CK_CurrentRatios.IsChecked Then
+            If totalCurrentLiabilities > 0 Then
+                Dim currentRatio As Double = helperMethods.CurrentRatio(totalCurrentAssets, totalCurrentLiabilities)
+                Debug.WriteLine($"TotalCurrentAssets: {totalCurrentAssets}, TotalCurrentLiabilities: {totalCurrentLiabilities}, CR: {currentRatio}")
+            Else
+                Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
+            End If
+        End If
+
+        If CK_DebtToEquity.IsChecked Then
+            If totalEquity > 0 Then
+                Dim debtToEquityRatio As Double = helperMethods.DebtToEquityRatio(totalLiabilities, totalEquity)
+                Debug.WriteLine($"TotalLiabilities: {totalLiabilities}, TotalEquity: {totalEquity}, D/E: {debtToEquityRatio}")
+            Else
+                Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
+            End If
+        End If
+
+        If CK_InterestCoverage.IsChecked Then
+            If totalInterestExpense > 0 Then
+                Dim interestCoverageRatio As Double = helperMethods.InterestCoverageRatio(totalEbitda, totalInterestExpense)
+                Debug.WriteLine($"TotalNetIncome: {totalEbitda}, TotalInterestExpense: {totalInterestExpense}, ICR: {interestCoverageRatio}")
+            Else
+                Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
+            End If
+        End If
+
+        If CK_ContributionMargin.IsChecked Then
+            If totalSalesRevenuePerUnit > 0 Then
+                Dim contributionMargin As Double = helperMethods.ContributionMarginRatio(totalSalesRevenuePerUnit, totalVariableCostPerUnit)
+                Debug.WriteLine($"TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, CM: {contributionMargin}")
+            Else
+                Debug.WriteLine("Total Sales Revenue Per Unit is zero or less, cannot calculate CM")
+            End If
+        End If
+
+        If CK_BreakEvenPoint.IsChecked Then
+            If totalFixedCosts > 0 Then
+                Dim breakEvenPoint As Double = helperMethods.BreakEvenPoint(totalFixedCosts, totalSalesRevenuePerUnit, totalVariableCostPerUnit)
+                Debug.WriteLine($"TotalFixedCosts: {totalFixedCosts}, TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, BEP: {breakEvenPoint}")
+            Else
+                Debug.WriteLine("Total Fixed Costs is zero or less, cannot calculate BEP")
+            End If
+        End If
     End Sub
 
 
