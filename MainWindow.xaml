@@ -27,7 +27,7 @@
                 <Button Height="50" Margin="40,40,40,0" Click="PreviewDatabaseButton_Click">Preview Database</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="AnalysisButton_Click">Analysis</Button>
                 <Button Height="50" Margin="40,40,40,0" Click="InputDataButton_Click">Input Data</Button>
-                <Button Height="50" Margin="40,40,40,0" Click="ScenarioAnalysisButton_Click">Scenario Analysis</Button>
+                <Button Height="50" Margin="40,40,40,0" Click="ScenarioAnalysisButton_Click">Analysis results</Button>
             </StackPanel>
         </DockPanel>
 
@@ -158,23 +158,41 @@
                     </Grid>
                 </TabItem>
 
-                <!-- Preview AnalysisTab -->
                 <TabItem Header="AnalysisTab" Name="AnalysisTab">
-                    <Grid Background="White">
-                        <DockPanel>
-                            <!-- Top Section -->
-                            <Grid DockPanel.Dock="Top" Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                    <Grid Background="#FFFFFF">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <!-- Top Section with Geometric Background -->
+                        <Grid Grid.Row="0" Margin="20" Background="#F5F5F5" Height="250">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Date Pickers -->
+                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <Border Background="#FFFFFF" CornerRadius="10" Padding="10" Margin="0,0,0,20">
                                     <DatePicker Name="StartDatePicker" BorderThickness="0" Text="Select start date" />
-                                    <DatePicker Name="EndDatePicker" Width="120" BorderThickness="0" Text="Select end date" />
-                                </StackPanel>
+                                </Border>
+                                <Border Background="#FFFFFF" CornerRadius="10" Padding="10">
+                                    <DatePicker Name="EndDatePicker" Width="150" BorderThickness="0" Text="Select end date" />
+                                </Border>
 
-                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Button Grid.Row="4" Grid.Column="0" Content="Calculate Ratios" Margin="10" Click="CalculateRatiosButton_Click" />
+
+                            </StackPanel>
+
+                            <!-- Checkboxes and Button -->
+                            <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <Border Background="#FFFFFF" BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="10" Padding="10">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -187,104 +205,65 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <CheckBox x:Name="CK_ROA" Grid.Row="0" Grid.Column="0" Content="ROA"/>
-                                        <CheckBox x:Name="CK_ROE" Grid.Row="0" Grid.Column="1" Content="ROE"/>
-                                        <CheckBox x:Name="CK_OperatingMargin" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
-                                        <CheckBox x:Name="CK_GrossProfitMargin" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
-                                        <CheckBox x:Name="CK_NetProfitMargin" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
-                                        <CheckBox x:Name="CK_CurrentRatios" Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
-                                        <CheckBox x:Name="CK_DebtToEquity" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
-                                        <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
-                                        <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
-                                        <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
+                                        <CheckBox x:Name="CK_ROA" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10" BorderThickness="3"/>
+                                        <CheckBox x:Name="CK_ROE" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10"/>
+                                        <CheckBox x:Name="CK_OperatingMargin" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10"/>
+                                        <CheckBox x:Name="CK_GrossProfitMargin" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10"/>
+                                        <CheckBox x:Name="CK_NetProfitMargin" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10"/>
+                                        <CheckBox x:Name="CK_CurrentRatios" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10"/>
+                                        <CheckBox x:Name="CK_DebtToEquity" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10"/>
+                                        <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10"/>
+                                        <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10"/>
+                                        <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="0" Content="Break-Even Point" Margin="10"/>
 
-                                        <Button Grid.Row="4" Grid.Column="0" Content="Calculate ratios" Click="CalculateRatiosButton_Click"/>
-
-                                        <StackPanel Grid.Row="0" Grid.Column="3" Margin="50,0,0,0">
-                                            <TextBlock>CHART 1</TextBlock>
-                                            <!--<lvc:CandleSeries></lvc:CandleSeries>-->
-                                        </StackPanel>
-                                        <StackPanel Grid.Row="0" Grid.Column="4" Margin="200,0,0,0">
-                                            <TextBlock>CHART 2</TextBlock>
-                                            <!--<lvc:PieChart></lvc:PieChart>-->
-                                        </StackPanel>
                                     </Grid>
-                                </StackPanel>
-                            </Grid>
+                                </Border>
+                            </StackPanel>
 
-                            <!-- Middle Separator -->
-                            <Separator DockPanel.Dock="Top" Margin="30,70"/>
+                            <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <TextBlock>da</TextBlock>
+                                <TextBlock>da</TextBlock>
+                                <TextBlock>da</TextBlock>
+                                <TextBlock>da</TextBlock>
+                            </StackPanel>
+                        
+                        </Grid>
 
-                            <!-- Bottom Section -->
-                            <Grid DockPanel.Dock="Bottom" Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                        <!-- Middle Separator -->
+                        <Separator Grid.Row="2" HorizontalAlignment="Center" Width="1000" Margin="0,20,0,0"/>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                        <!-- Bottom Section with Geometric Background -->
+                        <Grid Grid.Row="1" Margin="20" Background="#F5F5F5" Height="250">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Date Pickers -->
+                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <Border Background="#FFFFFF" CornerRadius="10" Padding="10" Margin="0,0,0,20">
                                     <DatePicker Name="StartDatePickerBottom" BorderThickness="0" Text="Select start date" />
-                                    <DatePicker Name="EndDatePickerBottom" Width="120" BorderThickness="0" Text="Select end date" />
-                                </StackPanel>
+                                </Border>
+                                <Border Background="#FFFFFF" CornerRadius="10" Padding="10">
+                                    <DatePicker Name="EndDatePickerBottom" Width="150" BorderThickness="0" Text="Select end date" />
+                                </Border>
+                            </StackPanel>
 
-                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                    <Grid>
-                                        <!-- Define the Grid Rows and Columns -->
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <!-- Add CheckBoxes to the Grid -->
-                                        <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA"/>
-                                        <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE"/>
-                                        <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit"/>
-
-                                        <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin"/>
-                                        <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin"/>
-                                        <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios"/>
-
-                                        <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity"/>
-                                        <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage"/>
-                                        <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin"/>
-
-                                        <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="0" Content="Break-Even Point"/>
-
-                                        <StackPanel Grid.Row="0" Grid.Column="3" Margin="20,0,0,0">
-                                            <TextBlock>Chart 1</TextBlock>
-                                            <!--<lvc:LineSeries></lvc:LineSeries>-->
-                                        </StackPanel>
-
-                                        <StackPanel Grid.Row="0" Grid.Column="4" Margin="40,0,0,0">
-                                            <TextBlock>Chart 2</TextBlock>
-                                            <!--<lvc:PieChart></lvc:PieChart>-->
-                                        </StackPanel>
-                                    </Grid>
-                                </StackPanel>
-
-                                <!-- Add a Grid for Button and ComboBox -->
-                                <Grid Grid.Row="4" Grid.Column="0" Margin="10,0,0,0">
+                            <!-- Checkboxes, Button, and ComboBoxes -->
+                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <Grid>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -292,13 +271,24 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Button -->
-                                    <Button Grid.Row="0" Grid.Column="0" Content="Retrieve data" Margin="0,0,0,10" Click="GetAPIdata_Click"/>
+                                    <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10"/>
+                                    <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10"/>
+                                    <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10"/>
+                                    <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10"/>
+                                    <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10"/>
+                                    <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10"/>
+                                    <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10"/>
+                                    <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10"/>
+                                    <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10"/>
+                                    <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="0" Content="Break-Even Point" Margin="10"/>
 
-                                    <!-- ComboBox -->
-                                    <ComboBox Name="SymbolOptions"  Grid.Row="1" Grid.Column="0" Width="200" Height="30" SelectedIndex="0">
+                                    <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Data" Margin="0,0,10,0" Click="GetAPIdata_Click"/>
+                                    <ComboBox Name="SymbolOptions" Grid.Row="4" Grid.Column="1" Width="100" Height="30" SelectedIndex="0" Margin="0,10,10,0">
                                         <ComboBoxItem Content="AAPL" />
                                         <ComboBoxItem Content="AMZN" />
                                         <ComboBoxItem Content="MSFT" />
@@ -321,7 +311,7 @@
                                         <ComboBoxItem Content="IBM" />
                                     </ComboBox>
 
-                                    <ComboBox Name="PeriodOptions" Grid.Row="1" Grid.Column="1" Width="100" SelectedIndex="0">
+                                    <ComboBox Name="PeriodOptions" Grid.Row="4" Grid.Column="2" Width="100" Height="30" SelectedIndex="0" Margin="0,10,0,0">
                                         <ComboBoxItem Content="Last year" />
                                         <ComboBoxItem Content="Two years ago" />
                                         <ComboBoxItem Content="Three years ago" />
@@ -329,13 +319,10 @@
                                         <ComboBoxItem Content="Five years ago" />
                                     </ComboBox>
                                 </Grid>
-                            </Grid>
-                        </DockPanel>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                 </TabItem>
-
-
-
 
 
                 <!-- Preview InputDataTab -->
