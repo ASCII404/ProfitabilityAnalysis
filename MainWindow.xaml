@@ -7,8 +7,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="Profitabil-inatorul" Height="720" Width="1280"
-        MinWidth="1280" MinHeight="720">
-
+        ResizeMode="CanMinimize">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -17,6 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+
     
     <DockPanel>
         <!-- Sidebar for navigation buttons -->
@@ -87,7 +87,7 @@
                 <!-- Preview Database Tab -->
                 <!-- Add an edit database button, specify the ID you want to edit, etc-->
                 <!-- Or maybe do not edit the database at all? just delete the row and enter it again but correctly? dumbass?-->
-                <!-- TO DO: Date Range(Start, End), Value Ranges(Min,Max), Record Count(Total number), Most Recent Entry, Oldest date Entry(also called first entry? why would I add this? am I going insane?), Maybe a standard deviation for each column?-->
+                <!-- TO DO: Date Range(Start, End), Value Ranges(Min,Max),  Maybe a standard deviation for each column?-->
                 <TabItem Header="Preview Database" Name="PreviewDatabaseTab">
                     <Grid Background="Green">
                         <Grid.RowDefinitions>
@@ -178,7 +178,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Date Pickers -->
-                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" Margin="30,0,20,0">
                                 <Border Background="#FFFFFF" CornerRadius="10" Padding="10" Margin="0,0,0,20">
                                     <DatePicker Name="StartDatePicker" BorderThickness="0" Text="Select start date" />
                                 </Border>
@@ -205,6 +205,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <CheckBox x:Name="CK_ROA" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10" BorderThickness="3"/>
@@ -216,26 +217,66 @@
                                         <CheckBox x:Name="CK_DebtToEquity" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10"/>
                                         <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10"/>
                                         <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10"/>
-                                        <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="0" Content="Break-Even Point" Margin="10"/>
+                                        <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10"/>
 
                                     </Grid>
                                 </Border>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
-                                <TextBlock>da</TextBlock>
-                                <TextBlock>da</TextBlock>
-                                <TextBlock>da</TextBlock>
-                                <TextBlock>da</TextBlock>
-                            </StackPanel>
-                        
+
+                            <ListView Grid.Row="4" Grid.Column="3" Name="MetricsResults_List" Margin="20,45,0,20" Width="220">
+                                <ListView.Items>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="ROA: " />
+                                        <TextBlock Text="0" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Roe" />
+                                        <TextBlock Text=" Metric 4" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Operating Margin Profit:" />
+                                        <TextBlock Text=" 6" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Gross Profit Margin: " />
+                                        <TextBlock Text="8" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Net Profit Margin: " />
+                                        <TextBlock Text=" 10" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Current Ratios: " />
+                                        <TextBlock Text=" 12" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Debt-to-Equity:" />
+                                        <TextBlock Text=" 14" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Interest Coverage:" />
+                                        <TextBlock Text=" 16" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Contribution Margin:" />
+                                        <TextBlock Text=" 18" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Break-Even Point:" />
+                                        <TextBlock Text=" 20" />
+                                    </StackPanel>
+
+                                </ListView.Items>
+                            </ListView>
+
                         </Grid>
 
-                        <!-- Middle Separator -->
-                        <Separator Grid.Row="2" HorizontalAlignment="Center" Width="1000" Margin="0,20,0,0"/>
-
                         <!-- Bottom Section with Geometric Background -->
-                        <Grid Grid.Row="1" Margin="20" Background="#F5F5F5" Height="250">
+                        <Grid Grid.Row="1" Margin="20,0,20,0" Background="#F5F5F5" Height="290">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
@@ -250,17 +291,22 @@
                             </Grid.RowDefinitions>
 
                             <!-- Date Pickers -->
-                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                <Border Background="#FFFFFF" CornerRadius="10" Padding="10" Margin="0,0,0,20">
+                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
+                                <Border Background="#FFFFFF" CornerRadius="10" Padding="10" Margin="0,20,0,20">
                                     <DatePicker Name="StartDatePickerBottom" BorderThickness="0" Text="Select start date" />
                                 </Border>
                                 <Border Background="#FFFFFF" CornerRadius="10" Padding="10">
                                     <DatePicker Name="EndDatePickerBottom" Width="150" BorderThickness="0" Text="Select end date" />
                                 </Border>
+                                <!-- Do not forget to change the style (Check the custom style made in a separate file) -->
+                                <!-- Put these buttons under the ComboBox Layout -->
+                                <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Income Statement" Margin="0,10,10,0" Click="GetAPIdata_Click"/>
+                                <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Balancesheet" Margin="0,10,10,0" Click="GetAPIdata_Click"/>
+
                             </StackPanel>
 
                             <!-- Checkboxes, Button, and ComboBoxes -->
-                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
+                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="75,0,0,0">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -276,19 +322,19 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10"/>
-                                    <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10"/>
-                                    <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10"/>
-                                    <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10"/>
-                                    <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10"/>
-                                    <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10"/>
-                                    <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10"/>
-                                    <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10"/>
-                                    <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10"/>
-                                    <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="0" Content="Break-Even Point" Margin="10"/>
+                                    <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="2" Content="ROA" Margin="10"/>
+                                    <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="3" Content="ROE" Margin="10"/>
+                                    <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="4" Content="Operating Margin Profit" Margin="10"/>
+                                    <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="2" Content="Gross Profit Margin" Margin="10"/>
+                                    <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="3" Content="Net Profit Margin" Margin="10"/>
+                                    <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="4" Content="Current Ratios" Margin="10"/>
+                                    <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="2" Content="Debt-to-Equity" Margin="10"/>
+                                    <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="3" Content="Interest Coverage" Margin="10"/>
+                                    <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="4" Content="Contribution Margin" Margin="10"/>
+                                    <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="3" Content="Break-Even Point" Margin="10"/>
 
-                                    <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Data" Margin="0,0,10,0" Click="GetAPIdata_Click"/>
-                                    <ComboBox Name="SymbolOptions" Grid.Row="4" Grid.Column="1" Width="100" Height="30" SelectedIndex="0" Margin="0,10,10,0">
+
+                                    <ComboBox Name="SymbolOptions" Grid.Row="0" Grid.Column="0" Width="100" Height="30" SelectedIndex="0" Margin="0,10,10,0" Style="{StaticResource ComboBoxButtonStyle}">
                                         <ComboBoxItem Content="AAPL" />
                                         <ComboBoxItem Content="AMZN" />
                                         <ComboBoxItem Content="MSFT" />
@@ -311,7 +357,7 @@
                                         <ComboBoxItem Content="IBM" />
                                     </ComboBox>
 
-                                    <ComboBox Name="PeriodOptions" Grid.Row="4" Grid.Column="2" Width="100" Height="30" SelectedIndex="0" Margin="0,10,0,0">
+                                    <ComboBox Name="PeriodOptions" Grid.Row="0" Grid.Column="1" Width="100" Height="30" SelectedIndex="0" Margin="0,10,0,0">
                                         <ComboBoxItem Content="Last year" />
                                         <ComboBoxItem Content="Two years ago" />
                                         <ComboBoxItem Content="Three years ago" />

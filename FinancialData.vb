@@ -84,6 +84,7 @@ Public Class FinancialData
         Debug.WriteLine($"Interest Expense: {InterestExpense}")
     End Sub
 
+    'TO DO: IMPLEMENT API FINANCIAL DATA FOR BALANCE SHEET
     Public Function GrossProfitMargin(ByVal revenue As Double, ByVal costOfGoodsSold As Double) As Double
         If revenue = 0 Then
             Return 0
