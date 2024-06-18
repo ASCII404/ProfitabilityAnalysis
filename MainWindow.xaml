@@ -7,7 +7,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="Profitabil-inatorul" Height="720" Width="1280"
-        ResizeMode="CanMinimize">
+        MinHeight="720" MinWidth="1280">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -20,16 +20,48 @@
     
     <DockPanel>
         <!-- Sidebar for navigation buttons -->
-        <DockPanel DockPanel.Dock="Left" Background="Gray" Width="200" MinWidth="200">
-            <Button Height="50" Margin="40,20,40,30" DockPanel.Dock="Bottom">HELP</Button>
+        <DockPanel DockPanel.Dock="Left" Background="Gray" Width="150" MinWidth="150">
+            <Button Height="60" Background="Transparent" Margin="20,20,20,30" DockPanel.Dock="Bottom">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\help-web-button.png" Width="20" Height="20" Margin="0,0,0,10"/>
+                    <TextBlock HorizontalAlignment="Center">Help</TextBlock>
+                </StackPanel>
+            </Button>
             <StackPanel>
-                <Button Height="50" Margin="40,40,40,0" Click="DashboardButton_Click">Dashboard</Button>
-                <Button Height="50" Margin="40,40,40,0" Click="PreviewDatabaseButton_Click">Preview Database</Button>
-                <Button Height="50" Margin="40,40,40,0" Click="AnalysisButton_Click">Analysis</Button>
-                <Button Height="50" Margin="40,40,40,0" Click="InputDataButton_Click">Input Data</Button>
-                <Button Height="50" Margin="40,40,40,0" Click="ScenarioAnalysisButton_Click">Analysis results</Button>
+                <Button Height="70" Margin="20,30,20,0" Click="DashboardButton_Click">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" Width="20" Height="20" Margin="0,0,0,10"/>
+                        <TextBlock HorizontalAlignment="Center">Dashboard</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Height="70" Margin="20,30,20,0" Click="PreviewDatabaseButton_Click">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\database.png" Width="20" Height="20" Margin="0,0,0,10"/>
+                        <TextBlock HorizontalAlignment="Center">Preview Database</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Height="70" Margin="20,30,20,0" Click="AnalysisButton_Click">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\analytics.png" Width="40" Height="40" Margin="0,0,0,10"/>
+                        <TextBlock HorizontalAlignment="Center">Analysis</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Height="70" Margin="20,30,20,0" Click="InputDataButton_Click">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\input.png" Width="20" Height="20" Margin="0,0,0,10"/>
+                        <TextBlock HorizontalAlignment="Center">Input Data</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Height="70" Margin="20,30,20,0" Click="ScenarioAnalysisButton_Click">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\checklist.png" Width="20" Height="20" Margin="0,0,0,10"/>
+                        <TextBlock HorizontalAlignment="Center">Analysis results</TextBlock>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </DockPanel>
+
+
 
         <!-- Main content area with hidden TabControl headers -->
         <DockPanel>
@@ -55,33 +87,71 @@
 
                         <!-- Placeholder for Chart 1 -->
                         <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Name="chart1" Visibility="Collapsed" />
-                        <Grid Grid.Row="0" Grid.Column="0" Name="placeholder1">
-                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
-                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        <Grid Grid.Row="0" Grid.Column="0" Name="placeholder1" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                                <TextBlock Text="TextBlock 1" Padding="10" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 2 -->
                         <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Name="chart2" Visibility="Collapsed" />
-                        <Grid Grid.Row="0" Grid.Column="1" Name="placeholder2">
-                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
-                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        <Grid Grid.Row="0" Grid.Column="1" Name="placeholder2" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                                <TextBlock Text="This is ROA" Padding="10" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 3 -->
                         <lvc:CartesianChart Grid.Row="1" Grid.Column="0" Name="chart3" Visibility="Collapsed" />
-                        <Grid Grid.Row="1" Grid.Column="0" Name="placeholder3">
-                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
-                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        <Grid Grid.Row="1" Grid.Column="0" Name="placeholder3" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                                <TextBlock Text="This is XYZ" Padding="10" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 4 -->
                         <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="chart4" Visibility="Collapsed" />
-                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4">
-                            <Rectangle Fill="LightGray" RadiusX="10" RadiusY="10" Margin="10"/>
-                            <TextBlock Text="Data is not loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DarkGray" />
+                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                                <TextBlock Text="This is ABC" Padding="10" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
                         </Grid>
                     </Grid>
                 </TabItem>
+
+
+
+
+
+
 
 
                 <!-- Preview Database Tab -->
