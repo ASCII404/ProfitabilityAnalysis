@@ -140,28 +140,28 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border" 
-                            BorderBrush="Gray" 
-                            BorderThickness="1" 
-                            CornerRadius="3"
-                            Background="LightGray"
-                            Margin="2" Padding="4">
-                        <ContentPresenter />
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="15" 
+                            Padding="10,5">
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="LightBlue" />
+                            <Setter TargetName="border" Property="Background" Value="LightBlue"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="SkyBlue" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                            <Setter TargetName="border" Property="Background" Value="Red"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Height" Value="70"/>
+        <Setter Property="Margin" Value="20,30,20,0"/>
     </Style>
 
 </ResourceDictionary>

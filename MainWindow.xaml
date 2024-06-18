@@ -21,38 +21,38 @@
     <DockPanel>
         <!-- Sidebar for navigation buttons -->
         <DockPanel DockPanel.Dock="Left" Background="Gray" Width="150" MinWidth="150">
-            <Button Height="60" Background="Transparent" Margin="20,20,20,30" DockPanel.Dock="Bottom">
+            <Button Style="{StaticResource RoundedButtonStyle}" Height="60" Margin="20,20,20,30" DockPanel.Dock="Bottom">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                     <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\help-web-button.png" Width="20" Height="20" Margin="0,0,0,10"/>
                     <TextBlock HorizontalAlignment="Center">Help</TextBlock>
                 </StackPanel>
             </Button>
             <StackPanel>
-                <Button Height="70" Margin="20,30,20,0" Click="DashboardButton_Click">
+                <Button Style="{StaticResource RoundedButtonStyle}" Click="DashboardButton_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                         <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" Width="20" Height="20" Margin="0,0,0,10"/>
                         <TextBlock HorizontalAlignment="Center">Dashboard</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Height="70" Margin="20,30,20,0" Click="PreviewDatabaseButton_Click">
+                <Button Style="{StaticResource RoundedButtonStyle}" Click="PreviewDatabaseButton_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                         <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\database.png" Width="20" Height="20" Margin="0,0,0,10"/>
                         <TextBlock HorizontalAlignment="Center">Preview Database</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Height="70" Margin="20,30,20,0" Click="AnalysisButton_Click">
+                <Button Style="{StaticResource RoundedButtonStyle}" Click="AnalysisButton_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                         <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\analytics.png" Width="40" Height="40" Margin="0,0,0,10"/>
                         <TextBlock HorizontalAlignment="Center">Analysis</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Height="70" Margin="20,30,20,0" Click="InputDataButton_Click">
+                <Button Style="{StaticResource RoundedButtonStyle}" Click="InputDataButton_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                         <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\input.png" Width="20" Height="20" Margin="0,0,0,10"/>
                         <TextBlock HorizontalAlignment="Center">Input Data</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Height="70" Margin="20,30,20,0" Click="ScenarioAnalysisButton_Click">
+                <Button Style="{StaticResource RoundedButtonStyle}" Click="ScenarioAnalysisButton_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                         <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\checklist.png" Width="20" Height="20" Margin="0,0,0,10"/>
                         <TextBlock HorizontalAlignment="Center">Analysis results</TextBlock>
@@ -227,7 +227,7 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-
+                <!-- Analysis Tab -->
                 <TabItem Header="AnalysisTab" Name="AnalysisTab">
                     <Grid Background="#FFFFFF">
                         <Grid.RowDefinitions>
@@ -257,7 +257,6 @@
                                 </Border>
 
                                 <Button Grid.Row="4" Grid.Column="0" Content="Calculate Ratios" Margin="10" Click="CalculateRatiosButton_Click" />
-
                             </StackPanel>
 
                             <!-- Checkboxes and Button -->
@@ -288,11 +287,9 @@
                                         <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10"/>
                                         <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10"/>
                                         <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10"/>
-
                                     </Grid>
                                 </Border>
                             </StackPanel>
-
 
                             <ListView Grid.Row="4" Grid.Column="3" Name="MetricsResults_List" Margin="20,45,0,20" Width="220">
                                 <ListView.Items>
@@ -324,32 +321,30 @@
                                         <TextBlock Text="Debt-to-Equity:" />
                                         <TextBlock Text=" 14" />
                                     </StackPanel>
-
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Interest Coverage:" />
                                         <TextBlock Text=" 16" />
                                     </StackPanel>
-
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Contribution Margin:" />
                                         <TextBlock Text=" 18" />
                                     </StackPanel>
-
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Break-Even Point:" />
                                         <TextBlock Text=" 20" />
                                     </StackPanel>
-
                                 </ListView.Items>
                             </ListView>
-
                         </Grid>
 
-                        <!-- Bottom Section with Geometric Background -->
+                        <!-- Bottom Section -->
                         <Grid Grid.Row="1" Margin="20,0,20,0" Background="#F5F5F5" Height="290">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -372,73 +367,77 @@
                                 <!-- Put these buttons under the ComboBox Layout -->
                                 <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Income Statement" Margin="0,10,10,0" Click="GetAPIdata_Click"/>
                                 <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Balancesheet" Margin="0,10,10,0" Click="GetAPIdata_Click"/>
-
                             </StackPanel>
 
                             <!-- Checkboxes, Button, and ComboBoxes -->
-                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="75,0,0,0">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="75,0,0,0">
+                                <Border Background="#FFFFFF" BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="10" Padding="10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="2" Content="ROA" Margin="10"/>
-                                    <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="3" Content="ROE" Margin="10"/>
-                                    <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="4" Content="Operating Margin Profit" Margin="10"/>
-                                    <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="2" Content="Gross Profit Margin" Margin="10"/>
-                                    <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="3" Content="Net Profit Margin" Margin="10"/>
-                                    <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="4" Content="Current Ratios" Margin="10"/>
-                                    <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="2" Content="Debt-to-Equity" Margin="10"/>
-                                    <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="3" Content="Interest Coverage" Margin="10"/>
-                                    <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="4" Content="Contribution Margin" Margin="10"/>
-                                    <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="3" Content="Break-Even Point" Margin="10"/>
-
-
-                                    <ComboBox Name="SymbolOptions" Grid.Row="0" Grid.Column="0" Width="100" Height="30" SelectedIndex="0" Margin="0,10,10,0" Style="{StaticResource ComboBoxButtonStyle}">
-                                        <ComboBoxItem Content="AAPL" />
-                                        <ComboBoxItem Content="AMZN" />
-                                        <ComboBoxItem Content="MSFT" />
-                                        <ComboBoxItem Content="GOOGL" />
-                                        <ComboBoxItem Content="META" />
-                                        <ComboBoxItem Content="NFLX" />
-                                        <ComboBoxItem Content="PYPL" />
-                                        <ComboBoxItem Content="V" />
-                                        <ComboBoxItem Content="JPM" />
-                                        <ComboBoxItem Content="DIS" />
-                                        <ComboBoxItem Content="TSLA" />
-                                        <ComboBoxItem Content="BA" />
-                                        <ComboBoxItem Content="F" />
-                                        <ComboBoxItem Content="GM" />
-                                        <ComboBoxItem Content="CAT" />
-                                        <ComboBoxItem Content="MMM" />
-                                        <ComboBoxItem Content="DE" />
-                                        <ComboBoxItem Content="HON" />
-                                        <ComboBoxItem Content="INTC" />
-                                        <ComboBoxItem Content="IBM" />
-                                    </ComboBox>
-
-                                    <ComboBox Name="PeriodOptions" Grid.Row="0" Grid.Column="1" Width="100" Height="30" SelectedIndex="0" Margin="0,10,0,0">
-                                        <ComboBoxItem Content="Last year" />
-                                        <ComboBoxItem Content="Two years ago" />
-                                        <ComboBoxItem Content="Three years ago" />
-                                        <ComboBoxItem Content="Four years ago" />
-                                        <ComboBoxItem Content="Five years ago" />
-                                    </ComboBox>
-                                </Grid>
+                                        <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10"/>
+                                        <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10"/>
+                                        <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10"/>
+                                        <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10"/>
+                                        <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10"/>
+                                        <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10"/>
+                                        <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10"/>
+                                        <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10"/>
+                                        <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10"/>
+                                        <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10"/>
+                                    </Grid>
+                                </Border>
                             </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                                <ComboBox Name="SymbolOptions" Width="100" Height="30" SelectedIndex="0" Margin="0,10,0,0" Style="{StaticResource ComboBoxButtonStyle}">
+                                    <ComboBoxItem Content="AAPL" />
+                                    <ComboBoxItem Content="AMZN" />
+                                    <ComboBoxItem Content="MSFT" />
+                                    <ComboBoxItem Content="GOOGL" />
+                                    <ComboBoxItem Content="META" />
+                                    <ComboBoxItem Content="NFLX" />
+                                    <ComboBoxItem Content="PYPL" />
+                                    <ComboBoxItem Content="V" />
+                                    <ComboBoxItem Content="JPM" />
+                                    <ComboBoxItem Content="DIS" />
+                                    <ComboBoxItem Content="TSLA" />
+                                    <ComboBoxItem Content="BA" />
+                                    <ComboBoxItem Content="F" />
+                                    <ComboBoxItem Content="GM" />
+                                    <ComboBoxItem Content="CAT" />
+                                    <ComboBoxItem Content="MMM" />
+                                    <ComboBoxItem Content="DE" />
+                                    <ComboBoxItem Content="HON" />
+                                    <ComboBoxItem Content="INTC" />
+                                    <ComboBoxItem Content="IBM" />
+                                </ComboBox>
+
+                                <ComboBox Name="PeriodOptions"  Width="100" Height="30" SelectedIndex="0" Margin="0,10,0,0">
+                                    <ComboBoxItem Content="Last year" />
+                                    <ComboBoxItem Content="Two years ago" />
+                                    <ComboBoxItem Content="Three years ago" />
+                                    <ComboBoxItem Content="Four years ago" />
+                                    <ComboBoxItem Content="Five years ago" />
+                                </ComboBox>
+                            </StackPanel>
+
                         </Grid>
                     </Grid>
                 </TabItem>
+
 
 
                 <!-- Preview InputDataTab -->
