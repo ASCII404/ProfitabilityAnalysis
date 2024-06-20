@@ -144,8 +144,7 @@
                             Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="15" 
-                            Padding="10,5">
+                            CornerRadius="15" >
                         <ContentPresenter HorizontalAlignment="Center" 
                                           VerticalAlignment="Center"/>
                     </Border>
@@ -160,8 +159,39 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Height" Value="70"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Margin" Value="20,25,20,0"/>
+        <Setter Property="Width" Value="90"/>
+        <Setter Property="Background" Value="MintCream"/>
+    </Style>
+    
+    <!-- LogInButtonStyle -->
+    <Style x:Key="LogInButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="LightBlue"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="DarkGray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Height" Value="30"/>
         <Setter Property="Margin" Value="20,30,20,0"/>
+        <Setter Property="Background" Value="CadetBlue"/>
     </Style>
 
 </ResourceDictionary>

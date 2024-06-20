@@ -6,6 +6,10 @@ Imports OfficeOpenXml
 Imports System.Net
 Imports Newtonsoft.Json.Linq
 Imports System.Net.Http
+Imports System.Runtime.CompilerServices
+Imports System.Runtime.Serialization
+Imports Microsoft.Windows.Themes
+Imports LiveCharts.Definitions.Points
 
 Class MainWindow
 
@@ -14,6 +18,9 @@ Class MainWindow
     Private apiKey As String
     Private FinancialData As FinancialData
     Private financialDataList As List(Of FinancialData)
+    Private previous_selected_tab As String
+    Private helpButton_content As String
+    Private authenatication_win As Authentication
     Public Sub New()
 
         apiKey = "your Alpha Vantage API Key"
@@ -22,6 +29,7 @@ Class MainWindow
         dbHelper = New Database("dbtest.db")
         FinancialData = New FinancialData()
     End Sub
+
     ' Event handlers to switch tabs
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
@@ -304,7 +312,27 @@ Class MainWindow
     End Sub
 
     Private Sub MainTabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles MainTabControl.SelectionChanged
+        If TypeOf e.Source Is TabControl Then
+            Dim selectedTab As TabItem = CType(MainTabControl.SelectedItem, TabItem)
+            Dim selectedTabName As String = selectedTab.Name
 
+            ' Only show the message if the selected tab has changed
+            If selectedTabName <> previous_selected_tab Then
+                If selectedTabName = "DashboardTab" Then
+                    helpButton_content = "This is the content from the DashboardTab"
+                ElseIf selectedTabName = "PreviewDatabaseTab" Then
+                    helpButton_content = "This is the content from the PreviewDatabaseTab"
+                ElseIf selectedTabName = "AnalysisTab" Then
+                    helpButton_content = "This is the content from the AnalysisTab"
+                ElseIf selectedTabName = "InputDataTab" Then
+                    helpButton_content = "This is the content from the InputDataTab"
+                ElseIf selectedTabName = "ScenarioAnalysisTab" Then
+                    helpButton_content = "This is the content from the ScenarioAnalysisTab"
+                End If
+                Debug.WriteLine("Current Tab: " & selectedTabName)
+                previous_selected_tab = selectedTabName ' Update the previous selected tab name
+            End If
+        End If
     End Sub
 
     Private Async Sub GetAPIdata_Click(sender As Object, e As RoutedEventArgs)
@@ -475,5 +503,22 @@ Class MainWindow
         End If
     End Sub
 
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+        MessageBox.Show(helpButton_content)
+    End Sub
+
+    Private Sub ClickableText_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs)
+        Debug.WriteLine("Clickable text was clicked!")
+        authenatication_win = New Authentication()
+        Dim result As Nullable(Of Boolean) = authenatication_win.ShowDialog()
+
+        If result.HasValue AndAlso result.Value Then
+            Debug.WriteLine("User authenticated successfully!")
+            LogIn.Text = "Welcome, User_Name"
+            LogIn.IsEnabled = False
+        Else
+            Debug.WriteLine("User authentication failed.")
+        End If
+    End Sub
 
 End Class

@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:ProfitabilityAnalysis"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="Profitabil-inatorul" Height="720" Width="1280"
-        MinHeight="720" MinWidth="1280">
+        Title="Profitabil-inatorul" Height="780" Width="1280"
+        MinHeight="780" MinWidth="1280">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -20,44 +20,62 @@
     
     <DockPanel>
         <!-- Sidebar for navigation buttons -->
-        <DockPanel DockPanel.Dock="Left" Background="Gray" Width="150" MinWidth="150">
-            <Button Style="{StaticResource RoundedButtonStyle}" Height="60" Margin="20,20,20,30" DockPanel.Dock="Bottom">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\help-web-button.png" Width="20" Height="20" Margin="0,0,0,10"/>
-                    <TextBlock HorizontalAlignment="Center">Help</TextBlock>
-                </StackPanel>
-            </Button>
+        <DockPanel DockPanel.Dock="Left" Background="CadetBlue" Width="150" MinWidth="100">
+            <StackPanel DockPanel.Dock="Bottom">
+                <TextBlock x:Name="LogIn" HorizontalAlignment="Center" Foreground="White" FontSize="15" Margin="10,10,10,10" Text="LOG IN" MouseLeftButtonUp="ClickableText_MouseLeftButtonUp"/>
+                <Separator></Separator>
+                <Button Style="{StaticResource RoundedButtonStyle}"  Margin="20,10,10,10" Click="Button_Click">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\help-web-button.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
             <StackPanel>
-                <Button Style="{StaticResource RoundedButtonStyle}" Click="DashboardButton_Click">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" Width="20" Height="20" Margin="0,0,0,10"/>
-                        <TextBlock HorizontalAlignment="Center">Dashboard</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource RoundedButtonStyle}" Click="PreviewDatabaseButton_Click">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\database.png" Width="20" Height="20" Margin="0,0,0,10"/>
-                        <TextBlock HorizontalAlignment="Center">Preview Database</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource RoundedButtonStyle}" Click="AnalysisButton_Click">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\analytics.png" Width="40" Height="40" Margin="0,0,0,10"/>
-                        <TextBlock HorizontalAlignment="Center">Analysis</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource RoundedButtonStyle}" Click="InputDataButton_Click">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\input.png" Width="20" Height="20" Margin="0,0,0,10"/>
-                        <TextBlock HorizontalAlignment="Center">Input Data</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource RoundedButtonStyle}" Click="ScenarioAnalysisButton_Click">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\checklist.png" Width="20" Height="20" Margin="0,0,0,10"/>
-                        <TextBlock HorizontalAlignment="Center">Analysis results</TextBlock>
-                    </StackPanel>
-                </Button>
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="DashboardButton_Click">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Dashboard</TextBlock>
+                </StackPanel> 
+                
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="PreviewDatabaseButton_Click">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Button_icons\database.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Preview Database</TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="AnalysisButton_Click">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\analytics.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Analysis</TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="InputDataButton_Click">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Button_icons\inputData.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Input data</TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="ScenarioAnalysisButton_Click">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\checklist.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Analysis result</TextBlock>
+                </StackPanel>
+
             </StackPanel>
         </DockPanel>
 
@@ -65,7 +83,7 @@
 
         <!-- Main content area with hidden TabControl headers -->
         <DockPanel>
-            <TabControl Name="MainTabControl" BorderThickness="0" DockPanel.Dock="Top" SelectedIndex="0">
+            <TabControl Name="MainTabControl" BorderThickness="0" DockPanel.Dock="Top" SelectedIndex="0" SelectionChanged="MainTabControl_SelectionChanged">
                 <TabControl.Template>
                     <ControlTemplate TargetType="TabControl">
                         <Grid>
@@ -146,12 +164,6 @@
                         </Grid>
                     </Grid>
                 </TabItem>
-
-
-
-
-
-
 
 
                 <!-- Preview Database Tab -->

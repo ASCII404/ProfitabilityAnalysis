@@ -78,6 +78,23 @@ Public Class Database
         End Using
     End Sub
 
+    Private Sub UserDatabase()
+
+        Using connection As New SQLiteConnection(connectionString)
+            connection.Open()
+
+            ' Create User table
+            Dim createUserTable As String = "
+                CREATE TABLE IF NOT EXISTS User (
+                    UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Username TEXT NOT NULL,
+                    Password TEXT NOT NULL
+                );"
+            Dim cmd As New SQLiteCommand(createUserTable, connection)
+            cmd.ExecuteNonQuery()
+
+        End Using
+    End Sub
     Public Sub AddFinancialData(dateValue As Date, revenue As Decimal, costOfGoodsSold As Decimal, operatingExpenses As Decimal, netIncome As Decimal, totalAssets As Decimal, totalEquity As Decimal, ebitda As Decimal, currentAssets As Decimal, currentLiabilities As Decimal, totalLiabilities As Decimal, interestExpense As Decimal, variableCosts As Decimal, fixedCosts As Decimal, salesRevenuePerUnit As Decimal, variableCostPerUnit As Decimal)
         Using connection As New SQLiteConnection(connectionString)
             connection.Open()
