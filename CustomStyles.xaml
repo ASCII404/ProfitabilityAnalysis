@@ -150,11 +150,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="LightBlue"/>
+                            <Setter TargetName="border" Property="Background" Value="LightGray"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="Red"/>
+                            <Setter TargetName="border" Property="Background" Value="Tomato"/>
                         </Trigger>
+                        
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

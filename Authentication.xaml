@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProfitabilityAnalysis"
         mc:Ignorable="d"
-        Title="Authentication" Height="350" Width="220"
+        Title="Authentication" Height="320" Width="220"
         ResizeMode="NoResize"
-        Icon="A:\VS\ProfitabilityAnalysis\Resources\Other_icons\log-in.ico">
+        Icon="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Other_icons\log-in.ico">
     
     <Window.Resources>
         <ResourceDictionary>
@@ -18,7 +18,7 @@
     </Window.Resources>
 
     <StackPanel Background="OrangeRed">
-        <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Other_icons\account.png" Width="60" Height="60" Margin="0,15,0,10" RenderOptions.BitmapScalingMode="HighQuality"/>
+        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Other_icons\account.png" Width="60" Height="60" Margin="0,15,0,10" RenderOptions.BitmapScalingMode="HighQuality"/>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Vertical">
                 <TextBlock x:Name="UserName" Text="User" HorizontalAlignment="Center"></TextBlock>
@@ -30,7 +30,6 @@
             </StackPanel>
             <Button Style="{StaticResource LogInButtonStyle}" Width="120" x:Name="Login" Content="Login" Margin="10,10,10,10" Click="Login_Click"></Button>
             <Button Style="{StaticResource LogInButtonStyle}" Width="120" x:Name="Register" Content="Register" Margin="10,0,10,10"></Button>
-            <Button Style="{StaticResource LogInButtonStyle}" Width="120" x:Name="Delete_user" Content="Delete user" Margin="10,0,10,10" Click="Delete_user_Click"></Button>
         </StackPanel>
     </StackPanel>
 

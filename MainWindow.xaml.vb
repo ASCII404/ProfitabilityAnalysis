@@ -1,15 +1,14 @@
 ﻿Imports System.Data
 Imports System.IO
+Imports System.Reflection.Emit
 Imports System.Windows.Threading
+Imports LiveCharts
+Imports LiveCharts.Wpf
 Imports Microsoft.Win32
 Imports OfficeOpenXml
-Imports System.Net
-Imports Newtonsoft.Json.Linq
-Imports System.Net.Http
-Imports System.Runtime.CompilerServices
-Imports System.Runtime.Serialization
-Imports Microsoft.Windows.Themes
-Imports LiveCharts.Definitions.Points
+
+
+Imports System.Collections.Generic
 
 Class MainWindow
 
@@ -23,6 +22,8 @@ Class MainWindow
     Private authenatication_win As Authentication
     Public Sub New()
 
+
+
         apiKey = "your Alpha Vantage API Key"
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial
         InitializeComponent()
@@ -30,7 +31,6 @@ Class MainWindow
         FinancialData = New FinancialData()
     End Sub
 
-    ' Event handlers to switch tabs
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
     End Sub
@@ -172,27 +172,19 @@ Class MainWindow
         ClearInputFields()
     End Sub
 
-    Private Sub ClearInputFields()
-        DateInput.SelectedDate = Nothing
-        RevenueInput.Text = String.Empty
-        CostOfGoodsSoldInput.Text = String.Empty
-        OperatingExpensesInput.Text = String.Empty
-        NetIncomeInput.Text = String.Empty
-        TotalAssetsInput.Text = String.Empty
-        TotalEquityInput.Text = String.Empty
-        EBITDAInput.Text = String.Empty
-        CurrentAssetsInput.Text = String.Empty
-        CurrentLiabilitiesInput.Text = String.Empty
-        TotalLiabilitiesInput.Text = String.Empty
-        InterestExpenseInput.Text = String.Empty
-        VariableCostsInput.Text = String.Empty
-        FixedCostsInput.Text = String.Empty
-        SalesRevenuePerUnitInput.Text = String.Empty
-        VariableCostPerUnitInput.Text = String.Empty
-    End Sub
-
     Private Sub ScenarioAnalysisButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = ScenarioAnalysisTab
+    End Sub
+
+    Private Sub ImportExcelButton_Click(sender As Object, e As RoutedEventArgs)
+        ' Open a file dialog to select an Excel file
+        Dim openFileDialog As New OpenFileDialog() With {
+            .Filter = "Excel Files|*.xls;*.xlsx"
+        }
+
+        If openFileDialog.ShowDialog() = True Then
+            ImportExcelData(openFileDialog.FileName)
+        End If
     End Sub
 
     Private Async Function LoadFinancialDataAsync() As Task
@@ -208,52 +200,6 @@ Class MainWindow
             Debug.WriteLine($"An error occurred while loading data: {ex.Message}")
         End Try
     End Function
-
-    Private Sub ImportExcelButton_Click(sender As Object, e As RoutedEventArgs)
-        ' Open a file dialog to select an Excel file
-        Dim openFileDialog As New OpenFileDialog() With {
-            .Filter = "Excel Files|*.xls;*.xlsx"
-        }
-
-        If openFileDialog.ShowDialog() = True Then
-            ImportExcelData(openFileDialog.FileName)
-        End If
-    End Sub
-
-    Private Sub ImportExcelData(filePath As String)
-        Try
-            Using package As New ExcelPackage(New FileInfo(filePath))
-                Dim worksheet = package.Workbook.Worksheets.FirstOrDefault()
-                If worksheet Is Nothing Then
-                    MessageBox.Show("No worksheet found in the Excel file.")
-                    Return
-                End If
-
-                ' Create a DataTable to hold the data
-                Dim dataTable As New DataTable()
-
-                ' Add columns to the DataTable
-                For Each firstRowCell In worksheet.Cells(1, 1, 1, worksheet.Dimension.End.Column)
-                    dataTable.Columns.Add(firstRowCell.Text)
-                Next
-
-                ' Add rows to the DataTable
-                For rowNum = 2 To worksheet.Dimension.End.Row
-                    Dim wsRow = worksheet.Cells(rowNum, 1, rowNum, worksheet.Dimension.End.Column)
-                    Dim row = dataTable.NewRow()
-                    For Each cell In wsRow
-                        row(cell.Start.Column - 1) = cell.Text
-                    Next
-                    dataTable.Rows.Add(row)
-                Next
-
-                ' Bind the DataTable to the DataGrid
-                ImportedDataGrid.ItemsSource = dataTable.DefaultView
-            End Using
-        Catch ex As Exception
-            MessageBox.Show($"Error reading Excel file: {ex.Message}")
-        End Try
-    End Sub
 
     Private Sub AddImportedDataButton_Click(sender As Object, e As RoutedEventArgs)
         Dim dataTable As DataTable = CType(ImportedDataGrid.ItemsSource, DataView).Table
@@ -311,6 +257,62 @@ Class MainWindow
         MessageBox.Show("Financial data added successfully!")
     End Sub
 
+    Private Async Sub GetAPIdata_Click(sender As Object, e As RoutedEventArgs)
+        Dim comboBoxItem1 As ComboBoxItem = CType(SymbolOptions.SelectedItem, ComboBoxItem)
+        Dim selectedSymbol As String = comboBoxItem1.Content.ToString()
+        Dim selectedFiscalYearIndex As Integer = PeriodOptions.SelectedIndex
+
+        Console.WriteLine("This is the selected symbol: " & selectedSymbol)
+        Console.WriteLine("This is the selected fiscal year index: " & selectedFiscalYearIndex)
+
+        Dim financialData As New FinancialData()
+        Await financialData.LoadFinancialData(selectedSymbol, selectedFiscalYearIndex)
+        financialData.PrintFinancialData()
+        ' Additional code to display ratios or handle results...
+    End Sub
+
+    'Help button content
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+        MessageBox.Show(helpButton_content)
+    End Sub
+
+    'Function to import excel data from a file
+    Private Sub ImportExcelData(filePath As String)
+        Try
+            Using package As New ExcelPackage(New FileInfo(filePath))
+                Dim worksheet = package.Workbook.Worksheets.FirstOrDefault()
+                If worksheet Is Nothing Then
+                    MessageBox.Show("No worksheet found in the Excel file.")
+                    Return
+                End If
+
+                ' Create a DataTable to hold the data
+                Dim dataTable As New DataTable()
+
+                ' Add columns to the DataTable
+                For Each firstRowCell In worksheet.Cells(1, 1, 1, worksheet.Dimension.End.Column)
+                    dataTable.Columns.Add(firstRowCell.Text)
+                Next
+
+                ' Add rows to the DataTable
+                For rowNum = 2 To worksheet.Dimension.End.Row
+                    Dim wsRow = worksheet.Cells(rowNum, 1, rowNum, worksheet.Dimension.End.Column)
+                    Dim row = dataTable.NewRow()
+                    For Each cell In wsRow
+                        row(cell.Start.Column - 1) = cell.Text
+                    Next
+                    dataTable.Rows.Add(row)
+                Next
+
+                ' Bind the DataTable to the DataGrid
+                ImportedDataGrid.ItemsSource = dataTable.DefaultView
+            End Using
+        Catch ex As Exception
+            MessageBox.Show($"Error reading Excel file: {ex.Message}")
+        End Try
+    End Sub
+
+    'It is used to check when a tab is selected and change the color of the buttons in the nav. bar and help button content
     Private Sub MainTabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles MainTabControl.SelectionChanged
         If TypeOf e.Source Is TabControl Then
             Dim selectedTab As TabItem = CType(MainTabControl.SelectedItem, TabItem)
@@ -332,23 +334,31 @@ Class MainWindow
                 Debug.WriteLine("Current Tab: " & selectedTabName)
                 previous_selected_tab = selectedTabName ' Update the previous selected tab name
             End If
+
+            'Reset the background color of all buttons from navigation bar
+            dashboard_button.Background = Brushes.MintCream
+            database_button.Background = Brushes.MintCream
+            analysis_button.Background = Brushes.MintCream
+            inputData_button.Background = Brushes.MintCream
+            results_button.Background = Brushes.MintCream
+
+            ' Set the background color of the selected tab's button
+            Select Case selectedTabName
+                Case "DashboardTab"
+                    dashboard_button.Background = Brushes.Tomato
+                Case "PreviewDatabaseTab"
+                    database_button.Background = Brushes.Tomato
+                Case "AnalysisTab"
+                    analysis_button.Background = Brushes.Tomato
+                Case "InputDataTab"
+                    inputData_button.Background = Brushes.Tomato
+                Case "ScenarioAnalysisTab"
+                    results_button.Background = Brushes.Tomato
+            End Select
         End If
     End Sub
 
-    Private Async Sub GetAPIdata_Click(sender As Object, e As RoutedEventArgs)
-        Dim comboBoxItem1 As ComboBoxItem = CType(SymbolOptions.SelectedItem, ComboBoxItem)
-        Dim selectedSymbol As String = comboBoxItem1.Content.ToString()
-        Dim selectedFiscalYearIndex As Integer = PeriodOptions.SelectedIndex
-
-        Console.WriteLine("This is the selected symbol: " & selectedSymbol)
-        Console.WriteLine("This is the selected fiscal year index: " & selectedFiscalYearIndex)
-
-        Dim financialData As New FinancialData()
-        Await financialData.LoadFinancialData(selectedSymbol, selectedFiscalYearIndex)
-        financialData.PrintFinancialData()
-        ' Additional code to display ratios or handle results...
-    End Sub
-
+    'It calculate ratios based on the selected checkboxes
     Private Async Sub CalculateRatiosButton_Click(sender As Object, e As RoutedEventArgs)
         Dim financialDataList As List(Of FinancialData) = Await dbHelper.GetFinancialDataAsync()
         Dim results As New Dictionary(Of String, List(Of Double))
@@ -503,10 +513,7 @@ Class MainWindow
         End If
     End Sub
 
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-        MessageBox.Show(helpButton_content)
-    End Sub
-
+    'It is used to LogIn 
     Private Sub ClickableText_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs)
         Debug.WriteLine("Clickable text was clicked!")
         authenatication_win = New Authentication()
@@ -520,5 +527,29 @@ Class MainWindow
             Debug.WriteLine("User authentication failed.")
         End If
     End Sub
+
+    'It clears all the input fields from the InputDataTab
+    Private Sub ClearInputFields()
+        DateInput.SelectedDate = Nothing
+        RevenueInput.Text = String.Empty
+        CostOfGoodsSoldInput.Text = String.Empty
+        OperatingExpensesInput.Text = String.Empty
+        NetIncomeInput.Text = String.Empty
+        TotalAssetsInput.Text = String.Empty
+        TotalEquityInput.Text = String.Empty
+        EBITDAInput.Text = String.Empty
+        CurrentAssetsInput.Text = String.Empty
+        CurrentLiabilitiesInput.Text = String.Empty
+        TotalLiabilitiesInput.Text = String.Empty
+        InterestExpenseInput.Text = String.Empty
+        VariableCostsInput.Text = String.Empty
+        FixedCostsInput.Text = String.Empty
+        SalesRevenuePerUnitInput.Text = String.Empty
+        VariableCostPerUnitInput.Text = String.Empty
+    End Sub
+
+
+
+
 
 End Class

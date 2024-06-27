@@ -20,7 +20,7 @@
     
     <DockPanel>
         <!-- Sidebar for navigation buttons -->
-        <DockPanel DockPanel.Dock="Left" Background="CadetBlue" Width="150" MinWidth="100">
+        <DockPanel DockPanel.Dock="Left" Background="#3f3f3f" Width="150" MinWidth="100">
             <StackPanel DockPanel.Dock="Bottom">
                 <TextBlock x:Name="LogIn" HorizontalAlignment="Center" Foreground="White" FontSize="15" Margin="10,10,10,10" Text="LOG IN" MouseLeftButtonUp="ClickableText_MouseLeftButtonUp"/>
                 <Separator></Separator>
@@ -32,48 +32,48 @@
             </StackPanel>
             <StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <Button Style="{StaticResource RoundedButtonStyle}" Click="DashboardButton_Click">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="DashboardButton_Click" x:Name="dashboard_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
-                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Dashboard</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">DASHBOARD</TextBlock>
                 </StackPanel> 
                 
                 <StackPanel Orientation="Vertical">
-                    <Button Style="{StaticResource RoundedButtonStyle}" Click="PreviewDatabaseButton_Click">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="PreviewDatabaseButton_Click" x:Name="database_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Button_icons\database.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\database.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
-                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Preview Database</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">PREVIEW DATABASE</TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <Button Style="{StaticResource RoundedButtonStyle}" Click="AnalysisButton_Click">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="AnalysisButton_Click" x:Name="analysis_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\analytics.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
-                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Analysis</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">ANALYSIS</TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <Button Style="{StaticResource RoundedButtonStyle}" Click="InputDataButton_Click">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="InputDataButton_Click" x:Name="inputData_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\ProfitabilityAnalysis\Resources\Button_icons\inputData.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\inputData.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
-                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Input data</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">INPUT DATA</TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <Button Style="{StaticResource RoundedButtonStyle}" Click="ScenarioAnalysisButton_Click">
+                    <Button Style="{StaticResource RoundedButtonStyle}" Click="ScenarioAnalysisButton_Click" x:Name="results_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\checklist.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
-                    <TextBlock HorizontalAlignment="Center" Margin="5,5">Analysis result</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">ANALYSIS RESULT</TextBlock>
                 </StackPanel>
 
             </StackPanel>
@@ -93,7 +93,7 @@
                 </TabControl.Template>
                 <!-- Dashboard Tab -->
                 <TabItem Header="Dashboard" Name="DashboardTab">
-                    <Grid Background="White">
+                    <Grid Background="Beige">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -110,10 +110,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
                                 <TextBlock Text="TextBlock 1" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -125,10 +125,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
                                 <TextBlock Text="This is ROA" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -140,10 +140,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
                                 <TextBlock Text="This is XYZ" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -155,10 +155,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="LightBlue" Margin="5" Grid.Row="0">
+                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
                                 <TextBlock Text="This is ABC" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="LightGreen" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -184,14 +184,13 @@
                               CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
                               RowHeaderWidth="0" GridLinesVisibility="None" Grid.Row="0">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding FinancialDataID}" Width="50" />
+                                <DataGridTextColumn Header="No." Binding="{Binding FinancialDataID}" Width="50" />
                                 <DataGridTextColumn Header="Date" Binding="{Binding DateValue, StringFormat=d}" Width="100" />
                                 <DataGridTextColumn Header="Revenue" Binding="{Binding Revenue, StringFormat=C}" Width="100" />
                                 <DataGridTextColumn Header="Cost of Goods Sold" Binding="{Binding CostOfGoodsSold, StringFormat=C}" Width="150" />
                                 <DataGridTextColumn Header="Operating Expenses" Binding="{Binding OperatingExpenses, StringFormat=C}" Width="150" />
                                 <DataGridTextColumn Header="Net Income" Binding="{Binding NetIncome, StringFormat=C}" Width="100" />
                                 <DataGridTextColumn Header="Total Assets" Binding="{Binding TotalAssets, StringFormat=C}" Width="100" />
-                                <DataGridTextColumn Header="Total Equity" Binding="{Binding TotalEquity, StringFormat=C}" Width="150" />
                                 <DataGridTextColumn Header="EBITDA" Binding="{Binding EBITDA, StringFormat=C}" Width="100" />
                                 <DataGridTextColumn Header="Current Assets" Binding="{Binding CurrentAssets, StringFormat=C}" Width="100" />
                                 <DataGridTextColumn Header="Current Liabilities" Binding="{Binding CurrentLiabilities, StringFormat=C}" Width="150" />
@@ -583,9 +582,63 @@
 
                 <TabItem Header="ScenarioAnalysisTab" Name="ScenarioAnalysisTab">
                     <Grid Background="White">
-                        <TextBlock Text="Preview Scenario Content Here" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Export Buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
+                            <Button Content="Export to PDF" Name="ExportPdfButton" Margin="5"/>
+                            <Button Content="Export to Excel" Name="ExportExcelButton" Margin="5"/>
+                        </StackPanel>
+
+                        <!-- Dashboards -->
+                        <Grid Grid.Row="1" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Internal data results" Grid.Row="0" Grid.Column="0" Margin="40,0,10,0"></TextBlock>
+                            <TextBlock Text="External data results" Grid.Row="1" Grid.Column="0" Margin="40,0,10,0"></TextBlock>
+                            <!-- Dashboard 1 -->
+                            <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Name="Dashboard1" Margin="5"/>
+                            <!-- Dashboard 2 -->
+                            <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Name="Dashboard2" Margin="5"/>
+                            <!-- Dashboard 3 -->
+                            <lvc:CartesianChart Grid.Row="1" Grid.Column="0" Name="Dashboard3" Margin="5"/>
+                            <!-- Dashboard 4 -->
+                            <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="Dashboard4" Margin="5"/>
+                        </Grid>
+
+                        <!-- Description Text Blocks -->
+                        <StackPanel Grid.Row="2" Margin="10" Grid.Column="0">
+                            <TextBlock Text="Description of results from the previous tab." Margin="5"/>
+                            <TextBlock Text="Further insights and analysis." Margin="5"/>
+                            <TextBlock Text="Additional information and conclusions." Margin="5"/>
+                        </StackPanel>
+
+                        <!-- Form for Interpretations -->
+                        <StackPanel Grid.Row="1" Margin="10" Grid.Column="1">
+                            <TextBlock Text="Metrics that presents risk" FontWeight="Bold" Margin="5"/>
+                            <TextBlock Text="Metric 1: Detailed interpretation and analysis." Margin="5"/>
+                            <TextBlock Text="Metric 2: Detailed interpretation and analysis." Margin="5"/>
+                            <TextBlock Text="Metric 3: Detailed interpretation and analysis." Margin="5"/>
+                            <!-- Add more TextBlocks as needed for other metrics -->
+                        </StackPanel>
                     </Grid>
                 </TabItem>
+
                 <ToolBar x:Name="toolBar" Height="100" Width="100"/>
 
             </TabControl>

@@ -13,6 +13,7 @@ Public Class Database
         End If
     End Sub
 
+    'It creates the tables in the database
     Private Sub CreateDatabase()
         Using connection As New SQLiteConnection(connectionString)
             connection.Open()
@@ -78,23 +79,7 @@ Public Class Database
         End Using
     End Sub
 
-    Private Sub UserDatabase()
-
-        Using connection As New SQLiteConnection(connectionString)
-            connection.Open()
-
-            ' Create User table
-            Dim createUserTable As String = "
-                CREATE TABLE IF NOT EXISTS User (
-                    UserID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Username TEXT NOT NULL,
-                    Password TEXT NOT NULL
-                );"
-            Dim cmd As New SQLiteCommand(createUserTable, connection)
-            cmd.ExecuteNonQuery()
-
-        End Using
-    End Sub
+    'It adds a new financial data record to the database
     Public Sub AddFinancialData(dateValue As Date, revenue As Decimal, costOfGoodsSold As Decimal, operatingExpenses As Decimal, netIncome As Decimal, totalAssets As Decimal, totalEquity As Decimal, ebitda As Decimal, currentAssets As Decimal, currentLiabilities As Decimal, totalLiabilities As Decimal, interestExpense As Decimal, variableCosts As Decimal, fixedCosts As Decimal, salesRevenuePerUnit As Decimal, variableCostPerUnit As Decimal)
         Using connection As New SQLiteConnection(connectionString)
             connection.Open()
@@ -159,6 +144,7 @@ Public Class Database
         End Using
     End Sub
 
+    'It deletes a financial data record from the database
     Public Async Function DeleteFinancialDataAsync(financialDataId As Integer) As Task
         Using connection As New SQLiteConnection(connectionString)
             Await connection.OpenAsync()
@@ -206,6 +192,7 @@ Public Class Database
         End Using
     End Function
 
+    'It fetches all financial data records from the database
     Public Async Function GetFinancialDataAsync() As Task(Of List(Of FinancialData))
         Dim financialDataList As New List(Of FinancialData)
 
