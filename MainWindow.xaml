@@ -110,10 +110,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
+                            <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
                                 <TextBlock Text="Evolution of Net Income" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -125,10 +125,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
+                            <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
                                 <TextBlock Text="Evolution of Assets" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -140,25 +140,25 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
+                            <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
                                 <TextBlock Text="Evolution of COGS" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 4 -->
                         <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="chart4" Visibility="Collapsed" />
-                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4" Margin="10">
+                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4" Margin="10" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Background="#437A5B" Margin="5" Grid.Row="0">
+                            <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
                                 <TextBlock Text="Evolution of Revenues" Padding="10" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border Background="#B4CD93" Margin="5" Grid.Row="1" CornerRadius="15">
+                            <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
@@ -168,7 +168,7 @@
 
                 <!-- Preview Database Tab -->
                 <TabItem Header="Preview Database" Name="PreviewDatabaseTab">
-                    <Grid Background="DarkSalmon">
+                    <Grid Background="Beige">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <!-- This row takes all available space -->
@@ -179,7 +179,7 @@
                         <!-- Customized DataGrid -->
                         <DataGrid Name="FinancialDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column"
                               CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
-                              RowHeaderWidth="0" GridLinesVisibility="None" Grid.Row="0">
+                              RowHeaderWidth="0" GridLinesVisibility="All" Grid.Row="0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="No." Binding="{Binding FinancialDataID}" Width="50" />
                                 <DataGridTextColumn Header="Date" Binding="{Binding DateValue, StringFormat=d}" Width="100" />
@@ -216,7 +216,7 @@
 
                                 <!-- Style for the DataGrid columns header -->
                                 <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="LightSteelBlue" />
+                                    <Setter Property="Background" Value="Olive" />
                                     <Setter Property="FontSize" Value="14" />
                                     <Setter Property="FontWeight" Value="Bold" />
                                     <Setter Property="Height" Value="30" />
@@ -238,7 +238,7 @@
                 <!-- Analysis Tab -->
                 <TabItem Header="AnalysisTab" Name="AnalysisTab">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <Grid Background="#FFFFFF">
+                        <Grid Background="Beige">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
@@ -246,350 +246,359 @@
                             </Grid.RowDefinitions>
 
                             <!-- Top Section -->
-                            <Grid Grid.Row="0" Margin="20" Background="#F5F5F5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                            <Border BorderBrush="#D3D3D3" Background="Olive" BorderThickness="2" CornerRadius="10" Margin="20,10,20,20">
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                <!-- Period picker -->
-                                <StackPanel Grid.Column="0" Orientation="Vertical">
-                                    <StackPanel Grid.Column="0" Grid.Row="0">
-                                        <TextBlock Text="Select the period for the analysis" HorizontalAlignment="Center" Margin="10,30,10,10"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <ComboBox Name="Period" Width="100" Height="30" SelectedIndex="0" Style="{StaticResource ComboBoxButtonStyle}">
-                                                <ComboBoxItem Content="Month" />
-                                                <ComboBoxItem Content="Quarter" />
-                                                <ComboBoxItem Content="Year" />
-                                            </ComboBox>
-                                            <TextBox Grid.Column="0" Grid.Row="4" Width="40" Margin="10,0,0,0" />
+                                    <!-- Period picker -->
+                                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                                        <StackPanel Grid.Column="0" Grid.Row="0">
+                                            <TextBlock Text="Select the period for the analysis" HorizontalAlignment="Center" Margin="10,30,10,10"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <ComboBox Name="Period" Width="100" Height="30" SelectedIndex="0" Style="{StaticResource ComboBoxButtonStyle}">
+                                                    <ComboBoxItem Content="Month" />
+                                                    <ComboBoxItem Content="Quarter" />
+                                                    <ComboBoxItem Content="Year" />
+                                                </ComboBox>
+                                                <TextBox Grid.Column="0" Grid.Row="4" Width="40" Margin="10,0,0,0" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="30,20,10,10">
+                                            <Button Grid.Row="4" Grid.Column="0" Content="Calculate Ratios" Height="50" Width="200" Click="CalculateRatiosButton_Click" />
                                         </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="30,20,10,10">
-                                        <Button Grid.Row="4" Grid.Column="0" Content="Calculate Ratios" Height="50" Width="200" Click="CalculateRatiosButton_Click" />
+
+                                    <!-- Checkboxes and Button -->
+                                    <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0,30,0">
+                                        <Border Background="#FFFFFF" BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="10" Padding="10">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <CheckBox x:Name="CK_ROA" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_ROE" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_OperatingMargin" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_GrossProfitMargin" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_NetProfitMargin" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_CurrentRatios" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_DebtToEquity" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10" BorderThickness="3"/>
+                                            </Grid>
+                                        </Border>
                                     </StackPanel>
-                                </StackPanel>
 
-                                <!-- Checkboxes and Button -->
-                                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0,30,0">
-                                    <Border Background="#FFFFFF" BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="10" Padding="10">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
+                                    <!-- Metrics -->
+                                    <StackPanel Grid.Row="0" Grid.Column="2">
+                                        <TextBlock Text="Results" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                                        <ListView Name="MetricsResults_List" Width="200" Height="150" Margin="0,10,0,10">
+                                            <ListView.Items>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="ROA: " />
+                                                    <TextBlock Text="5.2%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="ROE: " />
+                                                    <TextBlock Text="15.4%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Operating Margin Profit: " />
+                                                    <TextBlock Text="12.7%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Gross Profit Margin: " />
+                                                    <TextBlock Text="28.6%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Net Profit Margin: " />
+                                                    <TextBlock Text="14.3%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Current Ratios: " />
+                                                    <TextBlock Text="2.1" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Debt-to-Equity: " />
+                                                    <TextBlock Text="0.7" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Interest Coverage: " />
+                                                    <TextBlock Text="3.9" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Contribution Margin: " />
+                                                    <TextBlock Text="25.4%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Break-Even Point: " />
+                                                    <TextBlock Text="$300,000" />
+                                                </StackPanel>
+                                            </ListView.Items>
+                                        </ListView>
 
-                                            <CheckBox x:Name="CK_ROA" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_ROE" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_OperatingMargin" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_GrossProfitMargin" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_NetProfitMargin" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_CurrentRatios" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_DebtToEquity" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_InterestCoverage" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_ContributionMargin" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_BreakEvenPoint" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10" BorderThickness="3"/>
-                                        </Grid>
-                                    </Border>
-                                </StackPanel>
+                                        <Button Content="COPY TO CLIPBOARD" VerticalAlignment="Center" Margin="10,0,10,20"></Button>
+                                    </StackPanel>
 
-                                <!-- Metrics -->
-                                <StackPanel Grid.Row="0" Grid.Column="2">
-                                    <TextBlock Text="Results" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                                    <ListView Name="MetricsResults_List" Width="200" Height="200" Margin="0,10,0,0">
-                                        <ListView.Items>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="ROA: " />
-                                                <TextBlock Text="0" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Roe" />
-                                                <TextBlock Text=" Metric 4" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Operating Margin Profit:" />
-                                                <TextBlock Text=" 6" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Gross Profit Margin: " />
-                                                <TextBlock Text="8" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Net Profit Margin: " />
-                                                <TextBlock Text=" 10" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Current Ratios: " />
-                                                <TextBlock Text=" 12" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Debt-to-Equity:" />
-                                                <TextBlock Text=" 14" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Interest Coverage:" />
-                                                <TextBlock Text=" 16" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Contribution Margin:" />
-                                                <TextBlock Text=" 18" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Break-Even Point:" />
-                                                <TextBlock Text=" 20" />
-                                            </StackPanel>
-                                        </ListView.Items>
-                                    </ListView>
-                                </StackPanel>
-                            </Grid>
+                                </Grid>
+                            </Border>
 
                             <!-- Middle Section -->
-                            <Grid Grid.Row="1" Margin="20,0,20,0" Background="#F5F5F5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                            <Border Grid.Row="1" BorderBrush="#D3D3D3" Background="Olive" BorderThickness="2" CornerRadius="10" Margin="20,0,20,20">
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                <!-- Period picker -->
-                                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="20,0,30,0">
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                        <TextBlock Text="Select ticker symbol and period" HorizontalAlignment="Center" Margin="10,30,10,10"/>
-                                        <StackPanel Orientation="Horizontal" Margin="10,10">
-                                            <ComboBox Name="SymbolOptions" Width="100" Height="30" SelectedIndex="0" Style="{StaticResource ComboBoxButtonStyle}">
-                                                <ComboBoxItem Content="AAPL" />
-                                                <ComboBoxItem Content="AMZN" />
-                                                <ComboBoxItem Content="MSFT" />
-                                                <ComboBoxItem Content="GOOGL" />
-                                                <ComboBoxItem Content="META" />
-                                                <ComboBoxItem Content="NFLX" />
-                                                <ComboBoxItem Content="PYPL" />
-                                                <ComboBoxItem Content="V" />
-                                                <ComboBoxItem Content="JPM" />
-                                                <ComboBoxItem Content="DIS" />
-                                                <ComboBoxItem Content="TSLA" />
-                                                <ComboBoxItem Content="BA" />
-                                                <ComboBoxItem Content="F" />
-                                                <ComboBoxItem Content="GM" />
-                                                <ComboBoxItem Content="CAT" />
-                                                <ComboBoxItem Content="MMM" />
-                                                <ComboBoxItem Content="DE" />
-                                                <ComboBoxItem Content="HON" />
-                                                <ComboBoxItem Content="INTC" />
-                                                <ComboBoxItem Content="IBM" />
-                                            </ComboBox>
-                                            <ComboBox Name="PeriodOptions" Width="100" Height="30" SelectedIndex="0">
-                                                <ComboBoxItem Content="Last year" />
-                                                <ComboBoxItem Content="Two years ago" />
-                                                <ComboBoxItem Content="Three years ago" />
-                                                <ComboBoxItem Content="Four years ago" />
-                                                <ComboBoxItem Content="Five years ago" />
-                                            </ComboBox>
+                                    <!-- Period picker -->
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="20,0,30,0">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                            <TextBlock Text="Select ticker symbol and period" HorizontalAlignment="Center" Margin="10,30,10,10"/>
+                                            <StackPanel Orientation="Horizontal" Margin="10,10">
+                                                <ComboBox Name="SymbolOptions" Width="100" Height="30" SelectedIndex="0" Style="{StaticResource ComboBoxButtonStyle}">
+                                                    <ComboBoxItem Content="AAPL" />
+                                                    <ComboBoxItem Content="AMZN" />
+                                                    <ComboBoxItem Content="MSFT" />
+                                                    <ComboBoxItem Content="GOOGL" />
+                                                    <ComboBoxItem Content="META" />
+                                                    <ComboBoxItem Content="NFLX" />
+                                                    <ComboBoxItem Content="PYPL" />
+                                                    <ComboBoxItem Content="V" />
+                                                    <ComboBoxItem Content="JPM" />
+                                                    <ComboBoxItem Content="DIS" />
+                                                    <ComboBoxItem Content="TSLA" />
+                                                    <ComboBoxItem Content="BA" />
+                                                    <ComboBoxItem Content="F" />
+                                                    <ComboBoxItem Content="GM" />
+                                                    <ComboBoxItem Content="CAT" />
+                                                    <ComboBoxItem Content="MMM" />
+                                                    <ComboBoxItem Content="DE" />
+                                                    <ComboBoxItem Content="HON" />
+                                                    <ComboBoxItem Content="INTC" />
+                                                    <ComboBoxItem Content="IBM" />
+                                                </ComboBox>
+                                                <ComboBox Name="PeriodOptions" Width="100" Height="30" SelectedIndex="0" Style="{StaticResource ComboBoxButtonStyle}">
+                                                    <ComboBoxItem Content="Last year" />
+                                                    <ComboBoxItem Content="Two years ago" />
+                                                    <ComboBoxItem Content="Three years ago" />
+                                                    <ComboBoxItem Content="Four years ago" />
+                                                    <ComboBoxItem Content="Five years ago" />
+                                                </ComboBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="190">
+                                            <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Income Statement" Click="GetAPIdata_Click" Height="50" Margin="0,0,0,15"/>
+                                            <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Balancesheet" Click="GetAPIdata_Click" Height="50" Margin="0,0,0,15"/>
                                         </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="190">
-                                        <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Income Statement" Click="GetAPIdata_Click" Height="50" Margin="0,0,0,15"/>
-                                        <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Balancesheet" Click="GetAPIdata_Click" Height="50" Margin="0,0,0,15"/>
+
+                                    <!-- Checkboxes, Button, and ComboBoxes -->
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,30,0" VerticalAlignment="Center">
+                                        <Border Background="#FFFFFF" BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="10" Padding="10">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10" BorderThickness="3"/>
+                                                <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10" BorderThickness="3"/>
+                                            </Grid>
+                                        </Border>
                                     </StackPanel>
-                                </StackPanel>
 
-                                <!-- Checkboxes, Button, and ComboBoxes -->
-                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,30,0" VerticalAlignment="Center">
-                                    <Border Background="#FFFFFF" BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="10" Padding="10">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Row="0" Grid.Column="3">
+                                        <TextBlock Text="Results" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                                        <ListView Name="MetricsResults_ListAPI" Width="200" Height="150" Margin="0,10,0,10">
+                                            <ListView.Items>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="ROA: " />
+                                                    <TextBlock Text="5.4%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="ROE: " />
+                                                    <TextBlock Text="12.3%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Operating Margin Profit: " />
+                                                    <TextBlock Text="15.8%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Gross Profit Margin: " />
+                                                    <TextBlock Text="22.1%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Net Profit Margin: " />
+                                                    <TextBlock Text="10.6%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Current Ratios: " />
+                                                    <TextBlock Text="1.9" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Debt-to-Equity: " />
+                                                    <TextBlock Text="0.5" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Interest Coverage: " />
+                                                    <TextBlock Text="4.2" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Contribution Margin: " />
+                                                    <TextBlock Text="30.5%" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Break-Even Point: " />
+                                                    <TextBlock Text="$250,000" />
+                                                </StackPanel>
+                                            </ListView.Items>
+                                        </ListView>
 
-                                            <CheckBox x:Name="CK_ROA_API" Grid.Row="0" Grid.Column="0" Content="ROA" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_ROE_API" Grid.Row="0" Grid.Column="1" Content="ROE" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_OperatingMargin_API" Grid.Row="0" Grid.Column="2" Content="Operating Margin Profit" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_GrossProfitMargin_API" Grid.Row="1" Grid.Column="0" Content="Gross Profit Margin" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_NetProfitMargin_API" Grid.Row="1" Grid.Column="1" Content="Net Profit Margin" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_CurrentRatios_API" Grid.Row="1" Grid.Column="2" Content="Current Ratios" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_DebtToEquity_API" Grid.Row="2" Grid.Column="0" Content="Debt-to-Equity" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_InterestCoverage_API" Grid.Row="2" Grid.Column="1" Content="Interest Coverage" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_ContributionMargin_API" Grid.Row="2" Grid.Column="2" Content="Contribution Margin" Margin="10" BorderThickness="3"/>
-                                            <CheckBox x:Name="CK_BreakEvenPoint_API" Grid.Row="3" Grid.Column="1" Content="Break-Even Point" Margin="10" BorderThickness="3"/>
-                                        </Grid>
-                                    </Border>
-                                </StackPanel>
-
-                                <StackPanel Grid.Row="0" Grid.Column="3">
-                                    <TextBlock Text="Results" HorizontalAlignment="Center" Margin="0,10,0,10"/>
-                                    <ListView Name="MetricsResults_ListAPI" Width="200" Height="200">
-                                        <ListView.Items>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="ROA: " />
-                                                <TextBlock Text="0" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Roe" />
-                                                <TextBlock Text=" Metric 4" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Operating Margin Profit:" />
-                                                <TextBlock Text=" 6" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Gross Profit Margin: " />
-                                                <TextBlock Text="8" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Net Profit Margin: " />
-                                                <TextBlock Text=" 10" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Current Ratios: " />
-                                                <TextBlock Text=" 12" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Debt-to-Equity:" />
-                                                <TextBlock Text=" 14" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Interest Coverage:" />
-                                                <TextBlock Text=" 16" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Contribution Margin:" />
-                                                <TextBlock Text=" 18" />
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Break-Even Point:" />
-                                                <TextBlock Text=" 20" />
-                                            </StackPanel>
-                                        </ListView.Items>
-                                    </ListView>
-                                </StackPanel>
-                            </Grid>
+                                        <Button Content="COPY TO CLIPBOARD" VerticalAlignment="Center" Margin="10,0,10,20"></Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
 
                             <!-- Bottom Section -->
-                            <Grid Grid.Row="2" Margin="20,20,20,10" Background="#F5F5F5" HorizontalAlignment="Center" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Border Grid.Row="2" HorizontalAlignment="Center" BorderBrush="#D3D3D3" Background="Olive" BorderThickness="2" CornerRadius="10" Margin="20,0,20,20">
+                                <Grid Grid.Row="2" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
 
-                                    <StackPanel Orientation="Vertical" Margin="30,20,90,10">
-                                        <TextBlock Text="Values retrieved from the Balance Sheet" Margin="0,0,0,10"></TextBlock>
-                                        <ListView Name="BalanceSheet" Width="200" Height="130">
-                                            <ListView.Items>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Total Assets:" />
-                                                    <TextBlock Text="0" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Total Equity:" />
-                                                    <TextBlock Text="0" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Current Assets:" />
-                                                    <TextBlock Text=" Metric 4" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Current Liabilities:" />
-                                                    <TextBlock Text=" 6" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Total Liabilities:" />
-                                                    <TextBlock Text="8" />
-                                                </StackPanel>
-                                            </ListView.Items>
-                                        </ListView>
+                                        <StackPanel Orientation="Vertical" Margin="30,20,90,10">
+                                            <TextBlock Text="Values retrieved from the Balance Sheet" Margin="0,0,0,10"></TextBlock>
+                                            <ListView Name="BalanceSheet" Width="200" Height="130">
+                                                <ListView.Items>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Total Assets: " />
+                                                        <TextBlock Text="$1,200,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Total Equity: " />
+                                                        <TextBlock Text="$800,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Current Assets: " />
+                                                        <TextBlock Text="$300,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Current Liabilities: " />
+                                                        <TextBlock Text="$150,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Total Liabilities: " />
+                                                        <TextBlock Text="$400,000" />
+                                                    </StackPanel>
+                                                </ListView.Items>
+                                            </ListView>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical" Margin="0,20,30,10">
+                                            <TextBlock Text="Values retrieved from the Income Statement" Margin="0,0,0,10"></TextBlock>
+                                            <ListView Name="IncomeStatement" Width="200" Height="130">
+                                                <ListView.Items>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Revenue: " />
+                                                        <TextBlock Text="$1,500,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="COGS: " />
+                                                        <TextBlock Text="$900,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Operating Expenses: " />
+                                                        <TextBlock Text="$200,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Net Income: " />
+                                                        <TextBlock Text="$250,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="EBITDA: " />
+                                                        <TextBlock Text="$350,000" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Interest Expense: " />
+                                                        <TextBlock Text="$50,000" />
+                                                    </StackPanel>
+                                                </ListView.Items>
+                                            </ListView>
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" Margin="0,20,30,10">
-                                        <TextBlock Text="Values retrieved from the Income Statement" Margin="0,0,0,10"></TextBlock>
-                                        <ListView Name="IncomeStatement" Width="200" Height="130">
-                                            <ListView.Items>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Revenue: " />
-                                                    <TextBlock Text="0" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="COGS: " />
-                                                    <TextBlock Text="0" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Operating Expenses:" />
-                                                    <TextBlock Text="3" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Net Income:" />
-                                                    <TextBlock Text=" 6" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="EBITDA:" />
-                                                    <TextBlock Text="8" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Interest Expense:" />
-                                                    <TextBlock Text=" 10" />
-                                                </StackPanel>
-                                            </ListView.Items>
-                                        </ListView>
-                                    </StackPanel>
-                                    
-
-                                </StackPanel>
-                            </Grid>
+                                </Grid>
+                            </Border>
                         </Grid>
                     </ScrollViewer>
-
                 </TabItem>
+
 
 
                 <!-- Preview InputDataTab -->
                 <TabItem Header="InputData" Name="InputDataTab">
                     <Grid>
-                        <DockPanel>
+                        <DockPanel Background="Beige">
                             <Grid Margin="10" DockPanel.Dock="Top">
                                 <!-- Define rows and columns -->
                                 <Grid.ColumnDefinitions>
@@ -694,7 +703,7 @@
 
                                 <StackPanel Grid.Row="8" Grid.ColumnSpan="4">
                                 <Separator Margin="10,20,10,10"/>
-                                <TextBlock Text="Imported Data" HorizontalAlignment="Center" Margin="0,15,0,10" />
+                                <TextBlock Text="IMPORTED DATA" HorizontalAlignment="Center" Margin="0,15,0,10" />
                                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible">
                                         <DataGrid Name="ImportedDataGrid" AutoGenerateColumns="True" Height="400" Margin="0,10,0,0" />
                                     </ScrollViewer>
@@ -705,17 +714,16 @@
                                 <Button Width="120" Margin="5,0" Content="Add Financial Data" Click="AddInputData_Click"/>
                                 <Button Width="120" Margin="5,0" Content="Clear all fields" Click="ClearInputButton_Click"/>
                                 <Button Width="120" Margin="5,0" Content="Import data" Click="ImportExcelButton_Click"/>
-                                <Button Content="Put data into Database" Click="AddImportedDataButton_Click" Margin="5,0"/>
+                                <Button Content="Add to Database" Click="AddImportedDataButton_Click" Margin="5,0"/>
                             </StackPanel>
 
                         </DockPanel>
                     </Grid>
                 </TabItem>
-
-                
-                <!-- Preview analysis tab -->
+               
+                <!-- Preview analysis results tab -->
                 <TabItem Header="ScenarioAnalysisTab" Name="ScenarioAnalysisTab">
-                    <Grid Background="White">
+                    <Grid Background="Beige">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -729,13 +737,14 @@
                         <!-- Export Buttons -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
                             <Button Content="Export to PDF" Name="ExportPdfButton" Margin="5" Click="ExportPDFButton_Click"/>
-                            <Button Content="Export to Excel" Name="ExportExcelButton" Margin="5" Click="ExportExcelButton_Click"/>
                         </StackPanel>
 
                         <!-- Dashboards -->
                         <Grid Grid.Row="1" Margin="10">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -743,33 +752,42 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Internal data results" Grid.Row="0" Grid.Column="0" Margin="40,0,10,0"></TextBlock>
-                            <TextBlock Text="External data results" Grid.Row="1" Grid.Column="0" Margin="40,0,10,0"></TextBlock>
-                            <!-- Dashboard 1 -->
-                            <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Name="Dashboard1" Margin="5"/>
-                            <!-- Dashboard 2 -->
-                            <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Name="Dashboard2" Margin="5"/>
-                            <!-- Dashboard 3 -->
-                            <lvc:CartesianChart Grid.Row="1" Grid.Column="0" Name="Dashboard3" Margin="5"/>
-                            <!-- Dashboard 4 -->
-                            <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="Dashboard4" Margin="5"/>
+                            <!-- Title for Internal Data Analysis -->
+                            <TextBlock Text="INTERNAL DATA RESULTS" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="40,0,10,0"/>
+
+                            <!-- Internal Data Analysis Dashboards -->
+                            <Border Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Height="300" Background="AliceBlue" Grid.Row="1" Grid.Column="0">
+                                <lvc:CartesianChart Name="Dashboard1" Margin="5" LegendLocation="Top"/>
+                            </Border>
+                            <Border Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Height="300" Background="AliceBlue" Grid.Row="1" Grid.Column="1">
+                                <lvc:CartesianChart Name="Dashboard2" Margin="5" LegendLocation="Top"/>
+                            </Border>
+
+                            <!-- Title for External Data Analysis -->
+                            <TextBlock Text="EXTERNAL DATA RESULTS" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="40,0,10,0"/>
+
+                            <Border Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Height="300" Background="AliceBlue" Grid.Row="3" Grid.Column="0">
+                                <lvc:CartesianChart Name="Dashboard3" Margin="5" LegendLocation="Top"/>
+                            </Border>
+                            <Border Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Height="300" Background="AliceBlue" Grid.Row="3" Grid.Column="1">
+                                <lvc:CartesianChart Name="Dashboard4" Margin="5" LegendLocation="Top"/>
+                            </Border>
                         </Grid>
 
-                        <!-- Description Text Blocks -->
-                        <StackPanel Grid.Row="2" Margin="10" Grid.Column="0">
-                            <TextBlock Text="Description of results from the previous tab." Margin="5"/>
-                            <TextBlock Text="Further insights and analysis." Margin="5"/>
-                            <TextBlock Text="Additional information and conclusions." Margin="5"/>
-                        </StackPanel>
+
+
 
                         <!-- Form for Interpretations -->
-                        <StackPanel Grid.Row="1" Margin="10" Grid.Column="1">
-                            <TextBlock Text="Metrics that presents risk" FontWeight="Bold" Margin="5"/>
-                            <TextBlock Text="Metric 1: Detailed interpretation and analysis." Margin="5"/>
-                            <TextBlock Text="Metric 2: Detailed interpretation and analysis." Margin="5"/>
-                            <TextBlock Text="Metric 3: Detailed interpretation and analysis." Margin="5"/>
-                            <!-- Add more TextBlocks as needed for other metrics -->
-                        </StackPanel>
+                        <Border Grid.Row="1" Grid.Column="1" Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Background="AliceBlue">
+                            <StackPanel >
+                                <TextBlock Text="Metrics that presents risk" HorizontalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                                <TextBlock Text="Metric 1: Detailed interpretation and analysis." Margin="5"/>
+                                <TextBlock Text="Metric 2: Detailed interpretation and analysis." Margin="5"/>
+                                <TextBlock Text="Metric 3: Detailed interpretation and analysis." Margin="5"/>
+                                <!-- Add more TextBlocks as needed for other metrics -->
+                            </StackPanel>
+                        </Border>
+                        
                     </Grid>
                 </TabItem>
 

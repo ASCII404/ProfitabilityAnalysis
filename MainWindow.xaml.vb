@@ -10,14 +10,10 @@ Imports System.Collections.Generic
 Imports PdfSharp
 Imports PdfSharp.Pdf
 Imports PdfSharp.Drawing
-Imports System.Runtime.InteropServices
-Imports Excel = Microsoft.Office.Interop.Excel
-Imports OfficeOpenXml.FormulaParsing
 
 
 
 Class MainWindow
-
 
     Private dbHelper As Database
     Private apiKey As String
@@ -325,10 +321,16 @@ Class MainWindow
             Dim selectedTab As TabItem = CType(MainTabControl.SelectedItem, TabItem)
             Dim selectedTabName As String = selectedTab.Name
 
+            'HELP BUTTON CONTENT
             ' Only show the message if the selected tab has changed
             If selectedTabName <> previous_selected_tab Then
                 If selectedTabName = "DashboardTab" Then
-                    helpButton_content = "This is the content from the DashboardTab"
+                    helpButton_content = "Welcome to the Financial Data Visualization Tool!" & vbCrLf &
+                                         "This is your main dashboard for visualizing financial data from our database." & vbCrLf &
+                                         "If you see no data, means the database is empty." & vbCrLf &
+                                         "Simply switch to the 'Input Data' tab to enter or update your financial information." & vbCrLf &
+                                         "Make sure to input valid data for accurate visualization." & vbCrLf &
+                                         "Once the data is entered, return to the dashboard tab to see your visualizations." & vbCrLf
                 ElseIf selectedTabName = "PreviewDatabaseTab" Then
                     helpButton_content = "This is the content from the PreviewDatabaseTab"
                 ElseIf selectedTabName = "AnalysisTab" Then
@@ -352,15 +354,15 @@ Class MainWindow
             ' Set the background color of the selected tab's button
             Select Case selectedTabName
                 Case "DashboardTab"
-                    dashboard_button.Background = Brushes.Tomato
+                    dashboard_button.Background = Brushes.Brown
                 Case "PreviewDatabaseTab"
-                    database_button.Background = Brushes.Tomato
+                    database_button.Background = Brushes.Brown
                 Case "AnalysisTab"
-                    analysis_button.Background = Brushes.Tomato
+                    analysis_button.Background = Brushes.Brown
                 Case "InputDataTab"
-                    inputData_button.Background = Brushes.Tomato
+                    inputData_button.Background = Brushes.Brown
                 Case "ScenarioAnalysisTab"
-                    results_button.Background = Brushes.Tomato
+                    results_button.Background = Brushes.Brown
             End Select
         End If
     End Sub
@@ -600,47 +602,6 @@ Class MainWindow
         End If
     End Sub
 
-    'THIS IS NOT WORKING
-    Private Sub ExportExcelButton_Click(sender As Object, e As RoutedEventArgs)
-        Dim saveFileDialog As New SaveFileDialog() With {
-        .Filter = "Excel Files|*.xlsx",
-        .Title = "Save Excel File"
-    }
-
-        If saveFileDialog.ShowDialog() = True Then
-            Dim filePath As String = saveFileDialog.FileName
-
-            ' Create the Excel file
-            Try
-                Dim excelApp As New Excel.Application()
-                Dim workbook As Excel.Workbook = excelApp.Workbooks.Add(Type.Missing)
-                Dim worksheet As Excel.Worksheet = CType(workbook.Sheets(1), Excel.Worksheet)
-                worksheet.Name = "ExportedData"
-
-                ' Add some sample data to the worksheet
-                worksheet.Cells(1, 1) = "Header 1"
-                worksheet.Cells(1, 2) = "Header 2"
-                worksheet.Cells(2, 1) = "Data 1"
-                worksheet.Cells(2, 2) = "Data 2"
-
-                ' Save the workbook
-                workbook.SaveAs(filePath)
-                workbook.Close()
-                excelApp.Quit()
-
-                ' Release the COM objects
-                Marshal.ReleaseComObject(worksheet)
-                Marshal.ReleaseComObject(workbook)
-                Marshal.ReleaseComObject(excelApp)
-
-                MessageBox.Show("Excel file exported successfully!")
-            Catch ex As Exception
-                MessageBox.Show($"An unexpected error occurred while exporting the Excel file: {ex.Message}")
-            End Try
-
-            Debug.WriteLine($"Exporting Excel file to: {filePath}")
-        End If
-    End Sub
 
 
 End Class

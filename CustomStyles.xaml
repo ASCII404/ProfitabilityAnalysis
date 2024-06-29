@@ -153,7 +153,7 @@
                             <Setter TargetName="border" Property="Background" Value="LightGray"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="Tomato"/>
+                            <Setter TargetName="border" Property="Background" Value="Brown"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>
@@ -164,6 +164,8 @@
         <Setter Property="Margin" Value="20,25,20,0"/>
         <Setter Property="Width" Value="90"/>
         <Setter Property="Background" Value="MintCream"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0.2"/>
     </Style>
     
     <!-- LogInButtonStyle -->
