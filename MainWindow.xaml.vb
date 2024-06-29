@@ -6,9 +6,15 @@ Imports LiveCharts
 Imports LiveCharts.Wpf
 Imports Microsoft.Win32
 Imports OfficeOpenXml
-
-
 Imports System.Collections.Generic
+Imports PdfSharp
+Imports PdfSharp.Pdf
+Imports PdfSharp.Drawing
+Imports System.Runtime.InteropServices
+Imports Excel = Microsoft.Office.Interop.Excel
+Imports OfficeOpenXml.FormulaParsing
+
+
 
 Class MainWindow
 
@@ -38,6 +44,7 @@ Class MainWindow
     Private Async Sub PreviewDatabaseButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = PreviewDatabaseTab
         Await LoadFinancialDataAsync()
+        dbHelper.PrintDateComponents(300)
     End Sub
 
     Private Async Sub DeleteDataButton_Click(sender As Object, e As RoutedEventArgs)
@@ -242,14 +249,14 @@ Class MainWindow
                                             $"Sales Revenue Per Unit: {salesRevenuePerUnit}" & Environment.NewLine &
                                             $"Variable Cost Per Unit: {variableCostPerUnit}"
 
-                ' Show the confirmation message box
-                Dim result As MessageBoxResult = MessageBox.Show($"Please confirm the following data:{Environment.NewLine}{Environment.NewLine}{dataSummary}", "Confirm Data Entry", MessageBoxButton.OKCancel, MessageBoxImage.Information)
+                '' Show the confirmation message box
+                'Dim result As MessageBoxResult = MessageBox.Show($"Please confirm the following data:{Environment.NewLine}{Environment.NewLine}{dataSummary}", "Confirm Data Entry", MessageBoxButton.OKCancel, MessageBoxImage.Information)
 
-                ' If the user clicks OK, add the data to the database
-                If result = MessageBoxResult.OK Then
-                    dbHelper.AddFinancialData(dateValue, revenue, costOfGoodsSold, operatingExpenses, netIncome, totalAssets, totalEquity, ebitda, currentAssets, currentLiabilities, totalLiabilities, interestExpense, variableCosts, fixedCosts, salesRevenuePerUnit, variableCostPerUnit)
-                    ClearInputFields()
-                End If
+                '' If the user clicks OK, add the data to the database
+                'If result = MessageBoxResult.OK Then
+                dbHelper.AddFinancialData(dateValue, revenue, costOfGoodsSold, operatingExpenses, netIncome, totalAssets, totalEquity, ebitda, currentAssets, currentLiabilities, totalLiabilities, interestExpense, variableCosts, fixedCosts, salesRevenuePerUnit, variableCostPerUnit)
+                '    ClearInputFields()
+                'End If
             Catch ex As Exception
                 MessageBox.Show($"Error parsing data at row {rowIndex + 1}: {ex.Message}")
             End Try
@@ -358,159 +365,159 @@ Class MainWindow
         End If
     End Sub
 
-    'It calculate ratios based on the selected checkboxes
+    'It calculate ratios based on the selected checkboxes  TO DO: UNCOMMENT THIS SHIT AFTER YOU'RE DONE
     Private Async Sub CalculateRatiosButton_Click(sender As Object, e As RoutedEventArgs)
-        Dim financialDataList As List(Of FinancialData) = Await dbHelper.GetFinancialDataAsync()
-        Dim results As New Dictionary(Of String, List(Of Double))
-        Dim helperMethods As New FinancialData()
+        'Dim financialDataList As List(Of FinancialData) = Await dbHelper.GetFinancialDataAsync()
+        'Dim results As New Dictionary(Of String, List(Of Double))
+        'Dim helperMethods As New FinancialData()
 
-        Dim selectedStartDate As Date? = StartDatePicker.SelectedDate
-        Dim selectedEndDate As Date? = EndDatePicker.SelectedDate
+        'Dim selectedStartDate As Date? = StartDatePicker.SelectedDate
+        'Dim selectedEndDate As Date? = EndDatePicker.SelectedDate
 
-        ' Filter the financial data list based on the selected date
-        Dim filteredDataList As List(Of FinancialData)
-        If selectedStartDate.HasValue AndAlso selectedEndDate.HasValue Then
-            filteredDataList = financialDataList.Where(Function(data) data.DateValue >= selectedStartDate.Value AndAlso data.DateValue <= selectedEndDate.Value).ToList()
-            Debug.WriteLine(filteredDataList.Count & " records found for the selected date range: " & selectedStartDate.Value.ToString("yyyy-MM-dd") & " to " & selectedEndDate.Value.ToString("yyyy-MM-dd"))
-        Else
-            filteredDataList = financialDataList
-            Debug.WriteLine("No date range selected. Processing all records.")
-        End If
+        '' Filter the financial data list based on the selected date
+        'Dim filteredDataList As List(Of FinancialData)
+        'If selectedStartDate.HasValue AndAlso selectedEndDate.HasValue Then
+        '    filteredDataList = financialDataList.Where(Function(data) data.DateValue >= selectedStartDate.Value AndAlso data.DateValue <= selectedEndDate.Value).ToList()
+        '    Debug.WriteLine(filteredDataList.Count & " records found for the selected date range: " & selectedStartDate.Value.ToString("yyyy-MM-dd") & " to " & selectedEndDate.Value.ToString("yyyy-MM-dd"))
+        'Else
+        '    filteredDataList = financialDataList
+        '    Debug.WriteLine("No date range selected. Processing all records.")
+        'End If
 
-        Dim totalAssets As Double = 0
-        Dim totalNetIncome As Double = 0
-        Dim totalEquity As Double = 0
-        Dim totalRevenue As Double = 0
-        Dim TotalOperatingExpenses As Double = 0
-        Dim totalCostOfGoodsSold As Double = 0
-        Dim totalInterestExpense As Double = 0
-        Dim totalVariableCosts As Double = 0
-        Dim totalFixedCosts As Double = 0
-        Dim totalSalesRevenuePerUnit As Double = 0
-        Dim totalVariableCostPerUnit As Double = 0
-        Dim totalLiabilities As Double = 0
-        Dim totalCurrentLiabilities As Double = 0
-        Dim totalCurrentAssets As Double = 0
-        Dim totalEbitda As Double = 0
+        'Dim totalAssets As Double = 0
+        'Dim totalNetIncome As Double = 0
+        'Dim totalEquity As Double = 0
+        'Dim totalRevenue As Double = 0
+        'Dim TotalOperatingExpenses As Double = 0
+        'Dim totalCostOfGoodsSold As Double = 0
+        'Dim totalInterestExpense As Double = 0
+        'Dim totalVariableCosts As Double = 0
+        'Dim totalFixedCosts As Double = 0
+        'Dim totalSalesRevenuePerUnit As Double = 0
+        'Dim totalVariableCostPerUnit As Double = 0
+        'Dim totalLiabilities As Double = 0
+        'Dim totalCurrentLiabilities As Double = 0
+        'Dim totalCurrentAssets As Double = 0
+        'Dim totalEbitda As Double = 0
 
-        For Each data As FinancialData In filteredDataList
-            totalAssets += data.TotalAssets
-            totalNetIncome += data.NetIncome
-            totalEquity += data.TotalEquity
-            totalRevenue += data.Revenue
-            TotalOperatingExpenses += data.OperatingExpenses
-            totalCostOfGoodsSold += data.CostOfGoodsSold
-            totalInterestExpense += data.InterestExpense
-            totalVariableCosts += data.VariableCosts
-            totalFixedCosts += data.FixedCosts
-            totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
-            totalVariableCostPerUnit += data.VariableCostPerUnit
-            totalLiabilities += data.TotalLiabilities
-            totalCurrentLiabilities += data.CurrentLiabilities
-            totalCurrentAssets += data.CurrentAssets
-            totalEbitda += data.EBITDA
-        Next
+        'For Each data As FinancialData In filteredDataList
+        '    totalAssets += data.TotalAssets
+        '    totalNetIncome += data.NetIncome
+        '    totalEquity += data.TotalEquity
+        '    totalRevenue += data.Revenue
+        '    TotalOperatingExpenses += data.OperatingExpenses
+        '    totalCostOfGoodsSold += data.CostOfGoodsSold
+        '    totalInterestExpense += data.InterestExpense
+        '    totalVariableCosts += data.VariableCosts
+        '    totalFixedCosts += data.FixedCosts
+        '    totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
+        '    totalVariableCostPerUnit += data.VariableCostPerUnit
+        '    totalLiabilities += data.TotalLiabilities
+        '    totalCurrentLiabilities += data.CurrentLiabilities
+        '    totalCurrentAssets += data.CurrentAssets
+        '    totalEbitda += data.EBITDA
+        'Next
 
-        'The FinancialData.ReturnOnAssets() is used from the constructor intialization of FinancialData. 
-        If CK_ROA.IsChecked Then
-            If totalAssets > 0 Then
-                Dim roa As Double = FinancialData.ReturnOnAssets(totalNetIncome, totalAssets)
-                Debug.WriteLine($"TotalAssets: {totalAssets}, TotalNetIncome: {totalNetIncome}, ROA: {roa}")
-            Else
-                Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
-            End If
-        End If
+        ''The FinancialData.ReturnOnAssets() is used from the constructor intialization of FinancialData. 
+        'If CK_ROA.IsChecked Then
+        '    If totalAssets > 0 Then
+        '        Dim roa As Double = FinancialData.ReturnOnAssets(totalNetIncome, totalAssets)
+        '        Debug.WriteLine($"TotalAssets: {totalAssets}, TotalNetIncome: {totalNetIncome}, ROA: {roa}")
+        '    Else
+        '        Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
+        '    End If
+        'End If
 
-        If CK_ROE.IsChecked Then
-            If totalEquity > 0 Then
-                Dim roe As Double = totalNetIncome / totalEquity
-                Debug.WriteLine($"TotalEquity: {totalEquity}, TotalNetIncome: {totalNetIncome}, ROE: {roe}")
-            Else
-                Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
-            End If
-        End If
+        'If CK_ROE.IsChecked Then
+        '    If totalEquity > 0 Then
+        '        Dim roe As Double = totalNetIncome / totalEquity
+        '        Debug.WriteLine($"TotalEquity: {totalEquity}, TotalNetIncome: {totalNetIncome}, ROE: {roe}")
+        '    Else
+        '        Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
+        '    End If
+        'End If
 
-        For Each result In results
-            Debug.WriteLine($"{result.Key}: {result.Value}")
-        Next
+        'For Each result In results
+        '    Debug.WriteLine($"{result.Key}: {result.Value}")
+        'Next
 
-        If CK_OperatingMargin.IsChecked Then
-            Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses
-                                                                                )
-            Debug.WriteLine($"Operating Margin: {operatingMargin}")
-        End If
+        'If CK_OperatingMargin.IsChecked Then
+        '    Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses
+        '                                                                        )
+        '    Debug.WriteLine($"Operating Margin: {operatingMargin}")
+        'End If
 
-        If CK_OperatingMargin.IsChecked Then
-            If totalRevenue > 0 Then
-                Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses)
-                Debug.WriteLine($"totalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, OM: {operatingMargin}")
-            Else
-                Debug.WriteLine("Total Revenue is zero or less, cannot calculate OM")
-            End If
-        End If
+        'If CK_OperatingMargin.IsChecked Then
+        '    If totalRevenue > 0 Then
+        '        Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses)
+        '        Debug.WriteLine($"totalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, OM: {operatingMargin}")
+        '    Else
+        '        Debug.WriteLine("Total Revenue is zero or less, cannot calculate OM")
+        '    End If
+        'End If
 
-        If CK_NetProfitMargin.IsChecked Then
-            If totalRevenue > 0 Then
-                Dim netProfitMargin As Double = helperMethods.NetProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses, totalNetIncome)
-                Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, TotalOperatingExpenses: {TotalOperatingExpenses}, TotalNetIncome: {totalNetIncome}, NPM: {netProfitMargin}")
-            Else
-                Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
-            End If
-        End If
+        'If CK_NetProfitMargin.IsChecked Then
+        '    If totalRevenue > 0 Then
+        '        Dim netProfitMargin As Double = helperMethods.NetProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses, totalNetIncome)
+        '        Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, TotalOperatingExpenses: {TotalOperatingExpenses}, TotalNetIncome: {totalNetIncome}, NPM: {netProfitMargin}")
+        '    Else
+        '        Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
+        '    End If
+        'End If
 
-        If CK_GrossProfitMargin.IsChecked Then
-            If totalRevenue > 0 Then
-                Dim grossProfitMargin As Double = helperMethods.GrossProfitMargin(totalRevenue, totalCostOfGoodsSold)
-                Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, GPM: {grossProfitMargin}")
-            Else
-                Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
-            End If
-        End If
+        'If CK_GrossProfitMargin.IsChecked Then
+        '    If totalRevenue > 0 Then
+        '        Dim grossProfitMargin As Double = helperMethods.GrossProfitMargin(totalRevenue, totalCostOfGoodsSold)
+        '        Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, GPM: {grossProfitMargin}")
+        '    Else
+        '        Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
+        '    End If
+        'End If
 
-        If CK_CurrentRatios.IsChecked Then
-            If totalCurrentLiabilities > 0 Then
-                Dim currentRatio As Double = helperMethods.CurrentRatio(totalCurrentAssets, totalCurrentLiabilities)
-                Debug.WriteLine($"TotalCurrentAssets: {totalCurrentAssets}, TotalCurrentLiabilities: {totalCurrentLiabilities}, CR: {currentRatio}")
-            Else
-                Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
-            End If
-        End If
+        'If CK_CurrentRatios.IsChecked Then
+        '    If totalCurrentLiabilities > 0 Then
+        '        Dim currentRatio As Double = helperMethods.CurrentRatio(totalCurrentAssets, totalCurrentLiabilities)
+        '        Debug.WriteLine($"TotalCurrentAssets: {totalCurrentAssets}, TotalCurrentLiabilities: {totalCurrentLiabilities}, CR: {currentRatio}")
+        '    Else
+        '        Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
+        '    End If
+        'End If
 
-        If CK_DebtToEquity.IsChecked Then
-            If totalEquity > 0 Then
-                Dim debtToEquityRatio As Double = helperMethods.DebtToEquityRatio(totalLiabilities, totalEquity)
-                Debug.WriteLine($"TotalLiabilities: {totalLiabilities}, TotalEquity: {totalEquity}, D/E: {debtToEquityRatio}")
-            Else
-                Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
-            End If
-        End If
+        'If CK_DebtToEquity.IsChecked Then
+        '    If totalEquity > 0 Then
+        '        Dim debtToEquityRatio As Double = helperMethods.DebtToEquityRatio(totalLiabilities, totalEquity)
+        '        Debug.WriteLine($"TotalLiabilities: {totalLiabilities}, TotalEquity: {totalEquity}, D/E: {debtToEquityRatio}")
+        '    Else
+        '        Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
+        '    End If
+        'End If
 
-        If CK_InterestCoverage.IsChecked Then
-            If totalInterestExpense > 0 Then
-                Dim interestCoverageRatio As Double = helperMethods.InterestCoverageRatio(totalEbitda, totalInterestExpense)
-                Debug.WriteLine($"TotalNetIncome: {totalEbitda}, TotalInterestExpense: {totalInterestExpense}, ICR: {interestCoverageRatio}")
-            Else
-                Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
-            End If
-        End If
+        'If CK_InterestCoverage.IsChecked Then
+        '    If totalInterestExpense > 0 Then
+        '        Dim interestCoverageRatio As Double = helperMethods.InterestCoverageRatio(totalEbitda, totalInterestExpense)
+        '        Debug.WriteLine($"TotalNetIncome: {totalEbitda}, TotalInterestExpense: {totalInterestExpense}, ICR: {interestCoverageRatio}")
+        '    Else
+        '        Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
+        '    End If
+        'End If
 
-        If CK_ContributionMargin.IsChecked Then
-            If totalSalesRevenuePerUnit > 0 Then
-                Dim contributionMargin As Double = helperMethods.ContributionMarginRatio(totalSalesRevenuePerUnit, totalVariableCostPerUnit)
-                Debug.WriteLine($"TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, CM: {contributionMargin}")
-            Else
-                Debug.WriteLine("Total Sales Revenue Per Unit is zero or less, cannot calculate CM")
-            End If
-        End If
+        'If CK_ContributionMargin.IsChecked Then
+        '    If totalSalesRevenuePerUnit > 0 Then
+        '        Dim contributionMargin As Double = helperMethods.ContributionMarginRatio(totalSalesRevenuePerUnit, totalVariableCostPerUnit)
+        '        Debug.WriteLine($"TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, CM: {contributionMargin}")
+        '    Else
+        '        Debug.WriteLine("Total Sales Revenue Per Unit is zero or less, cannot calculate CM")
+        '    End If
+        'End If
 
-        If CK_BreakEvenPoint.IsChecked Then
-            If totalFixedCosts > 0 Then
-                Dim breakEvenPoint As Double = helperMethods.BreakEvenPoint(totalFixedCosts, totalSalesRevenuePerUnit, totalVariableCostPerUnit)
-                Debug.WriteLine($"TotalFixedCosts: {totalFixedCosts}, TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, BEP: {breakEvenPoint}")
-            Else
-                Debug.WriteLine("Total Fixed Costs is zero or less, cannot calculate BEP")
-            End If
-        End If
+        'If CK_BreakEvenPoint.IsChecked Then
+        '    If totalFixedCosts > 0 Then
+        '        Dim breakEvenPoint As Double = helperMethods.BreakEvenPoint(totalFixedCosts, totalSalesRevenuePerUnit, totalVariableCostPerUnit)
+        '        Debug.WriteLine($"TotalFixedCosts: {totalFixedCosts}, TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, BEP: {breakEvenPoint}")
+        '    Else
+        '        Debug.WriteLine("Total Fixed Costs is zero or less, cannot calculate BEP")
+        '    End If
+        'End If
     End Sub
 
     'It is used to LogIn 
@@ -548,8 +555,92 @@ Class MainWindow
         VariableCostPerUnitInput.Text = String.Empty
     End Sub
 
+    'It is used to export files
+    Private Sub ExportPDFButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim saveFileDialog As New SaveFileDialog() With {
+            .Filter = "PDF Files|*.pdf",
+            .Title = "Save PDF File"
+        }
 
+        If saveFileDialog.ShowDialog() = True Then
+            Dim filePath As String = saveFileDialog.FileName
 
+            ' Create the PDF file
+            Try
+                ' Create a new PDF document
+                Dim document As New PdfDocument()
+                document.Info.Title = "Created with PDFsharp"
+
+                ' Create an empty page
+                Dim page As PdfPage = document.AddPage()
+
+                ' Get an XGraphics object for drawing
+                Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
+
+                ' Create a font
+                Dim font As XFont = New XFont("Verdana", 20)
+                ' Draw the text
+                gfx.DrawString("Hello, World!", font, XBrushes.Black, New XRect(0, 0, page.Width, page.Height), XStringFormats.Center)
+                gfx.DrawString("This is a sample PDF file created using PDFsharp.", font, XBrushes.Black, New XRect(0, 40, page.Width, page.Height), XStringFormats.Center)
+
+                ' Save the document
+                document.Save(filePath)
+                document.Close()
+
+                MessageBox.Show("PDF file exported successfully!")
+            Catch ex As IOException
+                MessageBox.Show($"An IO exception occurred while exporting the PDF: {ex.Message}")
+            Catch ex As UnauthorizedAccessException
+                MessageBox.Show($"An access exception occurred while exporting the PDF: {ex.Message}")
+            Catch ex As Exception
+                MessageBox.Show($"An unexpected error occurred while exporting the PDF: {ex.Message}")
+            End Try
+
+            Debug.WriteLine($"Exporting PDF file to: {filePath}")
+        End If
+    End Sub
+
+    'THIS IS NOT WORKING
+    Private Sub ExportExcelButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim saveFileDialog As New SaveFileDialog() With {
+        .Filter = "Excel Files|*.xlsx",
+        .Title = "Save Excel File"
+    }
+
+        If saveFileDialog.ShowDialog() = True Then
+            Dim filePath As String = saveFileDialog.FileName
+
+            ' Create the Excel file
+            Try
+                Dim excelApp As New Excel.Application()
+                Dim workbook As Excel.Workbook = excelApp.Workbooks.Add(Type.Missing)
+                Dim worksheet As Excel.Worksheet = CType(workbook.Sheets(1), Excel.Worksheet)
+                worksheet.Name = "ExportedData"
+
+                ' Add some sample data to the worksheet
+                worksheet.Cells(1, 1) = "Header 1"
+                worksheet.Cells(1, 2) = "Header 2"
+                worksheet.Cells(2, 1) = "Data 1"
+                worksheet.Cells(2, 2) = "Data 2"
+
+                ' Save the workbook
+                workbook.SaveAs(filePath)
+                workbook.Close()
+                excelApp.Quit()
+
+                ' Release the COM objects
+                Marshal.ReleaseComObject(worksheet)
+                Marshal.ReleaseComObject(workbook)
+                Marshal.ReleaseComObject(excelApp)
+
+                MessageBox.Show("Excel file exported successfully!")
+            Catch ex As Exception
+                MessageBox.Show($"An unexpected error occurred while exporting the Excel file: {ex.Message}")
+            End Try
+
+            Debug.WriteLine($"Exporting Excel file to: {filePath}")
+        End If
+    End Sub
 
 
 End Class

@@ -240,4 +240,39 @@ Public Class Database
         Return financialDataList
     End Function
 
+
+    'TEMP FUNCTION, JUST TESTING A FUNCTIONALITY
+    Public Sub PrintDateComponents(dateId As Integer)
+        Using connection As New SQLiteConnection(connectionString)
+            connection.Open()
+
+            ' Query to get the date components for the given DateID
+            Dim cmd As New SQLiteCommand("
+            SELECT Date, Year, Quarter, Month, Day 
+            FROM DateDimension 
+            WHERE DateID = @DateID", connection)
+            cmd.Parameters.AddWithValue("@DateID", dateId)
+
+            Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                If reader.Read() Then
+                    Dim dateValue As Date = Convert.ToDateTime(reader("Date"))
+                    Dim year As Integer = Convert.ToInt32(reader("Year"))
+                    Dim quarter As Integer = Convert.ToInt32(reader("Quarter"))
+                    Dim month As Integer = Convert.ToInt32(reader("Month"))
+                    Dim day As Integer = Convert.ToInt32(reader("Day"))
+
+                    ' Print the components
+                    Debug.WriteLine("DateID: " & dateId)
+                    Debug.WriteLine("Date: " & dateValue.ToShortDateString())
+                    Debug.WriteLine("Year: " & year)
+                    Debug.WriteLine("Quarter: " & quarter)
+                    Debug.WriteLine("Month: " & month)
+                    Debug.WriteLine("Day: " & day)
+                Else
+                    Debug.WriteLine("DateID not found.")
+                End If
+            End Using
+        End Using
+    End Sub
+
 End Class
