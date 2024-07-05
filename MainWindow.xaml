@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ProfitabilityAnalysis"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="Profitabil-inatorul" Height="780" Width="1280"
+        Title="Profitability analysis" Height="780" Width="1280"
         MinHeight="780" MinWidth="1280">
 
     <Window.Resources>
@@ -104,62 +104,114 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Placeholder for Chart 1 -->
-                        <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Name="chart1" Visibility="Collapsed" />
+                        <lvc:CartesianChart Grid.Row="0" Grid.Column="0" Margin="20" Name="chart1" Visibility="Collapsed">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="{Binding Chart1Values}" Title="Net Income" LineSmoothness="0.5" PointGeometry="{x:Null}" StrokeThickness="2" Fill="Transparent" Stroke="CadetBlue"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Date" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Amount" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.ChartLegend>
+                                <lvc:DefaultLegend Foreground="Black"/>
+                            </lvc:CartesianChart.ChartLegend>
+                        </lvc:CartesianChart>
                         <Grid Grid.Row="0" Grid.Column="0" Name="placeholder1" Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
-                                <TextBlock Text="Evolution of Net Income" Padding="10" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Evolution of Net Income" Padding="10" HorizontalAlignment="Center" Foreground="White"/>
                             </Border>
                             <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
-                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
                             </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 2 -->
-                        <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Name="chart2" Visibility="Collapsed" />
+                        <lvc:CartesianChart Grid.Row="0" Grid.Column="1" Margin="20" Name="chart2" Visibility="Collapsed">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="{Binding Chart2Values}" Title="Total Assets" LineSmoothness="0.5" PointGeometry="{x:Null}" StrokeThickness="2" Fill="Transparent" Stroke="White"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Date" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Amount" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.ChartLegend>
+                                <lvc:DefaultLegend Foreground="Black"/>
+                            </lvc:CartesianChart.ChartLegend>
+                        </lvc:CartesianChart>
                         <Grid Grid.Row="0" Grid.Column="1" Name="placeholder2" Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
-                                <TextBlock Text="Evolution of Assets" Padding="10" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Evolution of Assets" Padding="10" HorizontalAlignment="Center" Foreground="White"/>
                             </Border>
                             <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
-                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
                             </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 3 -->
-                        <lvc:CartesianChart Grid.Row="1" Grid.Column="0" Name="chart3" Visibility="Collapsed" />
+                        <lvc:CartesianChart x:Name="chart3" Grid.Row="1" Grid.Column="0" Margin="20" Visibility="Collapsed">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Amount" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Categories" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.ChartLegend>
+                                <lvc:DefaultLegend Foreground="Black"/>
+                            </lvc:CartesianChart.ChartLegend>
+                        </lvc:CartesianChart>
+
                         <Grid Grid.Row="1" Grid.Column="0" Name="placeholder3" Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
-                                <TextBlock Text="Evolution of COGS" Padding="10" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Evolution of COGS" Padding="10" HorizontalAlignment="Center" Foreground="Black"/>
                             </Border>
                             <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
-                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
                             </Border>
                         </Grid>
 
                         <!-- Placeholder for Chart 4 -->
-                        <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Name="chart4" Visibility="Collapsed" />
-                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4" Margin="10" >
+                        <lvc:CartesianChart x:Name="chart4" Grid.Row="1" Grid.Column="1" Margin="20" Visibility="Collapsed">
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Title="Revenue" Values="{Binding RevenueValues}" LineSmoothness="0.5" PointGeometry="{x:Null}" StrokeThickness="2" Fill="Transparent" Stroke="CadetBlue"/>
+                                <lvc:LineSeries Title="Expenses" Values="{Binding ExpenseValues}" LineSmoothness="0.5" PointGeometry="{x:Null}" StrokeThickness="2" Fill="Transparent" Stroke="Red"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Date" Foreground="Black" Labels="{Binding DateLabels}"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Amount" Foreground="Black"/>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.ChartLegend>
+                                <lvc:DefaultLegend Foreground="Black"/>
+                            </lvc:CartesianChart.ChartLegend>
+                        </lvc:CartesianChart>
+
+                        <Grid Grid.Row="1" Grid.Column="1" Name="placeholder4" Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
-                                <TextBlock Text="Evolution of Revenues" Padding="10" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Evolution of Revenues" Padding="10" HorizontalAlignment="Center" Foreground="White"/>
                             </Border>
                             <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
-                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
                             </Border>
                         </Grid>
                     </Grid>

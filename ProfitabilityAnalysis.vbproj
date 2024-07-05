@@ -5,11 +5,11 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>ProfitabilityAnalysis</RootNamespace>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>dr__heinz_doofenshmirtz__hd__by_jaycasey_d57cam8-fullview.ico</ApplicationIcon>
+    <ApplicationIcon>analysis.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="dr__heinz_doofenshmirtz__hd__by_jaycasey_d57cam8-fullview.ico" />
+    <Content Include="analysis.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,6 +10,7 @@ Imports System.Collections.Generic
 Imports PdfSharp
 Imports PdfSharp.Pdf
 Imports PdfSharp.Drawing
+Imports LiveCharts.Defaults
 
 
 
@@ -22,16 +23,182 @@ Class MainWindow
     Private previous_selected_tab As String
     Private helpButton_content As String
     Private authenatication_win As Authentication
+
+    Public Property Chart1Values As ChartValues(Of ObservablePoint)
+    Public Property Chart2Values As ChartValues(Of ObservablePoint)
+    Public Property Chart3Values As ChartValues(Of ObservablePoint)
+    Public Property Chart4Values As ChartValues(Of ObservableValue)
     Public Sub New()
-
-
 
         apiKey = "your Alpha Vantage API Key"
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial
         InitializeComponent()
         dbHelper = New Database("dbtest.db")
         FinancialData = New FinancialData()
+
+
+
+        InitializeChartData1()
+        InitializeChartData2()
+        InitializeChartData3()
+        InitializeChartData4()
+
     End Sub
+
+    Private Sub InitializeChartData1()
+        ' Example: Populate data for Chart 1 (Net Income)
+        Chart1Values = New ChartValues(Of ObservablePoint) From {
+    New ObservablePoint(1, 1000),
+    New ObservablePoint(2, 2200),
+    New ObservablePoint(3, 1500),
+    New ObservablePoint(4, 3000),
+    New ObservablePoint(5, 2800),
+    New ObservablePoint(6, 3500),
+    New ObservablePoint(7, 2500),
+    New ObservablePoint(8, 4000),
+    New ObservablePoint(9, 3200),
+    New ObservablePoint(10, 4500)}
+        ' Add more points as needed
+
+        ' Bind data to Chart 1
+        DataContext = Me
+
+        ' Example: Placeholder text update for Chart 1
+        placeholder1.Visibility = Visibility.Collapsed
+        chart1.Visibility = Visibility.Visible
+    End Sub
+
+    Private Sub InitializeChartData2()
+        ' Example: Populate data for Chart 2 (Total Assets)
+        Chart2Values = New ChartValues(Of ObservablePoint) From {
+    New ObservablePoint(1, 1200),
+    New ObservablePoint(2, 1800),
+    New ObservablePoint(3, 2500),
+    New ObservablePoint(4, 2200),
+    New ObservablePoint(5, 3800),
+    New ObservablePoint(6, 3000),
+    New ObservablePoint(7, 2800),
+    New ObservablePoint(8, 3500),
+    New ObservablePoint(9, 4000),
+    New ObservablePoint(10, 5000)}
+        ' Bind data to Chart 2
+        chart2.Series = New SeriesCollection From {
+    New ColumnSeries With {
+        .Values = Chart2Values,
+        .Title = "Total Assets",
+        .Fill = Brushes.CadetBlue,
+        .Stroke = Brushes.CadetBlue
+    }
+}
+        DataContext = Me
+
+        ' Placeholder text update for Chart 2
+        placeholder2.Visibility = Visibility.Collapsed
+        chart2.Visibility = Visibility.Visible
+    End Sub
+
+    Private Sub InitializeChartData3()
+        ' Example: Populate data for Chart 3 (COGS)
+        Chart3Values = New ChartValues(Of ObservablePoint) From {
+        New ObservablePoint(1, 1400),
+        New ObservablePoint(2, 2500),
+        New ObservablePoint(3, 1800),
+        New ObservablePoint(4, 2800),
+        New ObservablePoint(5, 3500),
+        New ObservablePoint(6, 2200),
+        New ObservablePoint(7, 4000),
+        New ObservablePoint(8, 3800),
+        New ObservablePoint(9, 3000),
+        New ObservablePoint(10, 4500)
+    }
+
+        ' Bind data to Chart 3 as a Row Chart
+        chart3.Series = New SeriesCollection From {
+        New RowSeries With {
+            .Values = Chart3Values,
+            .Title = "COGS",
+            .Fill = Brushes.CadetBlue,
+            .Stroke = Brushes.CadetBlue
+        }
+    }
+
+        ' Set X and Y axes
+        chart3.AxisX.Clear()
+        chart3.AxisX.Add(New Axis With {
+        .Title = "Amount",
+        .Foreground = Brushes.Black
+    })
+
+        chart3.AxisY.Clear()
+        chart3.AxisY.Add(New Axis With {
+        .Title = "Categories",
+        .Foreground = Brushes.Black
+    })
+
+        DataContext = Me
+
+        ' Placeholder text update for Chart 3
+        placeholder3.Visibility = Visibility.Collapsed
+        chart3.Visibility = Visibility.Visible
+    End Sub
+
+    Public Sub InitializeChartData4()
+        ' Ensure chart4 is initialized and not null here
+        If chart4 Is Nothing Then
+            Throw New NullReferenceException("chart4 is not initialized.")
+        End If
+
+        ' Sample data for the chart
+        Dim revenueValues As New ChartValues(Of Double) From {2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800}
+        Dim expenseValues As New ChartValues(Of Double) From {1800, 1900, 2100, 2300, 2500, 2700, 2900, 3100, 3300, 3500}
+        Dim dateLabels As New List(Of String) From {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"}
+
+        ' Bind data to the chart
+        chart4.Series = New SeriesCollection From {
+        New LineSeries With {
+            .Title = "Revenue",
+            .Values = revenueValues,
+            .LineSmoothness = 0.5,
+            .PointGeometry = Nothing,
+            .StrokeThickness = 2,
+            .Fill = Brushes.Transparent,
+            .Stroke = Brushes.CadetBlue
+        },
+        New LineSeries With {
+            .Title = "Expenses",
+            .Values = expenseValues,
+            .LineSmoothness = 0.5,
+            .PointGeometry = Nothing,
+            .StrokeThickness = 2,
+            .Fill = Brushes.Transparent,
+            .Stroke = Brushes.Red
+        }
+    }
+
+        ' Bind the date labels to the X-axis
+        chart4.AxisX.Clear()
+        chart4.AxisX.Add(New Axis With {
+        .Title = "Date",
+        .Labels = dateLabels,
+        .Foreground = Brushes.Black
+    })
+
+        ' Set the Y-axis title
+        chart4.AxisY.Clear()
+        chart4.AxisY.Add(New Axis With {
+        .Title = "Amount",
+        .Foreground = Brushes.Black
+    })
+
+        ' Update visibility if needed
+        If placeholder4 IsNot Nothing Then
+            placeholder4.Visibility = Visibility.Collapsed
+        End If
+
+        chart4.Visibility = Visibility.Visible
+    End Sub
+
+
 
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
@@ -332,7 +499,8 @@ Class MainWindow
                                          "Make sure to input valid data for accurate visualization." & vbCrLf &
                                          "Once the data is entered, return to the dashboard tab to see your visualizations." & vbCrLf
                 ElseIf selectedTabName = "PreviewDatabaseTab" Then
-                    helpButton_content = "This is the content from the PreviewDatabaseTab"
+                    helpButton_content = "In this tab you can see your financial data that you entered." & vbCrLf &
+                                         "You can also delete any data by entering the number of a line and by clicking the 'Delete' button."
                 ElseIf selectedTabName = "AnalysisTab" Then
                     helpButton_content = "This is the content from the AnalysisTab"
                 ElseIf selectedTabName = "InputDataTab" Then
@@ -530,7 +698,7 @@ Class MainWindow
 
         If result.HasValue AndAlso result.Value Then
             Debug.WriteLine("User authenticated successfully!")
-            LogIn.Text = "Welcome, User_Name"
+            LogIn.Text = "Welcome, User"
             LogIn.IsEnabled = False
         Else
             Debug.WriteLine("User authentication failed.")
