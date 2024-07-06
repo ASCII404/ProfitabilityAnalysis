@@ -199,7 +199,6 @@ Class MainWindow
     End Sub
 
 
-
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
     End Sub
@@ -432,15 +431,38 @@ Class MainWindow
         Dim selectedSymbol As String = comboBoxItem1.Content.ToString()
         Dim selectedFiscalYearIndex As Integer = PeriodOptions.SelectedIndex
 
-        Console.WriteLine("This is the selected symbol: " & selectedSymbol)
-        Console.WriteLine("This is the selected fiscal year index: " & selectedFiscalYearIndex)
+        Debug.WriteLine("This is the selected symbol: " & selectedSymbol)
+        Debug.WriteLine("This is the selected fiscal year index: " & selectedFiscalYearIndex)
 
         Dim financialData As New FinancialData()
         Await financialData.LoadFinancialData(selectedSymbol, selectedFiscalYearIndex)
-        financialData.PrintFinancialData()
-        ' Additional code to display ratios or handle results...
+        Debug.WriteLine(financialData.Revenue)
+        incomeS_Rev.Text = financialData.Revenue.ToString("C0")
+        incomeS_COGS.Text = financialData.CostOfGoodsSold.ToString("C0")
+        incomeS_OP_Expenses.Text = financialData.OperatingExpenses.ToString("C0")
+        incomeS_NetIncome.Text = financialData.NetIncome.ToString("C0")
+        incomeS_EBITDA.Text = financialData.EBITDA.ToString("C0")
+        incomeS_IExpenses.Text = financialData.InterestExpense.ToString("C0")
     End Sub
 
+    Private Async Sub GetAPIdata2_Click(sender As Object, e As RoutedEventArgs)
+        Dim comboBoxItem2 As ComboBoxItem = CType(SymbolOptions.SelectedItem, ComboBoxItem)
+        Dim selectedSymbol As String = comboBoxItem2.Content.ToString()
+        Dim selectedFiscalYearIndex As Integer = PeriodOptions.SelectedIndex
+
+        Debug.WriteLine("This is the selected symbol: " & selectedSymbol)
+        Debug.WriteLine("This is the selected fiscal year index: " & selectedFiscalYearIndex)
+
+        Dim financialData As New FinancialData()
+        Await financialData.LoadFinancialData2(selectedSymbol, selectedFiscalYearIndex)
+        Debug.WriteLine(financialData.TotalAssets)
+        balanceS_TA.Text = financialData.TotalAssets.ToString("C0")
+        balanceS_TE.Text = financialData.TotalEquity.ToString("C0")
+        balanceS_CA.Text = financialData.CurrentAssets.ToString("C0")
+        balanceS_CL.Text = financialData.CurrentLiabilities.ToString("C0")
+        balanceS_TL.Text = financialData.TotalLiabilities.ToString("C0")
+
+    End Sub
     'Help button content
     Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
         MessageBox.Show(helpButton_content)

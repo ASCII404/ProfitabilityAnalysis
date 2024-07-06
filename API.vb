@@ -52,6 +52,12 @@ Public Class API
         End Get
     End Property
 
+    Public ReadOnly Property BalanceSheetReport() As JObject
+        Get
+            Return balancesheet_report
+        End Get
+    End Property
+
     ' Update the income statement URL based on the current symbol and API key
     Private Sub UpdateIncomeStatementUrl()
         income_statement_url = $"https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={company_symbol}&apikey={api_key}"
@@ -78,10 +84,8 @@ Public Class API
         End Using
     End Function
 
-
-
     'Using the AV API to get the balance sheet data
-    Public Async Function LoadBalanceSheet_API() As Task
+    Public Async Function LoadBalanceSheet_API(selectedFiscalYearIndex As Integer) As Task
         If String.IsNullOrEmpty(company_symbol) Then
             Throw New InvalidOperationException("Company symbol is not set.")
         End If

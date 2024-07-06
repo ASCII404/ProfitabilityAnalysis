@@ -1,5 +1,6 @@
 ﻿Imports Newtonsoft.Json.Linq
 
+'This does not respect encapsulation, change it soon.
 Public Class FinancialData
     Public Property FinancialDataID As Integer
     Public Property DateValue As Date
@@ -45,6 +46,8 @@ Public Class FinancialData
         Me.VariableCostPerUnit = variableCostPerUnit
     End Sub
 
+
+    'Loads financial data from the API for the income statement only
     Public Async Function LoadFinancialData(symbol As String, selectedFiscalYearIndex As Integer) As Task
         AV_API.Symbol = symbol
         Await AV_API.LoadIncomeStatement_API(selectedFiscalYearIndex)
@@ -57,34 +60,26 @@ Public Class FinancialData
             CostOfGoodsSold = If(report("costOfRevenue") IsNot Nothing, CDec(report("costOfRevenue")), 0D)
             OperatingExpenses = If(report("operatingExpenses") IsNot Nothing, CDec(report("operatingExpenses")), 0D)
             NetIncome = If(report("netIncome") IsNot Nothing, CDec(report("netIncome")), 0D)
-            TotalAssets = If(report("totalAssets") IsNot Nothing, CDec(report("totalAssets")), 0D)
-            TotalEquity = If(report("totalShareholderEquity") IsNot Nothing, CDec(report("totalShareholderEquity")), 0D)
             EBITDA = If(report("ebitda") IsNot Nothing, CDec(report("ebitda")), 0D)
-            CurrentAssets = If(report("currentAssets") IsNot Nothing, CDec(report("currentAssets")), 0D)
-            CurrentLiabilities = If(report("currentLiabilities") IsNot Nothing, CDec(report("currentLiabilities")), 0D)
-            TotalLiabilities = If(report("totalLiabilities") IsNot Nothing, CDec(report("totalLiabilities")), 0D)
             InterestExpense = If(report("interestExpense") IsNot Nothing, CDec(report("interestExpense")), 0D)
-            ' Other fields can be populated similarly
         End If
     End Function
 
-    ' DELETET THIS WHEN DONE WITH TESTING
-    Public Sub PrintFinancialData()
-        Debug.WriteLine("Financial Data:")
-        Debug.WriteLine($"Revenue: {Revenue}")
-        Debug.WriteLine($"Cost of Goods Sold: {CostOfGoodsSold}")
-        Debug.WriteLine($"Operating Expenses: {OperatingExpenses}")
-        Debug.WriteLine($"Net Income: {NetIncome}")
-        Debug.WriteLine($"Total Assets: {TotalAssets}")
-        Debug.WriteLine($"Total Equity: {TotalEquity}")
-        Debug.WriteLine($"EBITDA: {EBITDA}")
-        Debug.WriteLine($"Current Assets: {CurrentAssets}")
-        Debug.WriteLine($"Current Liabilities: {CurrentLiabilities}")
-        Debug.WriteLine($"Total Liabilities: {TotalLiabilities}")
-        Debug.WriteLine($"Interest Expense: {InterestExpense}")
-    End Sub
+    Public Async Function LoadFinancialData2(symbol As String, selectedFiscalYearIndex As Integer) As Task
+        AV_API.Symbol = symbol
+        Await AV_API.LoadBalanceSheet_API(selectedFiscalYearIndex)
 
-    'TO DO: IMPLEMENT API FINANCIAL DATA FOR BALANCE SHEET
+        Dim report As JObject = AV_API.BalanceSheetReport
+
+        If report IsNot Nothing Then
+            TotalAssets = If(report("totalAssets") IsNot Nothing, CDec(report("totalAssets")), 0D)
+            TotalEquity = If(report("totalShareholderEquity") IsNot Nothing, CDec(report("totalShareholderEquity")), 0D)
+            CurrentAssets = If(report("totalCurrentAssets") IsNot Nothing, CDec(report("totalCurrentAssets")), 0D)
+            CurrentLiabilities = If(report("totalCurrentLiabilities") IsNot Nothing, CDec(report("totalCurrentLiabilities")), 0D)
+            TotalLiabilities = If(report("totalLiabilities") IsNot Nothing, CDec(report("totalLiabilities")), 0D)
+        End If
+    End Function
+
     Public Function GrossProfitMargin(ByVal revenue As Double, ByVal costOfGoodsSold As Double) As Double
         If revenue = 0 Then
             Return 0

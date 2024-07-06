@@ -178,7 +178,7 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Border Background="Olive" Margin="5" Grid.Row="0" CornerRadius="10">
-                                <TextBlock Text="Evolution of COGS" Padding="10" HorizontalAlignment="Center" Foreground="Black"/>
+                                <TextBlock Text="Evolution of COGS" Padding="10" HorizontalAlignment="Center" Foreground="White"/>
                             </Border>
                             <Border Background="DarkOliveGreen" Margin="5" Grid.Row="1" CornerRadius="15">
                                 <TextBlock Text="Data is not loaded" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
@@ -473,7 +473,7 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="190">
                                             <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Income Statement" Click="GetAPIdata_Click" Height="50" Margin="0,0,0,15"/>
-                                            <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Balancesheet" Click="GetAPIdata_Click" Height="50" Margin="0,0,0,15"/>
+                                            <Button Grid.Row="4" Grid.Column="0" Content="Retrieve Balancesheet" Click="GetAPIdata2_Click" Height="50" Margin="0,0,0,15"/>
                                         </StackPanel>
                                     </StackPanel>
 
@@ -586,23 +586,23 @@
                                                 <ListView.Items>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Total Assets: " />
-                                                        <TextBlock Text="$1,200,000" />
+                                                        <TextBlock x:Name="balanceS_TA" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Total Equity: " />
-                                                        <TextBlock Text="$800,000" />
+                                                        <TextBlock x:Name="balanceS_TE" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Current Assets: " />
-                                                        <TextBlock Text="$300,000" />
+                                                        <TextBlock x:Name="balanceS_CA" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Current Liabilities: " />
-                                                        <TextBlock Text="$150,000" />
+                                                        <TextBlock x:Name="balanceS_CL" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Total Liabilities: " />
-                                                        <TextBlock Text="$400,000" />
+                                                        <TextBlock x:Name="balanceS_TL" Text="$0" />
                                                     </StackPanel>
                                                 </ListView.Items>
                                             </ListView>
@@ -613,27 +613,27 @@
                                                 <ListView.Items>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Revenue: " />
-                                                        <TextBlock Text="$1,500,000" />
+                                                        <TextBlock x:Name="incomeS_Rev" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="COGS: " />
-                                                        <TextBlock Text="$900,000" />
+                                                        <TextBlock x:Name="incomeS_COGS" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Operating Expenses: " />
-                                                        <TextBlock Text="$200,000" />
+                                                        <TextBlock x:Name="incomeS_OP_Expenses" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Net Income: " />
-                                                        <TextBlock Text="$250,000" />
+                                                        <TextBlock x:Name="incomeS_NetIncome" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="EBITDA: " />
-                                                        <TextBlock Text="$350,000" />
+                                                        <TextBlock x:Name="incomeS_EBITDA" Text="$0" />
                                                     </StackPanel>
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="Interest Expense: " />
-                                                        <TextBlock Text="$50,000" />
+                                                        <TextBlock x:Name="incomeS_IExpenses" Text="$0" />
                                                     </StackPanel>
                                                 </ListView.Items>
                                             </ListView>
