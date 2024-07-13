@@ -46,7 +46,6 @@ Public Class FinancialData
         Me.VariableCostPerUnit = variableCostPerUnit
     End Sub
 
-
     'Loads financial data from the API for the income statement only
     Public Async Function LoadFinancialData(symbol As String, selectedFiscalYearIndex As Integer) As Task
         AV_API.Symbol = symbol

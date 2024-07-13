@@ -241,6 +241,7 @@ Public Class Database
     End Function
 
 
+
     'TEMP FUNCTION, JUST TESTING A FUNCTIONALITY
     Public Sub PrintDateComponents(dateId As Integer)
         Using connection As New SQLiteConnection(connectionString)
