@@ -11,6 +11,7 @@ Imports PdfSharp
 Imports PdfSharp.Pdf
 Imports PdfSharp.Drawing
 Imports LiveCharts.Defaults
+Imports System.Runtime.Serialization
 
 
 
@@ -45,162 +46,284 @@ Class MainWindow
 
     End Sub
 
-    Private Sub InitializeChartData1()
-        ' Example: Populate data for Chart 1 (Net Income)
-        Chart1Values = New ChartValues(Of ObservablePoint) From {
-    New ObservablePoint(1, 1000),
-    New ObservablePoint(2, 2200),
-    New ObservablePoint(3, 1500),
-    New ObservablePoint(4, 3000),
-    New ObservablePoint(5, 2800),
-    New ObservablePoint(6, 3500),
-    New ObservablePoint(7, 2500),
-    New ObservablePoint(8, 4000),
-    New ObservablePoint(9, 3200),
-    New ObservablePoint(10, 4500)}
-        ' Add more points as needed
+    Private Async Sub InitializeChartData1()
+        Dim financialDataList As List(Of FinancialData) = Nothing
 
-        ' Bind data to Chart 1
-        DataContext = Me
+        Try
+            financialDataList = Await dbHelper.GetFinancialDataAsync()
+        Catch ex As Exception
+            MessageBox.Show("Error loading data: " & ex.Message)
+            Return
+        End Try
 
-        ' Example: Placeholder text update for Chart 1
-        placeholder1.Visibility = Visibility.Collapsed
-        chart1.Visibility = Visibility.Visible
+        Await Dispatcher.InvokeAsync(Sub()
+                                         If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
+                                             ' Show placeholder and hide chart if data is not available
+                                             placeholder1.Visibility = Visibility.Visible
+                                             chart1.Visibility = Visibility.Collapsed
+                                         Else
+                                             ' Initialize Chart2Values if not already done
+                                             If Chart1Values Is Nothing Then
+                                                 Chart1Values = New ChartValues(Of ObservablePoint)()
+                                             End If
+
+                                             ' Populate Chart1Values with data from financialDataList
+                                             For Each data As FinancialData In financialDataList
+                                                 Debug.WriteLine("This is data c1" & data.NetIncome)
+                                                 Chart1Values.Add(New ObservablePoint(data.DateValue.Month, data.NetIncome))
+                                             Next
+
+                                             ' Set the axis ranges
+                                             chart1.AxisX.Clear()
+                                             chart1.AxisX.Add(New Axis With {
+                                             .Title = "Month",
+                                             .MinValue = 1,
+                                             .MaxValue = 12,
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             ' Adjust Y-axis max value dynamically based on data
+
+                                             chart1.AxisY.Clear()
+                                             chart1.AxisY.Add(New Axis With {
+                                             .Title = "Amount",
+                                             .MinValue = 0,
+                                             .MaxValue = 500, ' Round up to nearest hundred
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             ' Update UI elements visibility
+                                             placeholder1.Visibility = Visibility.Collapsed
+                                             chart1.Visibility = Visibility.Visible
+                                         End If
+                                     End Sub)
     End Sub
 
-    Private Sub InitializeChartData2()
-        ' Example: Populate data for Chart 2 (Total Assets)
-        Chart2Values = New ChartValues(Of ObservablePoint) From {
-    New ObservablePoint(1, 1200),
-    New ObservablePoint(2, 1800),
-    New ObservablePoint(3, 2500),
-    New ObservablePoint(4, 2200),
-    New ObservablePoint(5, 3800),
-    New ObservablePoint(6, 3000),
-    New ObservablePoint(7, 2800),
-    New ObservablePoint(8, 3500),
-    New ObservablePoint(9, 4000),
-    New ObservablePoint(10, 5000)}
-        ' Bind data to Chart 2
-        chart2.Series = New SeriesCollection From {
-    New ColumnSeries With {
-        .Values = Chart2Values,
-        .Title = "Total Assets",
-        .Fill = Brushes.CadetBlue,
-        .Stroke = Brushes.CadetBlue
-    }
-}
-        DataContext = Me
+    Private Async Sub InitializeChartData2()
+        Dim financialDataList As List(Of FinancialData) = Nothing
 
-        ' Placeholder text update for Chart 2
-        placeholder2.Visibility = Visibility.Collapsed
-        chart2.Visibility = Visibility.Visible
+        Try
+            financialDataList = Await dbHelper.GetFinancialDataAsync()
+        Catch ex As Exception
+            MessageBox.Show("Data could not have been loaded")
+        End Try
+
+        Await Dispatcher.InvokeAsync(Sub()
+                                         If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
+                                             ' Show placeholder and hide chart if data is not available
+                                             placeholder2.Visibility = Visibility.Visible
+                                             chart2.Visibility = Visibility.Collapsed
+                                         Else
+                                             ' Initialize Chart2Values if not already done
+                                             If Chart2Values Is Nothing Then
+                                                 Chart2Values = New ChartValues(Of ObservablePoint)()
+                                             End If
+
+                                             ' Clear existing data
+                                             Chart2Values.Clear()
+
+                                             ' Define a dictionary to store cumulative sum and count for each month
+                                             Dim monthTotals As New Dictionary(Of Integer, Tuple(Of Double, Integer))
+
+                                             ' Iterate through financialDataList to calculate cumulative sum and count for each month
+                                             For Each data As FinancialData In financialDataList
+                                                 Dim month As Integer = data.DateValue.Month
+                                                 Dim cost As Double = data.TotalAssets
+                                                 Debug.WriteLine("This is data" & data.TotalAssets)
+
+                                                 If Not monthTotals.ContainsKey(month) Then
+                                                     ' Initialize cumulative sum and count for the month
+                                                     monthTotals(month) = Tuple.Create(cost, 1)
+                                                 Else
+                                                     ' Accumulate cumulative sum and count for the month
+                                                     Dim currentTotal = monthTotals(month)
+                                                     monthTotals(month) = Tuple.Create(currentTotal.Item1 + cost, currentTotal.Item2 + 1)
+                                                 End If
+                                             Next
+
+                                             ' Populate Chart2Values with the average for each month
+                                             For Each monthTotal In monthTotals
+                                                 Dim month As Integer = monthTotal.Key
+                                                 Dim sum As Double = monthTotal.Value.Item1
+                                                 Dim count As Integer = monthTotal.Value.Item2
+                                                 Dim average As Double = sum / count
+
+                                                 ' Add the average to Chart2Values
+                                                 Chart2Values.Add(New ObservablePoint(month, average))
+                                             Next
+
+                                             ' Bind data to Chart 2
+                                             chart2.Series = New SeriesCollection From {
+                                             New ColumnSeries With {
+                                                 .Values = Chart2Values,
+                                                 .Title = "Assets",
+                                                 .Fill = Brushes.CadetBlue,
+                                                 .Stroke = Brushes.CadetBlue
+                                             }
+                                         }
+
+                                             ' Set the axis ranges
+                                             chart2.AxisX.Clear()
+                                             chart2.AxisX.Add(New Axis With {
+                                             .Title = "Month",
+                                             .MinValue = 1,
+                                             .MaxValue = 12,
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             chart2.AxisY.Clear()
+                                             chart2.AxisY.Add(New Axis With {
+                                             .Title = "Amount",
+                                             .MinValue = 0,
+                                             .MaxValue = 1000,
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             ' Update UI elements visibility
+                                             placeholder2.Visibility = Visibility.Collapsed
+                                             chart2.Visibility = Visibility.Visible
+                                         End If
+                                     End Sub)
     End Sub
 
-    Private Sub InitializeChartData3()
-        ' Example: Populate data for Chart 3 (COGS)
-        Chart3Values = New ChartValues(Of ObservablePoint) From {
-        New ObservablePoint(1, 1400),
-        New ObservablePoint(2, 2500),
-        New ObservablePoint(3, 1800),
-        New ObservablePoint(4, 2800),
-        New ObservablePoint(5, 3500),
-        New ObservablePoint(6, 2200),
-        New ObservablePoint(7, 4000),
-        New ObservablePoint(8, 3800),
-        New ObservablePoint(9, 3000),
-        New ObservablePoint(10, 4500)
-    }
 
-        ' Bind data to Chart 3 as a Row Chart
-        chart3.Series = New SeriesCollection From {
-        New RowSeries With {
-            .Values = Chart3Values,
-            .Title = "COGS",
-            .Fill = Brushes.CadetBlue,
-            .Stroke = Brushes.CadetBlue
-        }
-    }
+    Private Async Sub InitializeChartData3()
+        Dim financialDataList As List(Of FinancialData) = Nothing
 
-        ' Set X and Y axes
-        chart3.AxisX.Clear()
-        chart3.AxisX.Add(New Axis With {
-        .Title = "Amount",
-        .Foreground = Brushes.Black
-    })
+        Try
+            financialDataList = Await dbHelper.GetFinancialDataAsync()
+        Catch ex As Exception
+            MessageBox.Show("Data could not have been loaded")
+        End Try
 
-        chart3.AxisY.Clear()
-        chart3.AxisY.Add(New Axis With {
-        .Title = "Categories",
-        .Foreground = Brushes.Black
-    })
+        Await Dispatcher.InvokeAsync(Sub()
+                                         If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
+                                             ' Show placeholder and hide chart if data is not available
+                                             placeholder3.Visibility = Visibility.Visible
+                                             chart3.Visibility = Visibility.Collapsed
+                                         Else
+                                             ' Initialize Chart3Values if not already done
+                                             If Chart3Values Is Nothing Then
+                                                 Chart3Values = New ChartValues(Of ObservablePoint)()
+                                             End If
 
-        DataContext = Me
+                                             ' Clear existing data
+                                             Chart3Values.Clear()
 
-        ' Placeholder text update for Chart 3
-        placeholder3.Visibility = Visibility.Collapsed
-        chart3.Visibility = Visibility.Visible
+                                             ' Populate Chart3Values with data from financialDataList
+                                             For Each data As FinancialData In financialDataList
+                                                 Chart3Values.Add(New ObservablePoint(data.DateValue.Month, data.CostOfGoodsSold))
+                                             Next
+
+                                             ' Bind data to Chart 3 as a Row Chart
+                                             chart3.Series = New SeriesCollection From {
+                                             New RowSeries With {
+                                                 .Values = Chart3Values,
+                                                 .Title = "COGS",
+                                                 .Fill = Brushes.CadetBlue,
+                                                 .Stroke = Brushes.CadetBlue
+                                             }
+                                         }
+
+                                             ' Set the axis ranges
+                                             chart3.AxisX.Clear()
+                                             chart3.AxisX.Add(New Axis With {
+                                             .Title = "Month",
+                                             .MinValue = 1,
+                                             .MaxValue = 12,
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             chart3.AxisY.Clear()
+                                             chart3.AxisY.Add(New Axis With {
+                                             .Title = "Amount",
+                                             .MinValue = 0,
+                                             .MaxValue = 1000,
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             ' Update UI elements visibility
+                                             placeholder3.Visibility = Visibility.Collapsed
+                                             chart3.Visibility = Visibility.Visible
+                                         End If
+                                     End Sub)
     End Sub
 
-    Public Sub InitializeChartData4()
-        ' Ensure chart4 is initialized and not null here
-        If chart4 Is Nothing Then
-            Throw New NullReferenceException("chart4 is not initialized.")
-        End If
 
-        ' Sample data for the chart
-        Dim revenueValues As New ChartValues(Of Double) From {2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800}
-        Dim expenseValues As New ChartValues(Of Double) From {1800, 1900, 2100, 2300, 2500, 2700, 2900, 3100, 3300, 3500}
-        Dim dateLabels As New List(Of String) From {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"}
+    Private Async Sub InitializeChartData4()
+        Dim financialDataList As List(Of FinancialData) = Nothing
 
-        ' Bind data to the chart
-        chart4.Series = New SeriesCollection From {
-        New LineSeries With {
-            .Title = "Revenue",
-            .Values = revenueValues,
-            .LineSmoothness = 0.5,
-            .PointGeometry = Nothing,
-            .StrokeThickness = 2,
-            .Fill = Brushes.Transparent,
-            .Stroke = Brushes.CadetBlue
-        },
-        New LineSeries With {
-            .Title = "Expenses",
-            .Values = expenseValues,
-            .LineSmoothness = 0.5,
-            .PointGeometry = Nothing,
-            .StrokeThickness = 2,
-            .Fill = Brushes.Transparent,
-            .Stroke = Brushes.Red
-        }
-    }
+        Try
+            financialDataList = Await dbHelper.GetFinancialDataAsync()
+        Catch ex As Exception
+            MessageBox.Show("Data could not be loaded")
+        End Try
 
-        ' Bind the date labels to the X-axis
-        chart4.AxisX.Clear()
-        chart4.AxisX.Add(New Axis With {
-        .Title = "Date",
-        .Labels = dateLabels,
-        .Foreground = Brushes.Black
-    })
+        Await Dispatcher.InvokeAsync(Sub()
+                                         If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
+                                             ' Show placeholder and hide chart if data is not available
+                                             If placeholder4 IsNot Nothing Then
+                                                 placeholder4.Visibility = Visibility.Visible
+                                             End If
+                                             chart4.Visibility = Visibility.Collapsed
+                                         Else
+                                             ' Initialize Chart4Values if not already done
+                                             If Chart4Values Is Nothing Then
+                                                 Chart4Values = New ChartValues(Of ObservableValue)()
+                                             End If
 
-        ' Set the Y-axis title
-        chart4.AxisY.Clear()
-        chart4.AxisY.Add(New Axis With {
-        .Title = "Amount",
-        .Foreground = Brushes.Black
-    })
+                                             ' Clear existing data
+                                             Chart4Values.Clear()
 
-        ' Update visibility if needed
-        If placeholder4 IsNot Nothing Then
-            placeholder4.Visibility = Visibility.Collapsed
-        End If
+                                             ' Populate Chart4Values with data from financialDataList
+                                             For Each data As FinancialData In financialDataList
+                                                 ' Assuming data.TotalAssets represents the value to display
+                                                 Chart4Values.Add(New ObservableValue(data.TotalAssets))
+                                             Next
 
-        chart4.Visibility = Visibility.Visible
+                                             ' Bind data to Chart 4 as a ColumnSeries
+                                             chart4.Series = New SeriesCollection From {
+                                             New ColumnSeries With {
+                                                 .Values = Chart4Values,
+                                                 .Title = "Assets",
+                                                 .Fill = Brushes.CadetBlue,
+                                                 .Stroke = Brushes.CadetBlue
+                                             }
+                                         }
+
+                                             ' Set the Y-axis title and range (adjust as per your data)
+                                             chart4.AxisY.Clear()
+                                             chart4.AxisY.Add(New Axis With {
+                                             .Title = "Amount",
+                                             .MinValue = 0,
+                                             .MaxValue = 4000, ' Adjust max value as per your data
+                                             .Foreground = Brushes.Black
+                                         })
+                                             chart4.AxisX.Clear()
+                                             chart4.AxisX.Add(New Axis With {
+                                             .Title = "Month",
+                                             .MinValue = 1,
+                                             .MaxValue = 12,
+                                             .Foreground = Brushes.Black
+                                         })
+
+                                             ' Update visibility if needed
+                                             If placeholder4 IsNot Nothing Then
+                                                 placeholder4.Visibility = Visibility.Collapsed
+                                             End If
+
+                                             chart4.Visibility = Visibility.Visible
+                                         End If
+                                     End Sub)
     End Sub
 
 
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
+        InitializeChartData1()
+        InitializeChartData2()
+        InitializeChartData3()
+        InitializeChartData4()
     End Sub
 
     Private Async Sub PreviewDatabaseButton_Click(sender As Object, e As RoutedEventArgs)
@@ -535,11 +658,21 @@ Class MainWindow
                     helpButton_content = "In this tab you can see your financial data that you entered." & vbCrLf &
                                          "You can also delete any data by entering the number of a line and by clicking the 'Delete' button."
                 ElseIf selectedTabName = "AnalysisTab" Then
-                    helpButton_content = "This is the content from the AnalysisTab"
+                    helpButton_content = "In order to do the analysis, pick a specific period like a month or a quarter and enter the period value. " & vbCrLf &
+                                         "Then click the 'Calculate Ratios' button." & vbCrLf &
+                                         "The tool will calculate the ratios for the selected period and period value." & vbCrLf &
+                                         "For example, if you picked Quarter and entered 1, the tool will calculate the ratios for the first quarter." & vbCrLf &
+                                         "Also, you can calculate specific metrics for available businesses by selecting a symbol and a fiscal year." & vbCrLf &
+                                         "Then click the 'Get API Data' button to get the data from the API." & vbCrLf &
+                                         "After data is retrieved, you can check boxes like ROA, ROE, etc. and click the 'Calculate Ratios' button."
                 ElseIf selectedTabName = "InputDataTab" Then
-                    helpButton_content = "This is the content from the InputDataTab"
+                    helpButton_content = "This tab offers 2 possibilities: Enter specific values for only 1 day or import your financial data directly through an excel file" & vbCrLf &
+                                         "For the import functionality to work, you need to have the same column names and the same order as the ones in the database." & vbCrLf &
+                                         "The first row of the excel file should contain the column names." & vbCrLf &
+                                         "After importing the data, you can click the 'Add to database' button to add the data to the database."
                 ElseIf selectedTabName = "ScenarioAnalysisTab" Then
-                    helpButton_content = "This is the content from the ScenarioAnalysisTab"
+                    helpButton_content = "Here you can see your results from the analysis procedure for both internal and external perspectives" & vbCrLf &
+                                         "You can also export the data to a PDF file by clicking the 'Export to PDF' button."
                 End If
                 Debug.WriteLine("Current Tab: " & selectedTabName)
                 previous_selected_tab = selectedTabName ' Update the previous selected tab name
@@ -608,13 +741,13 @@ Class MainWindow
             For Each data As FinancialData In financialDataList
                 If period = "Month" AndAlso data.DateValue.Month = periodValue Then
                     Debug.WriteLine(data.DateValue.ToString("yyyy-MM-dd"))
-                    totalAssets += data.TotalAssets
+                    totalAssets = data.TotalAssets
                     Debug.WriteLine("TotalAssets: " & totalAssets)
 
-                    totalNetIncome += data.NetIncome
+                    totalNetIncome = data.NetIncome
                     Debug.WriteLine("TotalNetIncome: " & totalNetIncome)
 
-                    totalEquity += data.TotalEquity
+                    totalEquity = data.TotalEquity
                     Debug.WriteLine("TotalEquity: " & totalEquity)
 
                     totalRevenue += data.Revenue
@@ -652,8 +785,8 @@ Class MainWindow
 
                     totalEbitda += data.EBITDA
                     Debug.WriteLine("TotalEbitda: " & totalEbitda)
-                ElseIf period = "Quarter" AndAlso data.DateValue.Month >= (periodValue - 2) AndAlso data.DateValue.Month <= periodValue Then
-                    Debug.WriteLine(data.DateValue.ToString("yyyy-MM-dd"))
+                ElseIf period = "Quarter" AndAlso data.DateValue.Month >= (periodValue * 4) - 3 AndAlso data.DateValue.Month <= periodValue * 4 Then
+                    MessageBox.Show(data.DateValue.ToString("yyyy-MM-dd"))
                     totalAssets += data.TotalAssets
                     Debug.WriteLine("TotalAssets: " & totalAssets)
 
