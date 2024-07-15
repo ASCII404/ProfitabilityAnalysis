@@ -94,17 +94,16 @@ Public Class API
         Using client As New HttpClient()
             Dim balancesheet_Json As String = Await client.GetStringAsync(balancesheet_url)
             balancesheet_Data = JObject.Parse(balancesheet_Json)
-            ' Filter the report by fiscal year if needed, otherwise get the first report
-            If String.IsNullOrEmpty(fiscal_year) Then
-                balancesheet_report = CType(balancesheet_Data("annualReports")(0), JObject)
+
+            ' Select the report based on the selected index
+            Dim reports As JArray = CType(balancesheet_Data("annualReports"), JArray)
+
+            If selectedFiscalYearIndex >= 0 AndAlso selectedFiscalYearIndex < reports.Count Then
+                balancesheet_report = CType(reports(selectedFiscalYearIndex), JObject)
             Else
-                For Each report As JObject In balancesheet_Data("annualReports")
-                    If report("fiscalDateEnding").ToString().Contains(fiscal_year) Then
-                        balancesheet_report = report
-                        Exit For
-                    End If
-                Next
+                Throw New IndexOutOfRangeException("Selected fiscal year index is out of range.")
             End If
         End Using
     End Function
+
 End Class

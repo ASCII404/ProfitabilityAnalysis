@@ -22,7 +22,7 @@
         <!-- Sidebar for navigation buttons -->
         <DockPanel DockPanel.Dock="Left" Background="#3f3f3f" Width="150" MinWidth="100">
             <StackPanel DockPanel.Dock="Bottom">
-                <TextBlock x:Name="LogIn" HorizontalAlignment="Center" Foreground="White" FontSize="15" Margin="10,10,10,10" Text="LOG IN" MouseLeftButtonUp="ClickableText_MouseLeftButtonUp"/>
+                <TextBlock x:Name="LogIn" HorizontalAlignment="Center" Foreground="White" FontSize="15" Margin="10,10,10,10" Text=""/>
                 <Separator></Separator>
                 <Button Style="{StaticResource RoundedButtonStyle}"  Margin="20,10,10,10" Click="Button_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
@@ -411,7 +411,7 @@
                                             </ListView.Items>
                                         </ListView>
 
-                                        <Button Content="COPY TO CLIPBOARD" VerticalAlignment="Center" Margin="10,0,10,20"></Button>
+                                        <Button x:Name="clipb1" Content="COPY TO CLIPBOARD" VerticalAlignment="Center" Margin="10,0,10,20" Click="CopyMetricsToClipboard_Click"></Button>
                                     </StackPanel>
 
                                 </Grid>
@@ -515,48 +515,48 @@
                                             <ListView.Items>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="ROA: " />
-                                                    <TextBlock Text="0%" />
+                                                    <TextBlock x:Name="ROA_api" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="ROE: " />
-                                                    <TextBlock Text="0%" />
+                                                    <TextBlock x:Name="ROE_api" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Operating Margin Profit: " />
-                                                    <TextBlock Text="0%" />
+                                                    <TextBlock x:Name="OPM_api" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Gross Profit Margin: " />
-                                                    <TextBlock Text="0%" />
+                                                    <TextBlock x:Name="GPM_api" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Net Profit Margin: " />
-                                                    <TextBlock Text="0%" />
+                                                    <TextBlock x:Name="NPM_api" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Current Ratios: " />
-                                                    <TextBlock Text="0" />
+                                                    <TextBlock x:Name="CRR_api" Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Debt-to-Equity: " />
-                                                    <TextBlock Text="0" />
+                                                    <TextBlock x:Name="DTE_api" Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Interest Coverage: " />
-                                                    <TextBlock Text="0" />
+                                                    <TextBlock x:Name="IC_api" Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Contribution Margin: " />
-                                                    <TextBlock Text="0%" />
+                                                    <TextBlock x:Name="CM_api" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Break-Even Point: " />
-                                                    <TextBlock Text="$0" />
+                                                    <TextBlock x:Name="BEP_api" Text="0" />
                                                 </StackPanel>
                                             </ListView.Items>
                                         </ListView>
 
-                                        <Button Content="COPY TO CLIPBOARD" VerticalAlignment="Center" Margin="10,0,10,20"></Button>
+                                        <Button x:Name="clipb2" Content="COPY TO CLIPBOARD" VerticalAlignment="Center" Margin="10,0,10,20" Click="CopyMetricsToClipboardAPI_Click"></Button>
                                     </StackPanel>
                                 </Grid>
                             </Border>

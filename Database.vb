@@ -22,7 +22,7 @@ Public Class Database
             Dim createDateDimensionTable As String = "
                 CREATE TABLE IF NOT EXISTS DateDimension (
                     DateID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Date DATE NOT NULL,
+                    Date DATE NOT NULL UNIQUE,
                     Year INTEGER,
                     Quarter INTEGER,
                     Month INTEGER,

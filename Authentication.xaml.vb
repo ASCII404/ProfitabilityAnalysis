@@ -26,13 +26,13 @@ Public Class Authentication
             ' Perform the actual credential validation
             If ValidateCredentials(User_name.Text, Password.Password) Then
                 ' Clear the input fields
-                User_name.Text = ""
-                Password.Password = ""
+
 
                 ' Open the main form
-                Dim mainForm As New MainWindow()
+                Dim mainForm As New MainWindow(User_name.Text)
                 mainForm.Show()
-
+                User_name.Text = ""
+                Password.Password = ""
                 ' Close the authentication form
                 Me.Close()
                 Return

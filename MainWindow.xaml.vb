@@ -13,6 +13,8 @@ Imports PdfSharp.Drawing
 Imports LiveCharts.Defaults
 Imports System.Runtime.Serialization
 Imports System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder
+Imports System.Diagnostics.Eventing.Reader
+Imports System.Text
 
 
 
@@ -26,12 +28,14 @@ Class MainWindow
     Private helpButton_content As String
     Private authenatication_win As Authentication
 
-    Private results As New List(Of Tuple(Of String, Double))
+    Private financialDataDict As New Dictionary(Of String, Double)
+    Private analysis_results As New Dictionary(Of String, Double)
+    Private _userName As String
     Public Property Chart1Values As ChartValues(Of ObservablePoint)
     Public Property Chart2Values As ChartValues(Of ObservablePoint)
     Public Property Chart3Values As ChartValues(Of ObservablePoint)
-    Public Property Chart4Values As ChartValues(Of ObservableValue)
-    Public Sub New()
+    Public Property Chart4Values As ChartValues(Of ObservablePoint)
+    Public Sub New(userName As String)
 
         apiKey = "your Alpha Vantage API Key"
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial
@@ -39,8 +43,8 @@ Class MainWindow
         dbHelper = New Database("dbtest.db")
         FinancialData = New FinancialData()
 
-
-
+        _userName = userName
+        LogIn.Text = "Welcome, " + _userName
         InitializeChartData1()
         InitializeChartData2()
         InitializeChartData3()
@@ -54,8 +58,7 @@ Class MainWindow
         Try
             financialDataList = Await dbHelper.GetFinancialDataAsync()
         Catch ex As Exception
-            MessageBox.Show("Error loading data: " & ex.Message)
-            Return
+            MessageBox.Show("Data could not have been loaded")
         End Try
 
         Await Dispatcher.InvokeAsync(Sub()
@@ -64,35 +67,70 @@ Class MainWindow
                                              placeholder1.Visibility = Visibility.Visible
                                              chart1.Visibility = Visibility.Collapsed
                                          Else
-                                             ' Initialize Chart2Values if not already done
+                                             ' Initialize Chart1Values if not already done
                                              If Chart1Values Is Nothing Then
                                                  Chart1Values = New ChartValues(Of ObservablePoint)()
                                              End If
 
-                                             ' Populate Chart1Values with data from financialDataList
+                                             ' Clear existing data
+                                             Chart1Values.Clear()
+
+                                             ' Define a dictionary to store cumulative sum and count for each month
+                                             Dim monthTotals As New Dictionary(Of Integer, Tuple(Of Integer, Integer))
+
+                                             ' Iterate through financialDataList to calculate cumulative sum and count for each month
                                              For Each data As FinancialData In financialDataList
-                                                 Debug.WriteLine("This is data c1" & data.NetIncome)
-                                                 Chart1Values.Add(New ObservablePoint(data.DateValue.Month, data.NetIncome))
+                                                 Dim month As Integer = data.DateValue.Month
+                                                 Dim cost As Integer = Convert.ToInt32(data.NetIncome)
+                                                 Debug.WriteLine("This is data" & data.NetIncome)
+
+                                                 If Not monthTotals.ContainsKey(month) Then
+                                                     ' Initialize cumulative sum and count for the month
+                                                     monthTotals(month) = Tuple.Create(cost, 1)
+                                                 Else
+                                                     ' Accumulate cumulative sum and count for the month
+                                                     Dim currentTotal = monthTotals(month)
+                                                     monthTotals(month) = Tuple.Create(currentTotal.Item1 + cost, currentTotal.Item2 + 1)
+                                                 End If
                                              Next
+
+                                             ' Populate Chart1Values with the average for each month
+                                             For Each monthTotal In monthTotals
+                                                 Dim month As Integer = monthTotal.Key
+                                                 Dim sum As Integer = monthTotal.Value.Item1
+                                                 Dim count As Integer = monthTotal.Value.Item2
+                                                 Dim average As Integer = sum \ count ' Use integer division
+
+                                                 ' Add the average to Chart1Values
+                                                 Chart1Values.Add(New ObservablePoint(month, average))
+                                             Next
+
+                                             ' Bind data to Chart1
+                                             chart1.Series = New SeriesCollection From {
+                                         New LineSeries With {
+                                             .Values = Chart1Values,
+                                             .Title = "Net income:",
+                                             .Fill = Brushes.CadetBlue,
+                                             .Stroke = Brushes.CadetBlue
+                                         }
+                                     }
 
                                              ' Set the axis ranges
                                              chart1.AxisX.Clear()
                                              chart1.AxisX.Add(New Axis With {
-                                             .Title = "Month",
-                                             .MinValue = 1,
-                                             .MaxValue = 12,
-                                             .Foreground = Brushes.Black
-                                         })
-
-                                             ' Adjust Y-axis max value dynamically based on data
+                                         .Title = "Month",
+                                         .MinValue = 1,
+                                         .MaxValue = 12,
+                                         .Foreground = Brushes.Black
+                                     })
 
                                              chart1.AxisY.Clear()
                                              chart1.AxisY.Add(New Axis With {
-                                             .Title = "Amount",
-                                             .MinValue = 0,
-                                             .MaxValue = 500, ' Round up to nearest hundred
-                                             .Foreground = Brushes.Black
-                                         })
+                                         .Title = "Amount",
+                                         .MinValue = 0,
+                                         .MaxValue = 30000,
+                                         .Foreground = Brushes.Black
+                                     })
 
                                              ' Update UI elements visibility
                                              placeholder1.Visibility = Visibility.Collapsed
@@ -125,12 +163,12 @@ Class MainWindow
                                              Chart2Values.Clear()
 
                                              ' Define a dictionary to store cumulative sum and count for each month
-                                             Dim monthTotals As New Dictionary(Of Integer, Tuple(Of Double, Integer))
+                                             Dim monthTotals As New Dictionary(Of Integer, Tuple(Of Integer, Integer))
 
                                              ' Iterate through financialDataList to calculate cumulative sum and count for each month
                                              For Each data As FinancialData In financialDataList
                                                  Dim month As Integer = data.DateValue.Month
-                                                 Dim cost As Double = data.TotalAssets
+                                                 Dim cost As Integer = Convert.ToInt32(data.TotalAssets)
                                                  Debug.WriteLine("This is data" & data.TotalAssets)
 
                                                  If Not monthTotals.ContainsKey(month) Then
@@ -146,9 +184,9 @@ Class MainWindow
                                              ' Populate Chart2Values with the average for each month
                                              For Each monthTotal In monthTotals
                                                  Dim month As Integer = monthTotal.Key
-                                                 Dim sum As Double = monthTotal.Value.Item1
+                                                 Dim sum As Integer = monthTotal.Value.Item1
                                                  Dim count As Integer = monthTotal.Value.Item2
-                                                 Dim average As Double = sum / count
+                                                 Dim average As Integer = sum \ count ' Use integer division
 
                                                  ' Add the average to Chart2Values
                                                  Chart2Values.Add(New ObservablePoint(month, average))
@@ -156,30 +194,30 @@ Class MainWindow
 
                                              ' Bind data to Chart 2
                                              chart2.Series = New SeriesCollection From {
-                                             New ColumnSeries With {
-                                                 .Values = Chart2Values,
-                                                 .Title = "Assets",
-                                                 .Fill = Brushes.CadetBlue,
-                                                 .Stroke = Brushes.CadetBlue
-                                             }
+                                         New ColumnSeries With {
+                                             .Values = Chart2Values,
+                                             .Title = "Assets value:",
+                                             .Fill = Brushes.CadetBlue,
+                                             .Stroke = Brushes.CadetBlue
                                          }
+                                     }
 
                                              ' Set the axis ranges
                                              chart2.AxisX.Clear()
                                              chart2.AxisX.Add(New Axis With {
-                                             .Title = "Month",
-                                             .MinValue = 1,
-                                             .MaxValue = 12,
-                                             .Foreground = Brushes.Black
-                                         })
+                                         .Title = "Month",
+                                         .MinValue = 1,
+                                         .MaxValue = 13,
+                                         .Foreground = Brushes.Black
+                                     })
 
                                              chart2.AxisY.Clear()
                                              chart2.AxisY.Add(New Axis With {
-                                             .Title = "Amount",
-                                             .MinValue = 0,
-                                             .MaxValue = 1000,
-                                             .Foreground = Brushes.Black
-                                         })
+                                         .Title = "Amount",
+                                         .MinValue = 0,
+                                         .MaxValue = 30000,
+                                         .Foreground = Brushes.Black
+                                     })
 
                                              ' Update UI elements visibility
                                              placeholder2.Visibility = Visibility.Collapsed
@@ -187,7 +225,6 @@ Class MainWindow
                                          End If
                                      End Sub)
     End Sub
-
 
     Private Async Sub InitializeChartData3()
         Dim financialDataList As List(Of FinancialData) = Nothing
@@ -204,7 +241,7 @@ Class MainWindow
                                              placeholder3.Visibility = Visibility.Visible
                                              chart3.Visibility = Visibility.Collapsed
                                          Else
-                                             ' Initialize Chart3Values if not already done
+                                             ' Initialize Chart2Values if not already done
                                              If Chart3Values Is Nothing Then
                                                  Chart3Values = New ChartValues(Of ObservablePoint)()
                                              End If
@@ -212,37 +249,62 @@ Class MainWindow
                                              ' Clear existing data
                                              Chart3Values.Clear()
 
-                                             ' Populate Chart3Values with data from financialDataList
+                                             ' Define a dictionary to store cumulative sum and count for each month
+                                             Dim monthTotals As New Dictionary(Of Integer, Tuple(Of Integer, Integer))
+
+                                             ' Iterate through financialDataList to calculate cumulative sum and count for each month
                                              For Each data As FinancialData In financialDataList
-                                                 Chart3Values.Add(New ObservablePoint(data.DateValue.Month, data.CostOfGoodsSold))
+                                                 Dim month As Integer = data.DateValue.Month
+                                                 Dim cost As Integer = Convert.ToInt32(data.TotalAssets)
+                                                 Debug.WriteLine("This is data" & data.TotalAssets)
+
+                                                 If Not monthTotals.ContainsKey(month) Then
+                                                     ' Initialize cumulative sum and count for the month
+                                                     monthTotals(month) = Tuple.Create(cost, 1)
+                                                 Else
+                                                     ' Accumulate cumulative sum and count for the month
+                                                     Dim currentTotal = monthTotals(month)
+                                                     monthTotals(month) = Tuple.Create(currentTotal.Item1 + cost, currentTotal.Item2 + 1)
+                                                 End If
                                              Next
 
-                                             ' Bind data to Chart 3 as a Row Chart
+                                             ' Populate Chart2Values with the average for each month
+                                             For Each monthTotal In monthTotals
+                                                 Dim month As Integer = monthTotal.Key
+                                                 Dim sum As Integer = monthTotal.Value.Item1
+                                                 Dim count As Integer = monthTotal.Value.Item2
+                                                 Dim average As Integer = sum \ count ' Use integer division
+
+                                                 ' Add the average to Chart2Values
+                                                 Chart3Values.Add(New ObservablePoint(month, average))
+                                             Next
+
+                                             ' Bind data to Chart 2
                                              chart3.Series = New SeriesCollection From {
-                                             New RowSeries With {
-                                                 .Values = Chart3Values,
-                                                 .Title = "COGS",
-                                                 .Fill = Brushes.CadetBlue,
-                                                 .Stroke = Brushes.CadetBlue
-                                             }
+                                         New ColumnSeries With {
+                                             .Values = Chart3Values,
+                                             .Title = "Costs of Goods Sold:",
+                                             .Fill = Brushes.CadetBlue,
+                                             .Stroke = Brushes.CadetBlue
                                          }
+                                     }
 
                                              ' Set the axis ranges
                                              chart3.AxisX.Clear()
                                              chart3.AxisX.Add(New Axis With {
-                                             .Title = "Month",
-                                             .MinValue = 1,
-                                             .MaxValue = 12,
-                                             .Foreground = Brushes.Black
-                                         })
+                                         .Title = "Month",
+                                         .MinValue = 1,
+                                         .MaxValue = 13,
+                                         .Foreground = Brushes.Black
+                                     })
 
                                              chart3.AxisY.Clear()
                                              chart3.AxisY.Add(New Axis With {
-                                             .Title = "Amount",
-                                             .MinValue = 0,
-                                             .MaxValue = 1000,
-                                             .Foreground = Brushes.Black
-                                         })
+                                         .Title = "Amount",
+                                         .MinValue = 0,
+                                         .MaxValue = 30000,
+                                         .Foreground = Brushes.Black
+                                     })
 
                                              ' Update UI elements visibility
                                              placeholder3.Visibility = Visibility.Collapsed
@@ -251,73 +313,93 @@ Class MainWindow
                                      End Sub)
     End Sub
 
-
     Private Async Sub InitializeChartData4()
         Dim financialDataList As List(Of FinancialData) = Nothing
 
         Try
             financialDataList = Await dbHelper.GetFinancialDataAsync()
         Catch ex As Exception
-            MessageBox.Show("Data could not be loaded")
+            MessageBox.Show("Data could not have been loaded")
         End Try
 
         Await Dispatcher.InvokeAsync(Sub()
                                          If financialDataList Is Nothing OrElse financialDataList.Count = 0 Then
                                              ' Show placeholder and hide chart if data is not available
-                                             If placeholder4 IsNot Nothing Then
-                                                 placeholder4.Visibility = Visibility.Visible
-                                             End If
+                                             placeholder4.Visibility = Visibility.Visible
                                              chart4.Visibility = Visibility.Collapsed
                                          Else
-                                             ' Initialize Chart4Values if not already done
+                                             ' Initialize Chart1Values if not already done
                                              If Chart4Values Is Nothing Then
-                                                 Chart4Values = New ChartValues(Of ObservableValue)()
+                                                 Chart4Values = New ChartValues(Of ObservablePoint)()
                                              End If
 
                                              ' Clear existing data
                                              Chart4Values.Clear()
 
-                                             ' Populate Chart4Values with data from financialDataList
+                                             ' Define a dictionary to store cumulative sum and count for each month
+                                             Dim monthTotals As New Dictionary(Of Integer, Tuple(Of Integer, Integer))
+
+                                             ' Iterate through financialDataList to calculate cumulative sum and count for each month
                                              For Each data As FinancialData In financialDataList
-                                                 ' Assuming data.TotalAssets represents the value to display
-                                                 Chart4Values.Add(New ObservableValue(data.TotalAssets))
+                                                 Dim month As Integer = data.DateValue.Month
+                                                 Dim cost As Integer = Convert.ToInt32(data.Revenue)
+                                                 Debug.WriteLine("This is data" & data.Revenue)
+
+                                                 If Not monthTotals.ContainsKey(month) Then
+                                                     ' Initialize cumulative sum and count for the month
+                                                     monthTotals(month) = Tuple.Create(cost, 1)
+                                                 Else
+                                                     ' Accumulate cumulative sum and count for the month
+                                                     Dim currentTotal = monthTotals(month)
+                                                     monthTotals(month) = Tuple.Create(currentTotal.Item1 + cost, currentTotal.Item2 + 1)
+                                                 End If
                                              Next
 
-                                             ' Bind data to Chart 4 as a ColumnSeries
-                                             chart4.Series = New SeriesCollection From {
-                                             New ColumnSeries With {
-                                                 .Values = Chart4Values,
-                                                 .Title = "Assets",
-                                                 .Fill = Brushes.CadetBlue,
-                                                 .Stroke = Brushes.CadetBlue
-                                             }
-                                         }
+                                             ' Populate Chart1Values with the average for each month
+                                             For Each monthTotal In monthTotals
+                                                 Dim month As Integer = monthTotal.Key
+                                                 Dim sum As Integer = monthTotal.Value.Item1
+                                                 Dim count As Integer = monthTotal.Value.Item2
+                                                 Dim average As Integer = sum \ count ' Use integer division
 
-                                             ' Set the Y-axis title and range (adjust as per your data)
-                                             chart4.AxisY.Clear()
-                                             chart4.AxisY.Add(New Axis With {
-                                             .Title = "Amount",
-                                             .MinValue = 0,
-                                             .MaxValue = 4000, ' Adjust max value as per your data
-                                             .Foreground = Brushes.Black
-                                         })
+                                                 ' Add the average to Chart1Values
+                                                 Chart4Values.Add(New ObservablePoint(month, average))
+                                             Next
+
+                                             ' Bind data to Chart1
+                                             chart4.Series = New SeriesCollection From {
+                                         New LineSeries With {
+                                             .Values = Chart4Values,
+                                             .Title = "Revenue:",
+                                             .Fill = Brushes.CadetBlue,
+                                             .Stroke = Brushes.CadetBlue
+                                         }
+                                     }
+
+                                             ' Set the axis ranges
                                              chart4.AxisX.Clear()
                                              chart4.AxisX.Add(New Axis With {
-                                             .Title = "Month",
-                                             .MinValue = 1,
-                                             .MaxValue = 12,
-                                             .Foreground = Brushes.Black
-                                         })
+                                         .Title = "Month",
+                                         .MinValue = 1,
+                                         .MaxValue = 12,
+                                         .Foreground = Brushes.Black
+                                     })
 
-                                             ' Update visibility if needed
-                                             If placeholder4 IsNot Nothing Then
-                                                 placeholder4.Visibility = Visibility.Collapsed
-                                             End If
+                                             chart4.AxisY.Clear()
+                                             chart4.AxisY.Add(New Axis With {
+                                         .Title = "Amount",
+                                         .MinValue = 0,
+                                         .MaxValue = 30000,
+                                         .Foreground = Brushes.Black
+                                     })
 
+                                             ' Update UI elements visibility
+                                             placeholder4.Visibility = Visibility.Collapsed
                                              chart4.Visibility = Visibility.Visible
                                          End If
                                      End Sub)
     End Sub
+
 
 
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
@@ -573,6 +655,14 @@ Class MainWindow
         Dim financialData As New FinancialData()
         Await financialData.LoadFinancialData(selectedSymbol, selectedFiscalYearIndex)
         Debug.WriteLine(financialData.Revenue)
+
+        financialDataDict("Revenue") = financialData.Revenue
+        financialDataDict("CostOfGoodsSold") = financialData.CostOfGoodsSold
+        financialDataDict("OperatingExpenses") = financialData.OperatingExpenses
+        financialDataDict("NetIncome") = financialData.NetIncome
+        financialDataDict("EBITDA") = financialData.EBITDA
+        financialDataDict("InterestExpense") = financialData.InterestExpense
+
         incomeS_Rev.Text = financialData.Revenue.ToString("C0")
         incomeS_COGS.Text = financialData.CostOfGoodsSold.ToString("C0")
         incomeS_OP_Expenses.Text = financialData.OperatingExpenses.ToString("C0")
@@ -591,7 +681,14 @@ Class MainWindow
 
         Dim financialData As New FinancialData()
         Await financialData.LoadFinancialData2(selectedSymbol, selectedFiscalYearIndex)
-        Debug.WriteLine(financialData.TotalAssets)
+
+
+        financialDataDict("TotalAssets") = financialData.TotalAssets
+        financialDataDict("TotalEquity") = financialData.TotalEquity
+        financialDataDict("CurrentAssets") = financialData.CurrentAssets
+        financialDataDict("CurrentLiabilities") = financialData.CurrentLiabilities
+        financialDataDict("TotalLiabilities") = financialData.TotalLiabilities
+
         balanceS_TA.Text = financialData.TotalAssets.ToString("C0")
         balanceS_TE.Text = financialData.TotalEquity.ToString("C0")
         balanceS_CA.Text = financialData.CurrentAssets.ToString("C0")
@@ -714,6 +811,18 @@ Class MainWindow
         IC_res.Text = "0"
         CM_res.Text = "0%"
         BEP_res.Text = "0"
+
+        ROA_api.Text = "0%"
+        ROE_api.Text = "0%"
+        OPM_api.Text = "0%"
+        GPM_api.Text = "0%"
+        NPM_api.Text = "0%"
+        CRR_api.Text = "0"
+        DTE_api.Text = "0"
+        IC_api.Text = "0"
+        CM_api.Text = "0%"
+        BEP_api.Text = "0"
+
     End Sub
     Private Async Sub CalculateRatiosButton_Click(sender As Object, e As RoutedEventArgs)
         reset_values()
@@ -827,6 +936,21 @@ Class MainWindow
                 totalCurrentAssets = totalCurrentAssets / 120
                 totalEbitda = totalEbitda / 120
             End If
+            If period = "Year" Then
+                totalNetIncome = totalNetIncome / 360
+                totalRevenue = totalRevenue / 360
+                TotalOperatingExpenses = TotalOperatingExpenses / 360
+                totalCostOfGoodsSold = totalCostOfGoodsSold / 360
+                totalInterestExpense = totalInterestExpense / 360
+                totalVariableCosts = totalVariableCosts / 360
+                totalFixedCosts = totalFixedCosts / 360
+                totalSalesRevenuePerUnit = totalSalesRevenuePerUnit / 360
+                totalVariableCostPerUnit = totalVariableCostPerUnit / 360
+                totalLiabilities = totalLiabilities / 360
+                totalCurrentLiabilities = totalCurrentLiabilities / 360
+                totalCurrentAssets = totalCurrentAssets / 360
+                totalEbitda = totalEbitda / 360
+            End If
             'The FinancialData.ReturnOnAssets() is used from the constructor initialization of FinancialData. 
             If CK_ROA.IsChecked Then
                 If totalAssets > 0 Then
@@ -834,6 +958,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalAssets: {totalAssets}, TotalNetIncome: {totalNetIncome}, ROA: {roa}")
                     roa = Math.Floor(roa * 100) / 100
                     ROA_res.Text = roa.ToString() & "%"
+                    analysis_results("ROA") = roa
                 Else
                     Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
                 End If
@@ -845,6 +970,7 @@ Class MainWindow
                     roe = Math.Floor(roe * 100) / 100
                     ROE_res.Text = roe.ToString() & "%"
                     Debug.WriteLine($"TotalEquity: {totalEquity}, TotalNetIncome: {totalNetIncome}, ROE: {roe}")
+                    analysis_results("ROE") = roe
                 Else
                     Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
                 End If
@@ -859,6 +985,7 @@ Class MainWindow
                 Debug.WriteLine($"Operating Margin: {operatingMargin}")
                 operatingMargin = Math.Floor(operatingMargin * 100) / 100
                 OPM_res.Text = operatingMargin.ToString() & "%"
+                analysis_results("OPM") = operatingMargin
             End If
 
             If CK_NetProfitMargin.IsChecked Then
@@ -867,6 +994,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, TotalOperatingExpenses: {TotalOperatingExpenses}, TotalNetIncome: {totalNetIncome}, NPM: {netProfitMargin}")
                     netProfitMargin = Math.Floor(netProfitMargin * 100) / 100
                     NPM_res.Text = netProfitMargin.ToString() & "%"
+                    analysis_results("NPM") = netProfitMargin
                 Else
                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
                 End If
@@ -878,6 +1006,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, GPM: {grossProfitMargin}")
                     grossProfitMargin = Math.Floor(grossProfitMargin * 100) / 100
                     GPM_res.Text = grossProfitMargin.ToString() & "%"
+                    analysis_results("GPM") = grossProfitMargin
                 Else
                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
                 End If
@@ -889,6 +1018,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalCurrentAssets: {totalCurrentAssets}, TotalCurrentLiabilities: {totalCurrentLiabilities}, CR: {currentRatio}")
                     currentRatio = Math.Floor(currentRatio * 100) / 100
                     CRR_res.Text = currentRatio.ToString()
+                    analysis_results("CR") = currentRatio
                 Else
                     Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
                 End If
@@ -900,6 +1030,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalLiabilities: {totalLiabilities}, TotalEquity: {totalEquity}, D/E: {debtToEquityRatio}")
                     debtToEquityRatio = Math.Floor(debtToEquityRatio * 100) / 100
                     DTE_res.Text = debtToEquityRatio.ToString()
+                    analysis_results("DTE") = debtToEquityRatio
                 Else
                     Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
                 End If
@@ -911,6 +1042,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalNetIncome: {totalEbitda}, TotalInterestExpense: {totalInterestExpense}, ICR: {interestCoverageRatio}")
                     interestCoverageRatio = Math.Floor(interestCoverageRatio * 100) / 100
                     IC_res.Text = interestCoverageRatio.ToString()
+                    analysis_results("ICR") = interestCoverageRatio
                 Else
                     Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
                 End If
@@ -922,6 +1054,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, CM: {contributionMargin}")
                     contributionMargin = Math.Floor(contributionMargin * 100) / 100
                     CM_res.Text = contributionMargin.ToString() & "%"
+                    analysis_results("CM") = contributionMargin
                 Else
                     Debug.WriteLine("Total Sales Revenue Per Unit is zero or less, cannot calculate CM")
                 End If
@@ -933,15 +1066,227 @@ Class MainWindow
                     Debug.WriteLine($"TotalFixedCosts: {totalFixedCosts}, TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, BEP: {breakEvenPoint}")
                     breakEvenPoint = Math.Floor(breakEvenPoint * 100) / 100
                     BEP_res.Text = breakEvenPoint.ToString("C0")
+                    analysis_results("BEP") = breakEvenPoint
                 Else
                     Debug.WriteLine("Total Fixed Costs is zero or less, cannot calculate BEP")
                 End If
             End If
+
+            'THIS IS FOR EXTERNAL API DATA
+            If CK_ROA_API.IsChecked Then
+                ' Retrieve TotalNetIncome from dictionary
+                Dim api_totalNetIncome As Double
+                If Not financialDataDict.TryGetValue("NetIncome", api_totalNetIncome) Then
+                    Debug.WriteLine("Net Income not found in dictionary.")
+                    Exit Sub ' Exit the subroutine if Net Income is not found
+                End If
+
+                ' Retrieve TotalAssets from dictionary
+                Dim api_totalAssets As Double
+                If Not financialDataDict.TryGetValue("TotalAssets", api_totalAssets) Then
+                    Debug.WriteLine("Total Assets not found in dictionary.")
+                    Exit Sub ' Exit the subroutine if Total Assets is not found
+                End If
+
+                If api_totalAssets > 0 Then
+                    Dim roa As Double = FinancialData.ReturnOnAssets(api_totalNetIncome, api_totalAssets)
+                    roa = Math.Floor(roa * 100) / 100
+                    ROA_api.Text = roa.ToString() & "%"
+                    analysis_results("ROA_API") = roa
+                Else
+                    ' If TotalAssets is zero or less, cannot calculate ROA
+                    Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
+                End If
+            End If
+
+            If CK_ROE_API.IsChecked Then
+                ' Retrieve Net Income from dictionary
+                Dim roeNetIncome As Decimal
+                If Not financialDataDict.TryGetValue("NetIncome", roeNetIncome) Then
+                    Debug.WriteLine("Net Income not found in dictionary.")
+                Else
+                    ' Retrieve Total Equity from dictionary
+                    Dim roeTotalEquity As Decimal
+                    If Not financialDataDict.TryGetValue("TotalEquity", roeTotalEquity) Then
+                        Debug.WriteLine("Total Equity not found in dictionary.")
+                    Else
+                        ' Calculate ROE if TotalEquity is greater than 0
+                        If roeTotalEquity > 0 Then
+                            Dim roe As Double = roeNetIncome / roeTotalEquity
+                            roe = Math.Floor(roe * 100) / 100
+                            ROE_api.Text = roe.ToString() & "%"
+                            analysis_results("ROE_API") = roe
+                        Else
+                            Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
+                        End If
+                    End If
+                End If
+            End If
+
+            ' Check if CK_OperatingMargin_API is checked
+            If CK_OperatingMargin_API.IsChecked Then
+                ' Retrieve relevant values from dictionary
+                Dim opMarginTotalRevenue As Decimal
+                If Not financialDataDict.TryGetValue("Revenue", opMarginTotalRevenue) Then
+                    Debug.WriteLine("Total Revenue not found in dictionary.")
+                Else
+                    Dim opMarginTotalCostOfGoodsSold As Decimal
+                    If Not financialDataDict.TryGetValue("CostOfGoodsSold", opMarginTotalCostOfGoodsSold) Then
+                        Debug.WriteLine("Total Cost of Goods Sold not found in dictionary.")
+                    Else
+                        Dim opMarginTotalOperatingExpenses As Decimal
+                        If Not financialDataDict.TryGetValue("OperatingExpenses", opMarginTotalOperatingExpenses) Then
+                            Debug.WriteLine("Total Operating Expenses not found in dictionary.")
+                        Else
+                            ' Calculate Operating Profit Margin
+                            Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(opMarginTotalRevenue, opMarginTotalCostOfGoodsSold, opMarginTotalOperatingExpenses)
+                            operatingMargin = Math.Floor(operatingMargin * 100) / 100
+                            OPM_api.Text = operatingMargin.ToString() & "%"
+                            analysis_results("OPM_API") = operatingMargin
+                        End If
+                    End If
+                End If
+            End If
+
+            If CK_NetProfitMargin_API.IsChecked Then
+                Dim npmTotalRevenue As Decimal
+                If Not financialDataDict.TryGetValue("Revenue", npmTotalRevenue) Then
+                    Debug.WriteLine("Total Revenue not found in dictionary.")
+                Else
+                    Dim npmTotalCostOfGoodsSold As Decimal
+                    If Not financialDataDict.TryGetValue("CostOfGoodsSold", npmTotalCostOfGoodsSold) Then
+                        Debug.WriteLine("Total Cost of Goods Sold not found in dictionary.")
+                    Else
+                        Dim npmTotalOperatingExpenses As Decimal
+                        If Not financialDataDict.TryGetValue("OperatingExpenses", npmTotalOperatingExpenses) Then
+                            Debug.WriteLine("Total Operating Expenses not found in dictionary.")
+                        Else
+                            Dim npmTotalNetIncome As Decimal
+                            If Not financialDataDict.TryGetValue("NetIncome", npmTotalNetIncome) Then
+                                Debug.WriteLine("Net Income not found in dictionary.")
+                            Else
+                                ' Calculate Net Profit Margin
+                                If npmTotalRevenue > 0 Then
+                                    Dim netProfitMargin As Double = helperMethods.NetProfitMargin(npmTotalRevenue, npmTotalCostOfGoodsSold, npmTotalOperatingExpenses, npmTotalNetIncome)
+                                    netProfitMargin = Math.Floor(netProfitMargin * 100) / 100
+                                    NPM_api.Text = netProfitMargin.ToString() & "%"
+                                    analysis_results("NPM_API") = netProfitMargin
+                                Else
+                                    Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+
+            ' Check if CK_GrossProfitMargin_API is checked
+            If CK_GrossProfitMargin_API.IsChecked Then
+                ' Retrieve relevant values from dictionary
+                Dim gpmTotalRevenue As Decimal
+                If Not financialDataDict.TryGetValue("Revenue", gpmTotalRevenue) Then
+                    Debug.WriteLine("Revenue not found in dictionary.")
+                Else
+                    Dim gpmTotalCostOfGoodsSold As Decimal
+                    If Not financialDataDict.TryGetValue("CostOfGoodsSold", gpmTotalCostOfGoodsSold) Then
+                    Else
+                        ' Calculate Gross Profit Margin if Total Revenue is greater than 0
+                        If gpmTotalRevenue > 0 Then
+                            Dim grossProfitMargin As Double = helperMethods.GrossProfitMargin(gpmTotalRevenue, gpmTotalCostOfGoodsSold)
+                            grossProfitMargin = Math.Floor(grossProfitMargin * 100) / 100
+                            GPM_api.Text = grossProfitMargin.ToString() & "%"
+                            analysis_results("GPM_API") = grossProfitMargin
+                        Else
+                            Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
+                        End If
+                    End If
+                End If
+            End If
+
+            ' Check if CK_CurrentRatios_API is checked
+            If CK_CurrentRatios_API.IsChecked Then
+                ' Retrieve relevant values from dictionary
+                Dim crTotalCurrentAssets As Decimal
+                If Not financialDataDict.TryGetValue("CurrentAssets", crTotalCurrentAssets) Then
+                Else
+                    Dim crTotalCurrentLiabilities As Decimal
+                    If Not financialDataDict.TryGetValue("CurrentLiabilities", crTotalCurrentLiabilities) Then
+                    Else
+                        ' Calculate Current Ratio if Total Current Liabilities is greater than 0
+                        If crTotalCurrentLiabilities > 0 Then
+                            Dim currentRatio As Double = helperMethods.CurrentRatio(crTotalCurrentAssets, crTotalCurrentLiabilities)
+                            currentRatio = Math.Floor(currentRatio * 100) / 100
+                            CRR_api.Text = currentRatio.ToString()
+                            analysis_results("CR_API") = currentRatio
+                        Else
+                            Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
+                        End If
+                    End If
+                End If
+            End If
+
+            ' Check if CK_DebtToEquity_API is checked
+            If CK_DebtToEquity_API.IsChecked Then
+                ' Retrieve relevant values from dictionary
+                Dim dteTotalLiabilities As Decimal
+                If Not financialDataDict.TryGetValue("TotalLiabilities", dteTotalLiabilities) Then
+                    Debug.WriteLine("Total Liabilities not found in dictionary.")
+                Else
+                    Dim dteTotalEquity As Decimal
+                    If Not financialDataDict.TryGetValue("TotalEquity", dteTotalEquity) Then
+                        Debug.WriteLine("Total Equity not found in dictionary.")
+                    Else
+                        ' Calculate Debt to Equity Ratio if TotalEquity is greater than 0
+                        If dteTotalEquity > 0 Then
+                            Dim debtToEquityRatio As Double = helperMethods.DebtToEquityRatio(dteTotalLiabilities, dteTotalEquity)
+                            Debug.WriteLine($"TotalLiabilities: {dteTotalLiabilities}, TotalEquity: {dteTotalEquity}, D/E: {debtToEquityRatio}")
+                            debtToEquityRatio = Math.Floor(debtToEquityRatio * 100) / 100
+                            DTE_api.Text = debtToEquityRatio.ToString()
+                            analysis_results("DTE_API") = debtToEquityRatio
+                        Else
+                            Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
+                        End If
+                    End If
+                End If
+            End If
+
+            ' Check if CK_InterestCoverage_API is checked
+            If CK_InterestCoverage_API.IsChecked Then
+                ' Retrieve relevant values from dictionary
+                Dim icrTotalEbitda As Decimal
+                If Not financialDataDict.TryGetValue("EBITDA", icrTotalEbitda) Then
+                    Debug.WriteLine("Total EBITDA not found in dictionary.")
+                Else
+                    Dim icrTotalInterestExpense As Decimal
+                    If Not financialDataDict.TryGetValue("InterestExpense", icrTotalInterestExpense) Then
+                        Debug.WriteLine("Total Interest Expense not found in dictionary.")
+                    Else
+                        ' Calculate Interest Coverage Ratio if TotalInterestExpense is greater than 0
+                        If icrTotalInterestExpense > 0 Then
+                            Dim interestCoverageRatio As Double = helperMethods.InterestCoverageRatio(icrTotalEbitda, icrTotalInterestExpense)
+                            Debug.WriteLine($"TotalEbitda: {icrTotalEbitda}, TotalInterestExpense: {icrTotalInterestExpense}, ICR: {interestCoverageRatio}")
+                            interestCoverageRatio = Math.Floor(interestCoverageRatio * 100) / 100
+                            IC_api.Text = interestCoverageRatio.ToString()
+                            analysis_results("ICR_API") = interestCoverageRatio
+                        Else
+                            Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
+                        End If
+                    End If
+                End If
+            End If
+
         Catch ex As Exception
             Debug.WriteLine($"Error fetching or calculating financial ratios: {ex.Message}")
         End Try
+        check_result_dict()
     End Sub
 
+    'TEMP DELETE AFTER TEST
+    Private Sub check_result_dict()
+        For Each result In analysis_results
+            Debug.WriteLine($"{result.Key}: {result.Value}")
+        Next
+    End Sub
 
     Private Sub ClickableText_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs)
         Debug.WriteLine("Clickable text was clicked!")
@@ -950,7 +1295,7 @@ Class MainWindow
 
         If result.HasValue AndAlso result.Value Then
             Debug.WriteLine("User authenticated successfully!")
-            LogIn.Text = "Welcome, User"
+            LogIn.Text = $"Welcome, {_userName}!"
             LogIn.IsEnabled = False
         Else
             Debug.WriteLine("User authentication failed.")
@@ -991,19 +1336,32 @@ Class MainWindow
             Try
                 ' Create a new PDF document
                 Dim document As New PdfDocument()
-                document.Info.Title = "Created with PDFsharp"
+                document.Info.Title = "Analysis Results"
 
-                ' Create an empty page
+                ' Create a page
                 Dim page As PdfPage = document.AddPage()
 
                 ' Get an XGraphics object for drawing
                 Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
 
-                ' Create a font
-                Dim font As XFont = New XFont("Verdana", 20)
-                ' Draw the text
-                gfx.DrawString("Hello, World!", font, XBrushes.Black, New XRect(0, 0, page.Width, page.Height), XStringFormats.Center)
-                gfx.DrawString("This is a sample PDF file created using PDFsharp.", font, XBrushes.Black, New XRect(0, 40, page.Width, page.Height), XStringFormats.Center)
+                ' Define fonts
+                Dim fontTitle As New XFont("Arial", 24)
+                Dim fontText As New XFont("Arial", 12)
+
+                ' Draw title
+                gfx.DrawString("Analysis Results", fontTitle, XBrushes.Black, New XRect(0, 20, page.Width, 0), XStringFormats.TopCenter)
+
+                ' Draw professional text
+                Dim professionalText As String = "Here are the results of our analysis:"
+                gfx.DrawString(professionalText, fontText, XBrushes.Black, New XRect(40, 60, page.Width - 80, 0), XStringFormats.TopLeft)
+
+                ' Draw results from analysis_results dictionary
+                Dim startY As Double = 100
+                For Each kvp In analysis_results
+                    Dim line = $"{kvp.Key}: {kvp.Value}"
+                    gfx.DrawString(line, fontText, XBrushes.Black, New XRect(40, startY, page.Width - 80, 0), XStringFormats.TopLeft)
+                    startY += 20
+                Next
 
                 ' Save the document
                 document.Save(filePath)
@@ -1021,6 +1379,49 @@ Class MainWindow
             Debug.WriteLine($"Exporting PDF file to: {filePath}")
         End If
     End Sub
+
+
+    Private Sub CopyMetricsToClipboard_Click(sender As Object, e As RoutedEventArgs)
+        Dim metricsText As New StringBuilder()
+
+        ' Iterate through ListView items (StackPanels in this case)
+        For Each item As StackPanel In MetricsResults_List.Items
+            ' Extract metric name and value from each StackPanel's children (TextBlocks)
+            Dim metricName As String = TryCast(item.Children(0), TextBlock)?.Text
+            Dim metricValue As String = TryCast((TryCast(item.Children(1), TextBlock))?.Text, String)
+
+            ' Append metric name and value to StringBuilder
+            metricsText.AppendLine($"{metricName}{metricValue}")
+        Next
+
+        ' Copy metricsText to clipboard
+        Clipboard.SetText(metricsText.ToString())
+
+        ' Optionally, show a message or perform other actions after copying
+        MessageBox.Show("Metrics copied to clipboard!")
+    End Sub
+
+
+    Private Sub CopyMetricsToClipboardAPI_Click(sender As Object, e As RoutedEventArgs)
+        Dim metricsText As New StringBuilder()
+
+        ' Iterate through ListView items (StackPanels in this case)
+        For Each item As StackPanel In MetricsResults_ListAPI.Items
+            ' Extract metric name and value from each StackPanel's children (TextBlocks)
+            Dim metricName As String = TryCast(item.Children(0), TextBlock)?.Text
+            Dim metricValue As String = TryCast((TryCast(item.Children(1), TextBlock))?.Text, String)
+
+            ' Append metric name and value to StringBuilder
+            metricsText.AppendLine($"{metricName}{metricValue}")
+        Next
+
+        ' Copy metricsText to clipboard
+        Clipboard.SetText(metricsText.ToString())
+
+        ' Optionally, show a message or perform other actions after copying
+        MessageBox.Show("Metrics copied to clipboard!")
+    End Sub
+
 
 
 
