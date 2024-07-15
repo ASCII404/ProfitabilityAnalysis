@@ -12,6 +12,7 @@ Imports PdfSharp.Pdf
 Imports PdfSharp.Drawing
 Imports LiveCharts.Defaults
 Imports System.Runtime.Serialization
+Imports System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder
 
 
 
@@ -25,6 +26,7 @@ Class MainWindow
     Private helpButton_content As String
     Private authenatication_win As Authentication
 
+    Private results As New List(Of Tuple(Of String, Double))
     Public Property Chart1Values As ChartValues(Of ObservablePoint)
     Public Property Chart2Values As ChartValues(Of ObservablePoint)
     Public Property Chart3Values As ChartValues(Of ObservablePoint)
@@ -701,7 +703,20 @@ Class MainWindow
         End If
     End Sub
 
+    Private Sub reset_values()
+        ROA_res.Text = "0%"
+        ROE_res.Text = "0%"
+        OPM_res.Text = "0%"
+        GPM_res.Text = "0%"
+        NPM_res.Text = "0%"
+        CRR_res.Text = "0"
+        DTE_res.Text = "0"
+        IC_res.Text = "0"
+        CM_res.Text = "0%"
+        BEP_res.Text = "0"
+    End Sub
     Private Async Sub CalculateRatiosButton_Click(sender As Object, e As RoutedEventArgs)
+        reset_values()
         Dim period As String = CType(internalPeriod.SelectedItem, ComboBoxItem).Content.ToString()
         Dim periodValue As Integer
 
@@ -739,153 +754,86 @@ Class MainWindow
             Dim totalEbitda As Double = 0
 
             For Each data As FinancialData In financialDataList
-                If period = "Month" AndAlso data.DateValue.Month = periodValue Then
+                If data.DateValue.Year = DateTime.Now.Year Then
+                    If period = "Month" AndAlso data.DateValue.Month = periodValue Then
+                        Debug.WriteLine(data.DateValue.ToString("yyyy-MM-dd"))
+                        totalAssets = data.TotalAssets
+                        totalNetIncome += data.NetIncome
+                        totalEquity = data.TotalEquity
+                        totalRevenue += data.Revenue
+                        TotalOperatingExpenses += data.OperatingExpenses
+                        totalCostOfGoodsSold += data.CostOfGoodsSold
+                        totalInterestExpense += data.InterestExpense
+                        totalVariableCosts += data.VariableCosts
+                        totalFixedCosts += data.FixedCosts
+                        totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
+                        totalVariableCostPerUnit += data.VariableCostPerUnit
+                        totalLiabilities += data.TotalLiabilities
+                        totalCurrentLiabilities += data.CurrentLiabilities
+                        totalCurrentAssets += data.CurrentAssets
+                        totalEbitda += data.EBITDA
+                    ElseIf period = "Quarter" AndAlso data.DateValue.Month >= (periodValue * 4) - 3 AndAlso data.DateValue.Month <= periodValue * 4 Then
+                        Debug.WriteLine(data.DateValue.ToString("yyyy-MM-dd"))
+                        totalAssets = data.TotalAssets
+                        totalNetIncome += data.NetIncome
+                        totalEquity = data.TotalEquity
+                        totalRevenue += data.Revenue
+                        TotalOperatingExpenses += data.OperatingExpenses
+                        totalCostOfGoodsSold += data.CostOfGoodsSold
+                        totalInterestExpense += data.InterestExpense
+                        totalVariableCosts += data.VariableCosts
+                        totalFixedCosts += data.FixedCosts
+                        totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
+                        totalVariableCostPerUnit += data.VariableCostPerUnit
+                        totalLiabilities += data.TotalLiabilities
+                        totalCurrentLiabilities += data.CurrentLiabilities
+                        totalCurrentAssets += data.CurrentAssets
+                        totalEbitda += data.EBITDA
+                    End If
+                End If
+
+                If period = "Year" AndAlso data.DateValue.Year = periodValue Then
                     Debug.WriteLine(data.DateValue.ToString("yyyy-MM-dd"))
                     totalAssets = data.TotalAssets
-                    Debug.WriteLine("TotalAssets: " & totalAssets)
-
-                    totalNetIncome = data.NetIncome
-                    Debug.WriteLine("TotalNetIncome: " & totalNetIncome)
-
+                    totalNetIncome += data.NetIncome
                     totalEquity = data.TotalEquity
-                    Debug.WriteLine("TotalEquity: " & totalEquity)
-
                     totalRevenue += data.Revenue
-                    Debug.WriteLine("TotalRevenue: " & totalRevenue)
-
                     TotalOperatingExpenses += data.OperatingExpenses
-                    Debug.WriteLine("TotalOperatingExpenses: " & TotalOperatingExpenses)
-
                     totalCostOfGoodsSold += data.CostOfGoodsSold
-                    Debug.WriteLine("TotalCostOfGoodsSold: " & totalCostOfGoodsSold)
-
                     totalInterestExpense += data.InterestExpense
-                    Debug.WriteLine("TotalInterestExpense: " & totalInterestExpense)
-
                     totalVariableCosts += data.VariableCosts
-                    Debug.WriteLine("TotalVariableCosts: " & totalVariableCosts)
-
                     totalFixedCosts += data.FixedCosts
-                    Debug.WriteLine("TotalFixedCosts: " & totalFixedCosts)
-
                     totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
-                    Debug.WriteLine("TotalSalesRevenuePerUnit: " & totalSalesRevenuePerUnit)
-
                     totalVariableCostPerUnit += data.VariableCostPerUnit
-                    Debug.WriteLine("TotalVariableCostPerUnit: " & totalVariableCostPerUnit)
-
                     totalLiabilities += data.TotalLiabilities
-                    Debug.WriteLine("TotalLiabilities: " & totalLiabilities)
-
                     totalCurrentLiabilities += data.CurrentLiabilities
-                    Debug.WriteLine("TotalCurrentLiabilities: " & totalCurrentLiabilities)
-
                     totalCurrentAssets += data.CurrentAssets
-                    Debug.WriteLine("TotalCurrentAssets: " & totalCurrentAssets)
-
                     totalEbitda += data.EBITDA
-                    Debug.WriteLine("TotalEbitda: " & totalEbitda)
-                ElseIf period = "Quarter" AndAlso data.DateValue.Month >= (periodValue * 4) - 3 AndAlso data.DateValue.Month <= periodValue * 4 Then
-                    MessageBox.Show(data.DateValue.ToString("yyyy-MM-dd"))
-                    totalAssets += data.TotalAssets
-                    Debug.WriteLine("TotalAssets: " & totalAssets)
-
-                    totalNetIncome += data.NetIncome
-                    Debug.WriteLine("TotalNetIncome: " & totalNetIncome)
-
-                    totalEquity += data.TotalEquity
-                    Debug.WriteLine("TotalEquity: " & totalEquity)
-
-                    totalRevenue += data.Revenue
-                    Debug.WriteLine("TotalRevenue: " & totalRevenue)
-
-                    TotalOperatingExpenses += data.OperatingExpenses
-                    Debug.WriteLine("TotalOperatingExpenses: " & TotalOperatingExpenses)
-
-                    totalCostOfGoodsSold += data.CostOfGoodsSold
-                    Debug.WriteLine("TotalCostOfGoodsSold: " & totalCostOfGoodsSold)
-
-                    totalInterestExpense += data.InterestExpense
-                    Debug.WriteLine("TotalInterestExpense: " & totalInterestExpense)
-
-                    totalVariableCosts += data.VariableCosts
-                    Debug.WriteLine("TotalVariableCosts: " & totalVariableCosts)
-
-                    totalFixedCosts += data.FixedCosts
-                    Debug.WriteLine("TotalFixedCosts: " & totalFixedCosts)
-
-                    totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
-                    Debug.WriteLine("TotalSalesRevenuePerUnit: " & totalSalesRevenuePerUnit)
-
-                    totalVariableCostPerUnit += data.VariableCostPerUnit
-                    Debug.WriteLine("TotalVariableCostPerUnit: " & totalVariableCostPerUnit)
-
-                    totalLiabilities += data.TotalLiabilities
-                    Debug.WriteLine("TotalLiabilities: " & totalLiabilities)
-
-                    totalCurrentLiabilities += data.CurrentLiabilities
-                    Debug.WriteLine("TotalCurrentLiabilities: " & totalCurrentLiabilities)
-
-                    totalCurrentAssets += data.CurrentAssets
-                    Debug.WriteLine("TotalCurrentAssets: " & totalCurrentAssets)
-
-                    totalEbitda += data.EBITDA
-                    Debug.WriteLine("TotalEbitda: " & totalEbitda)
-
-                ElseIf period = "Year" AndAlso data.DateValue.Year = periodValue Then
-                    Debug.WriteLine(data.DateValue.ToString("yyyy-MM-dd"))
-                    totalAssets += data.TotalAssets
-                    Debug.WriteLine("TotalAssets: " & totalAssets)
-
-                    totalNetIncome += data.NetIncome
-                    Debug.WriteLine("TotalNetIncome: " & totalNetIncome)
-
-                    totalEquity += data.TotalEquity
-                    Debug.WriteLine("TotalEquity: " & totalEquity)
-
-                    totalRevenue += data.Revenue
-                    Debug.WriteLine("TotalRevenue: " & totalRevenue)
-
-                    TotalOperatingExpenses += data.OperatingExpenses
-                    Debug.WriteLine("TotalOperatingExpenses: " & TotalOperatingExpenses)
-
-                    totalCostOfGoodsSold += data.CostOfGoodsSold
-                    Debug.WriteLine("TotalCostOfGoodsSold: " & totalCostOfGoodsSold)
-
-                    totalInterestExpense += data.InterestExpense
-                    Debug.WriteLine("TotalInterestExpense: " & totalInterestExpense)
-
-                    totalVariableCosts += data.VariableCosts
-                    Debug.WriteLine("TotalVariableCosts: " & totalVariableCosts)
-
-                    totalFixedCosts += data.FixedCosts
-                    Debug.WriteLine("TotalFixedCosts: " & totalFixedCosts)
-
-                    totalSalesRevenuePerUnit += data.SalesRevenuePerUnit
-                    Debug.WriteLine("TotalSalesRevenuePerUnit: " & totalSalesRevenuePerUnit)
-
-                    totalVariableCostPerUnit += data.VariableCostPerUnit
-                    Debug.WriteLine("TotalVariableCostPerUnit: " & totalVariableCostPerUnit)
-
-                    totalLiabilities += data.TotalLiabilities
-                    Debug.WriteLine("TotalLiabilities: " & totalLiabilities)
-
-                    totalCurrentLiabilities += data.CurrentLiabilities
-                    Debug.WriteLine("TotalCurrentLiabilities: " & totalCurrentLiabilities)
-
-                    totalCurrentAssets += data.CurrentAssets
-                    Debug.WriteLine("TotalCurrentAssets: " & totalCurrentAssets)
-
-                    totalEbitda += data.EBITDA
-                    Debug.WriteLine("TotalEbitda: " & totalEbitda)
                 End If
             Next
 
+            If period = "Quarter" Then
+                totalNetIncome = totalNetIncome / 120
+                totalRevenue = totalRevenue / 120
+                TotalOperatingExpenses = TotalOperatingExpenses / 120
+                totalCostOfGoodsSold = totalCostOfGoodsSold / 120
+                totalInterestExpense = totalInterestExpense / 120
+                totalVariableCosts = totalVariableCosts / 120
+                totalFixedCosts = totalFixedCosts / 120
+                totalSalesRevenuePerUnit = totalSalesRevenuePerUnit / 120
+                totalVariableCostPerUnit = totalVariableCostPerUnit / 120
+                totalLiabilities = totalLiabilities / 120
+                totalCurrentLiabilities = totalCurrentLiabilities / 120
+                totalCurrentAssets = totalCurrentAssets / 120
+                totalEbitda = totalEbitda / 120
+            End If
             'The FinancialData.ReturnOnAssets() is used from the constructor initialization of FinancialData. 
             If CK_ROA.IsChecked Then
                 If totalAssets > 0 Then
                     Dim roa As Double = FinancialData.ReturnOnAssets(totalNetIncome, totalAssets)
                     Debug.WriteLine($"TotalAssets: {totalAssets}, TotalNetIncome: {totalNetIncome}, ROA: {roa}")
+                    roa = Math.Floor(roa * 100) / 100
+                    ROA_res.Text = roa.ToString() & "%"
                 Else
                     Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
                 End If
@@ -894,6 +842,8 @@ Class MainWindow
             If CK_ROE.IsChecked Then
                 If totalEquity > 0 Then
                     Dim roe As Double = totalNetIncome / totalEquity
+                    roe = Math.Floor(roe * 100) / 100
+                    ROE_res.Text = roe.ToString() & "%"
                     Debug.WriteLine($"TotalEquity: {totalEquity}, TotalNetIncome: {totalNetIncome}, ROE: {roe}")
                 Else
                     Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
@@ -907,12 +857,16 @@ Class MainWindow
             If CK_OperatingMargin.IsChecked Then
                 Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses)
                 Debug.WriteLine($"Operating Margin: {operatingMargin}")
+                operatingMargin = Math.Floor(operatingMargin * 100) / 100
+                OPM_res.Text = operatingMargin.ToString() & "%"
             End If
 
             If CK_NetProfitMargin.IsChecked Then
                 If totalRevenue > 0 Then
                     Dim netProfitMargin As Double = helperMethods.NetProfitMargin(totalRevenue, totalCostOfGoodsSold, TotalOperatingExpenses, totalNetIncome)
                     Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, TotalOperatingExpenses: {TotalOperatingExpenses}, TotalNetIncome: {totalNetIncome}, NPM: {netProfitMargin}")
+                    netProfitMargin = Math.Floor(netProfitMargin * 100) / 100
+                    NPM_res.Text = netProfitMargin.ToString() & "%"
                 Else
                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
                 End If
@@ -922,6 +876,8 @@ Class MainWindow
                 If totalRevenue > 0 Then
                     Dim grossProfitMargin As Double = helperMethods.GrossProfitMargin(totalRevenue, totalCostOfGoodsSold)
                     Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, GPM: {grossProfitMargin}")
+                    grossProfitMargin = Math.Floor(grossProfitMargin * 100) / 100
+                    GPM_res.Text = grossProfitMargin.ToString() & "%"
                 Else
                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
                 End If
@@ -931,6 +887,8 @@ Class MainWindow
                 If totalCurrentLiabilities > 0 Then
                     Dim currentRatio As Double = helperMethods.CurrentRatio(totalCurrentAssets, totalCurrentLiabilities)
                     Debug.WriteLine($"TotalCurrentAssets: {totalCurrentAssets}, TotalCurrentLiabilities: {totalCurrentLiabilities}, CR: {currentRatio}")
+                    currentRatio = Math.Floor(currentRatio * 100) / 100
+                    CRR_res.Text = currentRatio.ToString()
                 Else
                     Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
                 End If
@@ -940,6 +898,8 @@ Class MainWindow
                 If totalEquity > 0 Then
                     Dim debtToEquityRatio As Double = helperMethods.DebtToEquityRatio(totalLiabilities, totalEquity)
                     Debug.WriteLine($"TotalLiabilities: {totalLiabilities}, TotalEquity: {totalEquity}, D/E: {debtToEquityRatio}")
+                    debtToEquityRatio = Math.Floor(debtToEquityRatio * 100) / 100
+                    DTE_res.Text = debtToEquityRatio.ToString()
                 Else
                     Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
                 End If
@@ -949,6 +909,8 @@ Class MainWindow
                 If totalInterestExpense > 0 Then
                     Dim interestCoverageRatio As Double = helperMethods.InterestCoverageRatio(totalEbitda, totalInterestExpense)
                     Debug.WriteLine($"TotalNetIncome: {totalEbitda}, TotalInterestExpense: {totalInterestExpense}, ICR: {interestCoverageRatio}")
+                    interestCoverageRatio = Math.Floor(interestCoverageRatio * 100) / 100
+                    IC_res.Text = interestCoverageRatio.ToString()
                 Else
                     Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
                 End If
@@ -958,6 +920,8 @@ Class MainWindow
                 If totalSalesRevenuePerUnit > 0 Then
                     Dim contributionMargin As Double = helperMethods.ContributionMarginRatio(totalSalesRevenuePerUnit, totalVariableCostPerUnit)
                     Debug.WriteLine($"TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, CM: {contributionMargin}")
+                    contributionMargin = Math.Floor(contributionMargin * 100) / 100
+                    CM_res.Text = contributionMargin.ToString() & "%"
                 Else
                     Debug.WriteLine("Total Sales Revenue Per Unit is zero or less, cannot calculate CM")
                 End If
@@ -967,6 +931,8 @@ Class MainWindow
                 If totalFixedCosts > 0 Then
                     Dim breakEvenPoint As Double = helperMethods.BreakEvenPoint(totalFixedCosts, totalSalesRevenuePerUnit, totalVariableCostPerUnit)
                     Debug.WriteLine($"TotalFixedCosts: {totalFixedCosts}, TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, BEP: {breakEvenPoint}")
+                    breakEvenPoint = Math.Floor(breakEvenPoint * 100) / 100
+                    BEP_res.Text = breakEvenPoint.ToString("C0")
                 Else
                     Debug.WriteLine("Total Fixed Costs is zero or less, cannot calculate BEP")
                 End If

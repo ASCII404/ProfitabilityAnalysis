@@ -370,43 +370,43 @@
                                             <ListView.Items>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="ROA: " />
-                                                    <TextBlock Text="5.2%" />
+                                                    <TextBlock x:Name="ROA_res" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="ROE: " />
-                                                    <TextBlock Text="15.4%" />
+                                                    <TextBlock x:Name="ROE_res" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Operating Margin Profit: " />
-                                                    <TextBlock Text="12.7%" />
+                                                    <TextBlock x:Name="OPM_res" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Gross Profit Margin: " />
-                                                    <TextBlock Text="28.6%" />
+                                                    <TextBlock x:Name="GPM_res" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Net Profit Margin: " />
-                                                    <TextBlock Text="14.3%" />
+                                                    <TextBlock x:Name="NPM_res" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Current Ratios: " />
-                                                    <TextBlock Text="2.1" />
+                                                    <TextBlock x:Name="CRR_res" Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Debt-to-Equity: " />
-                                                    <TextBlock Text="0.7" />
+                                                    <TextBlock x:Name="DTE_res" Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Interest Coverage: " />
-                                                    <TextBlock Text="3.9" />
+                                                    <TextBlock x:Name="IC_res" Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Contribution Margin: " />
-                                                    <TextBlock Text="25.4%" />
+                                                    <TextBlock x:Name="CM_res" Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Break-Even Point: " />
-                                                    <TextBlock Text="$300,000" />
+                                                    <TextBlock x:Name="BEP_res" Text="0" />
                                                 </StackPanel>
                                             </ListView.Items>
                                         </ListView>
@@ -515,43 +515,43 @@
                                             <ListView.Items>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="ROA: " />
-                                                    <TextBlock Text="5.4%" />
+                                                    <TextBlock Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="ROE: " />
-                                                    <TextBlock Text="12.3%" />
+                                                    <TextBlock Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Operating Margin Profit: " />
-                                                    <TextBlock Text="15.8%" />
+                                                    <TextBlock Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Gross Profit Margin: " />
-                                                    <TextBlock Text="22.1%" />
+                                                    <TextBlock Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Net Profit Margin: " />
-                                                    <TextBlock Text="10.6%" />
+                                                    <TextBlock Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Current Ratios: " />
-                                                    <TextBlock Text="1.9" />
+                                                    <TextBlock Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Debt-to-Equity: " />
-                                                    <TextBlock Text="0.5" />
+                                                    <TextBlock Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Interest Coverage: " />
-                                                    <TextBlock Text="4.2" />
+                                                    <TextBlock Text="0" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Contribution Margin: " />
-                                                    <TextBlock Text="30.5%" />
+                                                    <TextBlock Text="0%" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Break-Even Point: " />
-                                                    <TextBlock Text="$250,000" />
+                                                    <TextBlock Text="$0" />
                                                 </StackPanel>
                                             </ListView.Items>
                                         </ListView>
