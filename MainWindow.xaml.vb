@@ -29,8 +29,11 @@ Class MainWindow
     Private authenatication_win As Authentication
 
     Private financialDataDict As New Dictionary(Of String, Double)
+    Private financialDataDictInternal As New Dictionary(Of String, Double)
     Private analysis_results As New Dictionary(Of String, Double)
     Private _userName As String
+    Private months As List(Of String) = New List(Of String) From {"January", "February", "March", "April", "May", "June"}
+
     Public Property Chart1Values As ChartValues(Of ObservablePoint)
     Public Property Chart2Values As ChartValues(Of ObservablePoint)
     Public Property Chart3Values As ChartValues(Of ObservablePoint)
@@ -49,9 +52,71 @@ Class MainWindow
         InitializeChartData2()
         InitializeChartData3()
         InitializeChartData4()
-
+        InitializeFinalCharts()
     End Sub
 
+    Private Sub PopulateMetrics()
+        ' Clear existing content first
+        MetricsStackPanel.Children.Clear()
+
+        ' Add dynamic TextBlocks based on analysis_results
+        For Each kvp In analysis_results
+            Dim metricTextBlock As New TextBlock With {
+            .Margin = New Thickness(5),
+            .TextWrapping = TextWrapping.Wrap
+        }
+
+            Select Case kvp.Key
+                Case "ROA"
+                    metricTextBlock.Text = $"Metric 1 - ROA: is currently at {kvp.Value}%, indicating that the company is effectively using its assets to generate income, which is favorable to investors."
+                    metricTextBlock.Text += vbCrLf & "Suggestion: Focus on increasing sales and revenue streams to improve the numerator (Net Income) or Reduce operating expenses to enhance profitability without significantly increasing assets."
+                Case "NetProfitMargin"
+                    metricTextBlock.Text = $"Metric 2 - Net profit margin: is currently at {kvp.Value}%, suggesting that the company has high expenses relative to its revenue, impacting profitability and potentially sustainability."
+                    metricTextBlock.Text += vbCrLf & "Suggestion: Implement cost-cutting measures, negotiate better supplier terms, or streamline operations to reduce expenses or  Improve operational efficiency and employee productivity to achieve higher margins on sales."
+                Case "CurrentRatio"
+                    metricTextBlock.Text = $"Metric 3 - Current ratio: is at {kvp.Value}, meaning that the company may struggle to meet its short-term obligations with its current assets, potentially indicating liquidity issues or financial distress."
+                    metricTextBlock.Text += vbCrLf & "Suggestion: Optimize working capital by efficiently managing inventory levels and accounts payable/receivable cycles to maintain a healthy balance between current assets and liabilities."
+                    ' Add more cases as needed for other metrics
+                Case Else
+                    ' Handle additional metrics if necessary
+            End Select
+
+            ' Add the TextBlock to the StackPanel
+            MetricsStackPanel.Children.Add(metricTextBlock)
+        Next
+    End Sub
+
+
+    Private Sub InitializeFinalCharts()
+        financialDataDictInternal("GrossProfit") = 0
+        financialDataDictInternal("totalAssets") = 0
+        financialDataDictInternal("totalEquity") = 0
+        financialDataDictInternal("totalNetIncome") = 0
+        financialDataDictInternal("totalRevenue") = 0
+        financialDataDictInternal("TotalOperatingExpenses") = 0
+        financialDataDictInternal("totalCostOfGoodsSold") = 0
+        financialDataDictInternal("totalInterestExpense") = 0
+        financialDataDictInternal("totalVariableCosts") = 0
+        financialDataDictInternal("totalFixedCosts") = 0
+        financialDataDictInternal("totalSalesRevenuePerUnit") = 0
+        financialDataDictInternal("totalVariableCostPerUnit") = 0
+        financialDataDictInternal("totalLiabilities") = 0
+        financialDataDictInternal("totalCurrentLiabilities") = 0
+        financialDataDictInternal("totalCurrentAssets") = 0
+        financialDataDictInternal("totalEbitda") = 0
+
+        financialDataDict("TotalAssets") = 0
+        financialDataDict("TotalEquity") = 0
+        financialDataDict("CurrentAssets") = 0
+        financialDataDict("CurrentLiabilities") = 0
+        financialDataDict("TotalLiabilities") = 0
+        financialDataDict("Revenue") = 0
+        financialDataDict("CostOfGoodsSold") = 0
+        financialDataDict("OperatingExpenses") = 0
+        financialDataDict("NetIncome") = 0
+        financialDataDict("EBITDA") = 0
+        financialDataDict("InterestExpense") = 0
+    End Sub
     Private Async Sub InitializeChartData1()
         Dim financialDataList As List(Of FinancialData) = Nothing
 
@@ -400,8 +465,6 @@ Class MainWindow
                                      End Sub)
     End Sub
 
-
-
     Private Sub DashboardButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = DashboardTab
         InitializeChartData1()
@@ -550,6 +613,9 @@ Class MainWindow
 
     Private Sub ScenarioAnalysisButton_Click(sender As Object, e As RoutedEventArgs)
         MainTabControl.SelectedItem = ScenarioAnalysisTab
+        UpdateCharts()
+        CalculateDuPont()
+        PopulateMetrics()
     End Sub
 
     Private Sub ImportExcelButton_Click(sender As Object, e As RoutedEventArgs)
@@ -951,6 +1017,27 @@ Class MainWindow
                 totalCurrentAssets = totalCurrentAssets / 360
                 totalEbitda = totalEbitda / 360
             End If
+
+            Dim grossProfit As Double = totalRevenue - totalCostOfGoodsSold
+            grossProfit = Math.Floor(grossProfit * 100) / 100
+
+            financialDataDictInternal("GrossProfit") = grossProfit
+            financialDataDictInternal("totalAssets") = totalAssets
+            financialDataDictInternal("totalEquity") = totalEquity
+            financialDataDictInternal("totalNetIncome") = totalNetIncome
+            financialDataDictInternal("totalRevenue") = totalRevenue
+            financialDataDictInternal("TotalOperatingExpenses") = TotalOperatingExpenses
+            financialDataDictInternal("totalCostOfGoodsSold") = totalCostOfGoodsSold
+            financialDataDictInternal("totalInterestExpense") = totalInterestExpense
+            financialDataDictInternal("totalVariableCosts") = totalVariableCosts
+            financialDataDictInternal("totalFixedCosts") = totalFixedCosts
+            financialDataDictInternal("totalSalesRevenuePerUnit") = totalSalesRevenuePerUnit
+            financialDataDictInternal("totalVariableCostPerUnit") = totalVariableCostPerUnit
+            financialDataDictInternal("totalLiabilities") = totalLiabilities
+            financialDataDictInternal("totalCurrentLiabilities") = totalCurrentLiabilities
+            financialDataDictInternal("totalCurrentAssets") = totalCurrentAssets
+            financialDataDictInternal("totalEbitda") = totalEbitda
+
             'The FinancialData.ReturnOnAssets() is used from the constructor initialization of FinancialData. 
             If CK_ROA.IsChecked Then
                 If totalAssets > 0 Then
@@ -958,7 +1045,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalAssets: {totalAssets}, TotalNetIncome: {totalNetIncome}, ROA: {roa}")
                     roa = Math.Floor(roa * 100) / 100
                     ROA_res.Text = roa.ToString() & "%"
-                    analysis_results("ROA") = roa
+                    analysis_results("Return on Assets") = roa
                 Else
                     Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
                 End If
@@ -970,7 +1057,7 @@ Class MainWindow
                     roe = Math.Floor(roe * 100) / 100
                     ROE_res.Text = roe.ToString() & "%"
                     Debug.WriteLine($"TotalEquity: {totalEquity}, TotalNetIncome: {totalNetIncome}, ROE: {roe}")
-                    analysis_results("ROE") = roe
+                    analysis_results("Return on Equity") = roe
                 Else
                     Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
                 End If
@@ -985,7 +1072,7 @@ Class MainWindow
                 Debug.WriteLine($"Operating Margin: {operatingMargin}")
                 operatingMargin = Math.Floor(operatingMargin * 100) / 100
                 OPM_res.Text = operatingMargin.ToString() & "%"
-                analysis_results("OPM") = operatingMargin
+                analysis_results("Operating Margin") = operatingMargin
             End If
 
             If CK_NetProfitMargin.IsChecked Then
@@ -994,7 +1081,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, TotalOperatingExpenses: {TotalOperatingExpenses}, TotalNetIncome: {totalNetIncome}, NPM: {netProfitMargin}")
                     netProfitMargin = Math.Floor(netProfitMargin * 100) / 100
                     NPM_res.Text = netProfitMargin.ToString() & "%"
-                    analysis_results("NPM") = netProfitMargin
+                    analysis_results("Net Profit Margin") = netProfitMargin
                 Else
                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
                 End If
@@ -1006,7 +1093,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalRevenue: {totalRevenue}, TotalCostOfGoodsSold: {totalCostOfGoodsSold}, GPM: {grossProfitMargin}")
                     grossProfitMargin = Math.Floor(grossProfitMargin * 100) / 100
                     GPM_res.Text = grossProfitMargin.ToString() & "%"
-                    analysis_results("GPM") = grossProfitMargin
+                    analysis_results("Gross Profit Margin") = grossProfitMargin
                 Else
                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
                 End If
@@ -1018,7 +1105,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalCurrentAssets: {totalCurrentAssets}, TotalCurrentLiabilities: {totalCurrentLiabilities}, CR: {currentRatio}")
                     currentRatio = Math.Floor(currentRatio * 100) / 100
                     CRR_res.Text = currentRatio.ToString()
-                    analysis_results("CR") = currentRatio
+                    analysis_results("Current Ratios") = currentRatio
                 Else
                     Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
                 End If
@@ -1030,7 +1117,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalLiabilities: {totalLiabilities}, TotalEquity: {totalEquity}, D/E: {debtToEquityRatio}")
                     debtToEquityRatio = Math.Floor(debtToEquityRatio * 100) / 100
                     DTE_res.Text = debtToEquityRatio.ToString()
-                    analysis_results("DTE") = debtToEquityRatio
+                    analysis_results("Debto-to-Equity") = debtToEquityRatio
                 Else
                     Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
                 End If
@@ -1042,7 +1129,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalNetIncome: {totalEbitda}, TotalInterestExpense: {totalInterestExpense}, ICR: {interestCoverageRatio}")
                     interestCoverageRatio = Math.Floor(interestCoverageRatio * 100) / 100
                     IC_res.Text = interestCoverageRatio.ToString()
-                    analysis_results("ICR") = interestCoverageRatio
+                    analysis_results("Interest Coverage Ratio") = interestCoverageRatio
                 Else
                     Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
                 End If
@@ -1054,7 +1141,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, CM: {contributionMargin}")
                     contributionMargin = Math.Floor(contributionMargin * 100) / 100
                     CM_res.Text = contributionMargin.ToString() & "%"
-                    analysis_results("CM") = contributionMargin
+                    analysis_results("Contribution Margin") = contributionMargin
                 Else
                     Debug.WriteLine("Total Sales Revenue Per Unit is zero or less, cannot calculate CM")
                 End If
@@ -1066,7 +1153,7 @@ Class MainWindow
                     Debug.WriteLine($"TotalFixedCosts: {totalFixedCosts}, TotalSalesRevenuePerUnit: {totalSalesRevenuePerUnit}, TotalVariableCostPerUnit: {totalVariableCostPerUnit}, BEP: {breakEvenPoint}")
                     breakEvenPoint = Math.Floor(breakEvenPoint * 100) / 100
                     BEP_res.Text = breakEvenPoint.ToString("C0")
-                    analysis_results("BEP") = breakEvenPoint
+                    analysis_results("Break Even Point") = breakEvenPoint
                 Else
                     Debug.WriteLine("Total Fixed Costs is zero or less, cannot calculate BEP")
                 End If
@@ -1092,7 +1179,7 @@ Class MainWindow
                     Dim roa As Double = FinancialData.ReturnOnAssets(api_totalNetIncome, api_totalAssets)
                     roa = Math.Floor(roa * 100) / 100
                     ROA_api.Text = roa.ToString() & "%"
-                    analysis_results("ROA_API") = roa
+                    analysis_results("Return on Assets for selected business") = roa
                 Else
                     ' If TotalAssets is zero or less, cannot calculate ROA
                     Debug.WriteLine("TotalAssets is zero or less, cannot calculate ROA")
@@ -1115,7 +1202,7 @@ Class MainWindow
                             Dim roe As Double = roeNetIncome / roeTotalEquity
                             roe = Math.Floor(roe * 100) / 100
                             ROE_api.Text = roe.ToString() & "%"
-                            analysis_results("ROE_API") = roe
+                            analysis_results("Return on Equity for selected business") = roe
                         Else
                             Debug.WriteLine("TotalEquity is zero or less, cannot calculate ROE")
                         End If
@@ -1142,7 +1229,7 @@ Class MainWindow
                             Dim operatingMargin As Double = helperMethods.OperatingProfitMargin(opMarginTotalRevenue, opMarginTotalCostOfGoodsSold, opMarginTotalOperatingExpenses)
                             operatingMargin = Math.Floor(operatingMargin * 100) / 100
                             OPM_api.Text = operatingMargin.ToString() & "%"
-                            analysis_results("OPM_API") = operatingMargin
+                            analysis_results("Operating Margin for selected business") = operatingMargin
                         End If
                     End If
                 End If
@@ -1170,7 +1257,7 @@ Class MainWindow
                                     Dim netProfitMargin As Double = helperMethods.NetProfitMargin(npmTotalRevenue, npmTotalCostOfGoodsSold, npmTotalOperatingExpenses, npmTotalNetIncome)
                                     netProfitMargin = Math.Floor(netProfitMargin * 100) / 100
                                     NPM_api.Text = netProfitMargin.ToString() & "%"
-                                    analysis_results("NPM_API") = netProfitMargin
+                                    analysis_results("Net Profit Margin for selected business") = netProfitMargin
                                 Else
                                     Debug.WriteLine("Total Revenue is zero or less, cannot calculate NPM")
                                 End If
@@ -1195,7 +1282,7 @@ Class MainWindow
                             Dim grossProfitMargin As Double = helperMethods.GrossProfitMargin(gpmTotalRevenue, gpmTotalCostOfGoodsSold)
                             grossProfitMargin = Math.Floor(grossProfitMargin * 100) / 100
                             GPM_api.Text = grossProfitMargin.ToString() & "%"
-                            analysis_results("GPM_API") = grossProfitMargin
+                            analysis_results("Gross Profit Margin for selected business") = grossProfitMargin
                         Else
                             Debug.WriteLine("Total Revenue is zero or less, cannot calculate GPM")
                         End If
@@ -1217,7 +1304,7 @@ Class MainWindow
                             Dim currentRatio As Double = helperMethods.CurrentRatio(crTotalCurrentAssets, crTotalCurrentLiabilities)
                             currentRatio = Math.Floor(currentRatio * 100) / 100
                             CRR_api.Text = currentRatio.ToString()
-                            analysis_results("CR_API") = currentRatio
+                            analysis_results("Current Ratios for selected business") = currentRatio
                         Else
                             Debug.WriteLine("Total Current Liabilities is zero or less, cannot calculate CR")
                         End If
@@ -1242,7 +1329,7 @@ Class MainWindow
                             Debug.WriteLine($"TotalLiabilities: {dteTotalLiabilities}, TotalEquity: {dteTotalEquity}, D/E: {debtToEquityRatio}")
                             debtToEquityRatio = Math.Floor(debtToEquityRatio * 100) / 100
                             DTE_api.Text = debtToEquityRatio.ToString()
-                            analysis_results("DTE_API") = debtToEquityRatio
+                            analysis_results("Debt-to-equity for selected business") = debtToEquityRatio
                         Else
                             Debug.WriteLine("Total Equity is zero or less, cannot calculate D/E")
                         End If
@@ -1267,7 +1354,7 @@ Class MainWindow
                             Debug.WriteLine($"TotalEbitda: {icrTotalEbitda}, TotalInterestExpense: {icrTotalInterestExpense}, ICR: {interestCoverageRatio}")
                             interestCoverageRatio = Math.Floor(interestCoverageRatio * 100) / 100
                             IC_api.Text = interestCoverageRatio.ToString()
-                            analysis_results("ICR_API") = interestCoverageRatio
+                            analysis_results("Interest coverage for selected business") = interestCoverageRatio
                         Else
                             Debug.WriteLine("Total Interest Expense is zero or less, cannot calculate ICR")
                         End If
@@ -1325,9 +1412,9 @@ Class MainWindow
     'It is used to export files
     Private Sub ExportPDFButton_Click(sender As Object, e As RoutedEventArgs)
         Dim saveFileDialog As New SaveFileDialog() With {
-            .Filter = "PDF Files|*.pdf",
-            .Title = "Save PDF File"
-        }
+        .Filter = "PDF Files|*.pdf",
+        .Title = "Save PDF File"
+    }
 
         If saveFileDialog.ShowDialog() = True Then
             Dim filePath As String = saveFileDialog.FileName
@@ -1363,6 +1450,18 @@ Class MainWindow
                     startY += 20
                 Next
 
+                ' Draw DuPont Analysis results
+                startY += 20
+                gfx.DrawString("DuPont Analysis", fontTitle, XBrushes.Black, New XRect(0, startY, page.Width, 0), XStringFormats.TopCenter)
+                startY += 40
+                gfx.DrawString($"Net Profit Margin: {netProfitMargin:P2}", fontText, XBrushes.Black, New XRect(40, startY, page.Width - 80, 0), XStringFormats.TopLeft)
+                startY += 20
+                gfx.DrawString($"Asset Turnover: {assetTurnover:F2}", fontText, XBrushes.Black, New XRect(40, startY, page.Width - 80, 0), XStringFormats.TopLeft)
+                startY += 20
+                gfx.DrawString($"Equity Multiplier: {equityMultiplier:F2}", fontText, XBrushes.Black, New XRect(40, startY, page.Width - 80, 0), XStringFormats.TopLeft)
+                startY += 20
+                gfx.DrawString($"DuPont Analysis: {duPontAnalysis:F2}", fontText, XBrushes.Black, New XRect(40, startY, page.Width - 80, 0), XStringFormats.TopLeft)
+
                 ' Save the document
                 document.Save(filePath)
                 document.Close()
@@ -1379,6 +1478,7 @@ Class MainWindow
             Debug.WriteLine($"Exporting PDF file to: {filePath}")
         End If
     End Sub
+
 
 
     Private Sub CopyMetricsToClipboard_Click(sender As Object, e As RoutedEventArgs)
@@ -1422,6 +1522,118 @@ Class MainWindow
         MessageBox.Show("Metrics copied to clipboard!")
     End Sub
 
+    Private Sub UpdateCharts()
+        ' Ensure the series exist before assigning values
+        If Dashboard1.Series.Count >= 2 Then
+            ' Chart 1: Assets and Net Income
+            Dashboard1.Series(0).Values = New ChartValues(Of Double) From {financialDataDictInternal("totalAssets")}
+            Dashboard1.Series(1).Values = New ChartValues(Of Double) From {financialDataDictInternal("totalNetIncome")}
+
+            ' Set X-axis labels (months)
+            Dashboard1.AxisX.Clear()
+            Dashboard1.AxisX.Add(New Axis With {.Title = "Months", .Labels = months})
+
+            ' Set Y-axis labels
+            Dashboard1.AxisY.Clear()
+            Dashboard1.AxisY.Add(New Axis With {.Title = "Amount"})
+        End If
+
+        If Dashboard2.Series.Count >= 2 Then
+            ' Chart 2: Gross Profit and Total Revenue (Horizontal Bar)
+            Dim grossProfitSeries As New RowSeries With {
+                .Title = "Gross Profit",
+                .Values = New ChartValues(Of Double) From {financialDataDictInternal("GrossProfit")}
+            }
+            Dim totalRevenueSeries As New RowSeries With {
+                .Title = "Total Revenue",
+                .Values = New ChartValues(Of Double) From {financialDataDictInternal("totalRevenue")}
+            }
+            Dashboard2.Series.Clear()
+            Dashboard2.Series.Add(grossProfitSeries)
+            Dashboard2.Series.Add(totalRevenueSeries)
+
+            ' Set X-axis labels (months)
+            Dashboard2.AxisY.Clear()
+            Dashboard2.AxisY.Add(New Axis With {.Title = "Months", .Labels = months})
+
+            ' Set Y-axis labels
+            Dashboard2.AxisX.Clear()
+            Dashboard2.AxisX.Add(New Axis With {.Title = "Amount"})
+        End If
+
+        If Dashboard3.Series.Count >= 2 Then
+            ' Chart 3: Net Income and Equity (Horizontal Bar)
+            Dim netIncomeSeries As New RowSeries With {
+                .Title = "Net Income",
+                .Values = New ChartValues(Of Double) From {financialDataDict("NetIncome")}
+            }
+            Dim equitySeries As New RowSeries With {
+                .Title = "Equity",
+                .Values = New ChartValues(Of Double) From {financialDataDict("TotalEquity")}
+            }
+            Dashboard3.Series.Clear()
+            Dashboard3.Series.Add(netIncomeSeries)
+            Dashboard3.Series.Add(equitySeries)
+
+            ' Set X-axis labels (months)
+            Dashboard3.AxisY.Clear()
+            Dashboard3.AxisY.Add(New Axis With {.Title = "Months", .Labels = months})
+
+            ' Set Y-axis labels
+            Dashboard3.AxisX.Clear()
+            Dashboard3.AxisX.Add(New Axis With {.Title = "Amount"})
+        End If
+
+        If Dashboard4.Series.Count >= 1 Then
+            ' Chart 4: COGS
+            Dashboard4.Series(0).Values = New ChartValues(Of Double) From {financialDataDict("CostOfGoodsSold")}
+
+            ' Set X-axis labels (months)
+            Dashboard4.AxisX.Clear()
+            Dashboard4.AxisX.Add(New Axis With {.Title = "Months", .Labels = months})
+
+            ' Set Y-axis labels
+            Dashboard4.AxisY.Clear()
+            Dashboard4.AxisY.Add(New Axis With {.Title = "Amount"})
+        End If
+    End Sub
+
+
+    Private netProfitMargin As Double
+    Private assetTurnover As Double
+    Private equityMultiplier As Double
+    Private duPontAnalysis As Double
+
+    Private Sub CalculateDuPont()
+        Debug.WriteLine("DuPont is not ok")
+        ' Ensure all necessary keys exist in the dictionary
+        If financialDataDictInternal.ContainsKey("totalNetIncome") AndAlso
+       financialDataDictInternal.ContainsKey("totalRevenue") AndAlso
+       financialDataDictInternal.ContainsKey("totalAssets") AndAlso
+       financialDataDictInternal.ContainsKey("totalEquity") Then
+            Debug.WriteLine("DuPont is ok")
+            ' Calculate Net Profit Margin
+            netProfitMargin = financialDataDictInternal("totalNetIncome") / financialDataDictInternal("totalRevenue")
+
+            ' Calculate Asset Turnover (AT)
+            assetTurnover = financialDataDictInternal("totalRevenue") / financialDataDictInternal("totalAssets")
+
+            ' Calculate Equity Multiplier (EM)
+            equityMultiplier = financialDataDictInternal("totalAssets") / financialDataDictInternal("totalEquity")
+
+            ' Calculate DuPont Analysis
+            duPontAnalysis = netProfitMargin * assetTurnover * equityMultiplier
+
+            ' Output the results
+            Console.WriteLine("DuPont Analysis: " & duPontAnalysis)
+            Console.WriteLine("Net Profit Margin: " & netProfitMargin)
+            Console.WriteLine("Asset Turnover: " & assetTurnover)
+            Console.WriteLine("Equity Multiplier: " & equityMultiplier)
+
+        Else
+            Console.WriteLine("One or more required keys are missing in the financialDataDictInternal dictionary.")
+        End If
+    End Sub
 
 
 

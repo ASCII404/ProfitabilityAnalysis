@@ -819,8 +819,8 @@
                             <Border Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Height="300" Background="AliceBlue" Grid.Row="1" Grid.Column="1">
                                 <lvc:CartesianChart Name="Dashboard2" Margin="5" LegendLocation="Top">
                                     <lvc:CartesianChart.Series>
-                                        <lvc:LineSeries Title="Gross Profit" Values="300, 200, 300, 1000, 500, 200"/>
-                                        <lvc:LineSeries Title="Total Revenue" Values="210, 300, 100, 200, 300, 500"/>
+                                        <lvc:RowSeries Title="Gross Profit" Values="300, 200, 300, 1000, 500, 200"/>
+                                        <lvc:RowSeries Title="Total Revenue" Values="210, 300, 100, 200, 300, 500"/>
                                     </lvc:CartesianChart.Series>
                                 </lvc:CartesianChart>
                             </Border>
@@ -831,8 +831,8 @@
                             <Border Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Height="300" Background="AliceBlue" Grid.Row="3" Grid.Column="0">
                                 <lvc:CartesianChart Name="Dashboard3" Margin="5" LegendLocation="Top">
                                     <lvc:CartesianChart.Series>
-                                        <lvc:LineSeries Title="Net income" Values="100, 230, 300, 100, 520, 400"/>
-                                        <lvc:LineSeries Title="Equity" Values="100, 330, 170, 100, 200, 560"/>
+                                        <lvc:RowSeries Title="Net Income" Values="100, 230, 300, 100, 520, 400"/>
+                                        <lvc:RowSeries Title="Equity" Values="100, 330, 170, 100, 200, 560"/>
                                     </lvc:CartesianChart.Series>
                                 </lvc:CartesianChart>
                             </Border>
@@ -846,20 +846,11 @@
                         </Grid>
 
 
-
-
                         <!-- Form for Interpretations -->
                         <Border Grid.Row="1" Grid.Column="1" Margin="10" BorderBrush="Black" BorderThickness="2" CornerRadius="2" Background="AliceBlue">
-                            <StackPanel Width="300">
+                            <StackPanel x:Name="MetricsStackPanel" Width="300">
                                 <!-- Adjust width as needed -->
-                                <TextBlock Text="Metrics that present risk" HorizontalAlignment="Center" FontWeight="Bold" Margin="5"/>
-                                <TextBlock Text="Metric 1 - ROA: is currently at 2%, indicating that the company is effectively using its assets to generate income, which is favorable to investors." Margin="5" TextWrapping="Wrap"/>
-                                <TextBlock Margin="5" Text="Suggestion: Focus on increasing sales and revenue streams to improve the numerator (Net Income) or Reduce operating expenses to enhance profitability without significantly increasing assets." TextWrapping="Wrap"/>
-                                <TextBlock Text="Metric 2 - Net profit margin: is currently at 1%, suggesting that the company has high expenses relative to its revenue, impacting profitability and potentially sustainability." Margin="5" TextWrapping="Wrap"/>
-                                <TextBlock Margin="5" Text="Suggestion: Implement cost-cutting measures, negotiate better supplier terms, or streamline operations to reduce expenses or  Improve operational efficiency and employee productivity to achieve higher margins on sales." TextWrapping="Wrap"/>
-                                <TextBlock Text="Metric 3 - Current ratio: is at 0.3, meaning that the company may struggle to meet its short-term obligations with its current assets, potentially indicating liquidity issues or financial distress." Margin="5" TextWrapping="Wrap"/>
-                                <TextBlock Margin="5" Text="Suggestion: Optimize working capital by efficiently managing inventory levels and accounts payable/receivable cycles to maintain a healthy balance between current assets and liabilities." TextWrapping="Wrap"/>
-                                <!-- Add more TextBlocks as needed for other metrics -->
+
                             </StackPanel>
                         </Border>
 

@@ -16,7 +16,7 @@ Public Class API
     'Initialize the API class variables with a default constructor
     Public Sub New()
         'Retrieve API key from configuration file KN8N1PLOV3JJ8TCB.
-        api_key = "KN8N1PLOV3JJ8TCB"
+        api_key = "C5DB4KU3H4D6LQPB"
         income_statement_Data = New JObject()
         income_statement_report = New JObject()
         balancesheet_Data = New JObject()
@@ -65,45 +65,60 @@ Public Class API
 
     'Using the AV API to get the income statement data
     Public Async Function LoadIncomeStatement_API(selectedFiscalYearIndex As Integer) As Task
-        If String.IsNullOrEmpty(company_symbol) Then
-            Throw New InvalidOperationException("Company symbol is not set.")
-        End If
-
-        Using client As New HttpClient()
-            Dim income_statement_Json As String = Await client.GetStringAsync(income_statement_url)
-            income_statement_Data = JObject.Parse(income_statement_Json)
-
-            ' Select the report based on the selected index
-            Dim reports As JArray = CType(income_statement_Data("annualReports"), JArray)
-
-            If selectedFiscalYearIndex >= 0 AndAlso selectedFiscalYearIndex < reports.Count Then
-                income_statement_report = CType(reports(selectedFiscalYearIndex), JObject)
-            Else
-                Throw New IndexOutOfRangeException("Selected fiscal year index is out of range.")
+        Try
+            If String.IsNullOrEmpty(company_symbol) Then
+                Throw New InvalidOperationException("Company symbol is not set.")
             End If
-        End Using
+
+            Using client As New HttpClient()
+                Dim income_statement_Json As String = Await client.GetStringAsync(income_statement_url)
+                income_statement_Data = JObject.Parse(income_statement_Json)
+
+                ' Select the report based on the selected index
+                Dim reports As JArray = CType(income_statement_Data("annualReports"), JArray)
+
+                If selectedFiscalYearIndex >= 0 AndAlso selectedFiscalYearIndex < reports.Count Then
+                    income_statement_report = CType(reports(selectedFiscalYearIndex), JObject)
+                Else
+                    Throw New IndexOutOfRangeException("Selected fiscal year index is out of range.")
+                End If
+            End Using
+        Catch ex As HttpRequestException When ex.Message.Contains("daily limit of 25 retrievals achieved")
+            MessageBox.Show("Daily limit of 25 retrievals achieved. Please try again later or upgrade your API plan.")
+        Catch ex As Exception
+            MessageBox.Show($"An error occurred while loading income statement: {ex.Message}")
+        End Try
     End Function
+
 
     'Using the AV API to get the balance sheet data
     Public Async Function LoadBalanceSheet_API(selectedFiscalYearIndex As Integer) As Task
-        If String.IsNullOrEmpty(company_symbol) Then
-            Throw New InvalidOperationException("Company symbol is not set.")
-        End If
-
-        balancesheet_url = $"https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={company_symbol}&apikey={api_key}"
-        Using client As New HttpClient()
-            Dim balancesheet_Json As String = Await client.GetStringAsync(balancesheet_url)
-            balancesheet_Data = JObject.Parse(balancesheet_Json)
-
-            ' Select the report based on the selected index
-            Dim reports As JArray = CType(balancesheet_Data("annualReports"), JArray)
-
-            If selectedFiscalYearIndex >= 0 AndAlso selectedFiscalYearIndex < reports.Count Then
-                balancesheet_report = CType(reports(selectedFiscalYearIndex), JObject)
-            Else
-                Throw New IndexOutOfRangeException("Selected fiscal year index is out of range.")
+        Try
+            If String.IsNullOrEmpty(company_symbol) Then
+                Throw New InvalidOperationException("Company symbol is not set.")
             End If
-        End Using
+
+            balancesheet_url = $"https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={company_symbol}&apikey={api_key}"
+
+            Using client As New HttpClient()
+                Dim balancesheet_Json As String = Await client.GetStringAsync(balancesheet_url)
+                balancesheet_Data = JObject.Parse(balancesheet_Json)
+
+                ' Select the report based on the selected index
+                Dim reports As JArray = CType(balancesheet_Data("annualReports"), JArray)
+
+                If selectedFiscalYearIndex >= 0 AndAlso selectedFiscalYearIndex < reports.Count Then
+                    balancesheet_report = CType(reports(selectedFiscalYearIndex), JObject)
+                Else
+                    Throw New IndexOutOfRangeException("Selected fiscal year index is out of range.")
+                End If
+            End Using
+        Catch ex As HttpRequestException When ex.Message.Contains("daily limit of 25 retrievals achieved")
+            MessageBox.Show("Daily limit of 25 retrievals achieved. Please try again later or upgrade your API plan.")
+        Catch ex As Exception
+            MessageBox.Show($"An error occurred while loading balance sheet: {ex.Message}")
+        End Try
     End Function
+
 
 End Class
