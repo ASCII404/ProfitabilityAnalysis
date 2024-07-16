@@ -26,7 +26,7 @@
                 <Separator></Separator>
                 <Button Style="{StaticResource RoundedButtonStyle}"  Margin="20,10,10,10" Click="Button_Click">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\help-web-button.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                        <Image Source="/Resources/Button_icons/help-web-button.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -34,7 +34,7 @@
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource RoundedButtonStyle}" Click="DashboardButton_Click" x:Name="dashboard_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\dashboard.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image x:Name="Dashboard" Source="/Resources/Button_icons/dashboard.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">DASHBOARD</TextBlock>
@@ -43,7 +43,7 @@
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource RoundedButtonStyle}" Click="PreviewDatabaseButton_Click" x:Name="database_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\database.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="/Resources/Button_icons/database.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">PREVIEW DATABASE</TextBlock>
@@ -52,7 +52,7 @@
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource RoundedButtonStyle}" Click="AnalysisButton_Click" x:Name="analysis_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\analytics.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="/Resources/Button_icons/analytics.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">ANALYSIS</TextBlock>
@@ -61,7 +61,7 @@
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource RoundedButtonStyle}" Click="InputDataButton_Click" x:Name="inputData_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\inputData.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="/Resources/Button_icons/inputData.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">INPUT DATA</TextBlock>
@@ -70,7 +70,7 @@
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource RoundedButtonStyle}" Click="ScenarioAnalysisButton_Click" x:Name="results_button">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <Image Source="A:\VS\VisualBasic\Thesis\ProfitabilityAnalysis\Resources\Button_icons\checklist.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
+                            <Image Source="/Resources/Button_icons/checklist.png" RenderOptions.BitmapScalingMode="HighQuality" Width="45" Height="45"/>
                         </StackPanel>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Margin="5,5" Foreground="White" FontFamily="Calibri" FontSize="11pt">ANALYSIS RESULT</TextBlock>
